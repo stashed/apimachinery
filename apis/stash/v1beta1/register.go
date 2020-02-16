@@ -17,7 +17,7 @@ limitations under the License.
 package v1beta1
 
 import (
-	"stash.appscode.dev/stash/apis/stash"
+	"stash.appscode.dev/apimachinery/apis/stash"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"

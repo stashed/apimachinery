@@ -20,7 +20,7 @@ import (
 	"hash/fnv"
 	"strconv"
 
-	"stash.appscode.dev/stash/api/crds"
+	"stash.appscode.dev/apimachinery/api/crds"
 
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	hashutil "k8s.io/kubernetes/pkg/util/hash"

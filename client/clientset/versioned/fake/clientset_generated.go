@@ -19,13 +19,13 @@ limitations under the License.
 package fake
 
 import (
-	clientset "stash.appscode.dev/stash/client/clientset/versioned"
-	repositoriesv1alpha1 "stash.appscode.dev/stash/client/clientset/versioned/typed/repositories/v1alpha1"
-	fakerepositoriesv1alpha1 "stash.appscode.dev/stash/client/clientset/versioned/typed/repositories/v1alpha1/fake"
-	stashv1alpha1 "stash.appscode.dev/stash/client/clientset/versioned/typed/stash/v1alpha1"
-	fakestashv1alpha1 "stash.appscode.dev/stash/client/clientset/versioned/typed/stash/v1alpha1/fake"
-	stashv1beta1 "stash.appscode.dev/stash/client/clientset/versioned/typed/stash/v1beta1"
-	fakestashv1beta1 "stash.appscode.dev/stash/client/clientset/versioned/typed/stash/v1beta1/fake"
+	clientset "stash.appscode.dev/apimachinery/client/clientset/versioned"
+	repositoriesv1alpha1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/repositories/v1alpha1"
+	fakerepositoriesv1alpha1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/repositories/v1alpha1/fake"
+	stashv1alpha1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1alpha1"
+	fakestashv1alpha1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1alpha1/fake"
+	stashv1beta1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
+	fakestashv1beta1 "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/fake"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"

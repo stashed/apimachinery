@@ -21,8 +21,8 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "stash.appscode.dev/stash/apis/stash/v1alpha1"
-	v1beta1 "stash.appscode.dev/stash/apis/stash/v1beta1"
+	v1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"

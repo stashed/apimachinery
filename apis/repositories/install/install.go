@@ -17,8 +17,8 @@ limitations under the License.
 package install
 
 import (
-	"stash.appscode.dev/stash/apis/repositories"
-	"stash.appscode.dev/stash/apis/repositories/v1alpha1"
+	"stash.appscode.dev/apimachinery/apis/repositories"
+	"stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"

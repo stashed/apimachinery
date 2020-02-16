@@ -17,7 +17,7 @@
 set -eou pipefail
 
 GOPATH=$(go env GOPATH)
-REPO_ROOT="$GOPATH/src/stash.appscode.dev/stash"
+REPO_ROOT="$GOPATH/src/stash.appscode.dev/apimachinery"
 
 pushd $REPO_ROOT
 

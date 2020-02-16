@@ -21,8 +21,8 @@ package v1alpha1
 import (
 	"time"
 
-	v1alpha1 "stash.appscode.dev/stash/apis/repositories/v1alpha1"
-	scheme "stash.appscode.dev/stash/client/clientset/versioned/scheme"
+	v1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
+	scheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	rest "k8s.io/client-go/rest"

@@ -19,7 +19,7 @@ limitations under the License.
 
 syntax = 'proto2';
 
-package stash.appscode.dev.stash.apis.repositories.v1alpha1;
+package stash.appscode.dev.apimachinery.apis.repositories.v1alpha1;
 
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";

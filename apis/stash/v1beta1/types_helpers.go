@@ -17,7 +17,7 @@ limitations under the License.
 package v1beta1
 
 import (
-	"stash.appscode.dev/stash/apis/stash/v1alpha1"
+	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 
 	"k8s.io/kube-openapi/pkg/common"
 )
@@ -33,7 +33,7 @@ func (t TargetRef) IsWorkload() bool {
 }
 
 func GetOpenAPIDefinitionsWithRetentionPolicy(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
-	key := "stash.appscode.dev/stash/apis/stash/v1alpha1.RetentionPolicy"
+	key := "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy"
 	out := GetOpenAPIDefinitions(ref)
 	out[key] = v1alpha1.GetOpenAPIDefinitions(ref)[key]
 	return out

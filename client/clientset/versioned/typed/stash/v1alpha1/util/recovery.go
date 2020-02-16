@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"time"
 
-	api "stash.appscode.dev/stash/apis/stash/v1alpha1"
-	cs "stash.appscode.dev/stash/client/clientset/versioned/typed/stash/v1alpha1"
+	api "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	cs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1alpha1"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/golang/glog"

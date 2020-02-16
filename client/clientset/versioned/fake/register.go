@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
-	repositoriesv1alpha1 "stash.appscode.dev/stash/apis/repositories/v1alpha1"
-	stashv1alpha1 "stash.appscode.dev/stash/apis/stash/v1alpha1"
-	stashv1beta1 "stash.appscode.dev/stash/apis/stash/v1beta1"
+	repositoriesv1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
+	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

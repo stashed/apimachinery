@@ -21,10 +21,10 @@ package v1alpha1
 import (
 	time "time"
 
-	stashv1alpha1 "stash.appscode.dev/stash/apis/stash/v1alpha1"
-	versioned "stash.appscode.dev/stash/client/clientset/versioned"
-	internalinterfaces "stash.appscode.dev/stash/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "stash.appscode.dev/stash/client/listers/stash/v1alpha1"
+	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	versioned "stash.appscode.dev/apimachinery/client/clientset/versioned"
+	internalinterfaces "stash.appscode.dev/apimachinery/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "stash.appscode.dev/apimachinery/client/listers/stash/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

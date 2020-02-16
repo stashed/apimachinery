@@ -19,7 +19,7 @@ limitations under the License.
 
 syntax = 'proto2';
 
-package stash.appscode.dev.stash.apis.stash.v1beta1;
+package stash.appscode.dev.apimachinery.apis.stash.v1beta1;
 
 import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
@@ -28,7 +28,7 @@ import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 import "kmodules.xyz/offshoot-api/api/v1/generated.proto";
 import "kmodules.xyz/prober/api/v1/generated.proto";
-import "stash.appscode.dev/stash/apis/stash/v1alpha1/generated.proto";
+import "stash.appscode.dev/apimachinery/apis/stash/v1alpha1/generated.proto";
 
 // Package-wide variables from generator "generated".
 option go_package = "v1beta1";
@@ -78,7 +78,7 @@ message BackupBatchSpec {
   optional k8s.io.api.core.v1.LocalObjectReference repository = 5;
 
   // RetentionPolicy indicates the policy to follow to clean old backup snapshots
-  optional .stash.appscode.dev.stash.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 6;
+  optional .stash.appscode.dev.apimachinery.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 6;
 
   // Indicates that the BackupConfiguration is paused from taking backup. Default value is 'false'
   // +optional
@@ -122,7 +122,7 @@ message BackupBlueprintList {
 
 message BackupBlueprintSpec {
   // RepositorySpec is used to create Repository crd for respective workload
-  optional .stash.appscode.dev.stash.apis.stash.v1alpha1.RepositorySpec repositorySpec = 1;
+  optional .stash.appscode.dev.apimachinery.apis.stash.v1alpha1.RepositorySpec repositorySpec = 1;
 
   optional string schedule = 2;
 
@@ -131,7 +131,7 @@ message BackupBlueprintSpec {
   optional TaskRef task = 3;
 
   // RetentionPolicy indicates the policy to follow to clean old backup snapshots
-  optional .stash.appscode.dev.stash.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 4;
+  optional .stash.appscode.dev.apimachinery.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 4;
 
   // RuntimeSettings allow to specify Resources, NodeSelector, Affinity, Toleration, ReadinessProbe etc.
   // +optional
@@ -194,7 +194,7 @@ message BackupConfigurationSpec {
   optional k8s.io.api.core.v1.LocalObjectReference repository = 4;
 
   // RetentionPolicy indicates the policy to follow to clean old backup snapshots
-  optional .stash.appscode.dev.stash.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 5;
+  optional .stash.appscode.dev.apimachinery.apis.stash.v1alpha1.RetentionPolicy retentionPolicy = 5;
 
   // Indicates that the BackupConfiguration is paused from taking backup. Default value is 'false'
   // +optional

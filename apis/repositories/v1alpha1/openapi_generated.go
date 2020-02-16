@@ -368,9 +368,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/prober/api/v1.FormEntry":                                        schema_kmodulesxyz_prober_api_v1_FormEntry(ref),
 		"kmodules.xyz/prober/api/v1.HTTPPostAction":                                   schema_kmodulesxyz_prober_api_v1_HTTPPostAction(ref),
 		"kmodules.xyz/prober/api/v1.Handler":                                          schema_kmodulesxyz_prober_api_v1_Handler(ref),
-		"stash.appscode.dev/stash/apis/repositories/v1alpha1.Snapshot":                schema_stash_apis_repositories_v1alpha1_Snapshot(ref),
-		"stash.appscode.dev/stash/apis/repositories/v1alpha1.SnapshotList":            schema_stash_apis_repositories_v1alpha1_SnapshotList(ref),
-		"stash.appscode.dev/stash/apis/repositories/v1alpha1.SnapshotStatus":          schema_stash_apis_repositories_v1alpha1_SnapshotStatus(ref),
+		"stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.Snapshot":         schema_apimachinery_apis_repositories_v1alpha1_Snapshot(ref),
+		"stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.SnapshotList":     schema_apimachinery_apis_repositories_v1alpha1_SnapshotList(ref),
+		"stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.SnapshotStatus":   schema_apimachinery_apis_repositories_v1alpha1_SnapshotStatus(ref),
 	}
 }
 
@@ -17348,7 +17348,7 @@ func schema_kmodulesxyz_prober_api_v1_Handler(ref common.ReferenceCallback) comm
 	}
 }
 
-func schema_stash_apis_repositories_v1alpha1_Snapshot(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_repositories_v1alpha1_Snapshot(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17375,18 +17375,18 @@ func schema_stash_apis_repositories_v1alpha1_Snapshot(ref common.ReferenceCallba
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/repositories/v1alpha1.SnapshotStatus"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.SnapshotStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/stash/apis/repositories/v1alpha1.SnapshotStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.SnapshotStatus"},
 	}
 }
 
-func schema_stash_apis_repositories_v1alpha1_SnapshotList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_repositories_v1alpha1_SnapshotList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17417,7 +17417,7 @@ func schema_stash_apis_repositories_v1alpha1_SnapshotList(ref common.ReferenceCa
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/repositories/v1alpha1.Snapshot"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.Snapshot"),
 									},
 								},
 							},
@@ -17428,11 +17428,11 @@ func schema_stash_apis_repositories_v1alpha1_SnapshotList(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/stash/apis/repositories/v1alpha1.Snapshot"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1.Snapshot"},
 	}
 }
 
-func schema_stash_apis_repositories_v1alpha1_SnapshotStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_repositories_v1alpha1_SnapshotStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{

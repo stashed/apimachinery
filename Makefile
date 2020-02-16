@@ -17,16 +17,12 @@ SHELL=/bin/bash -o pipefail
 
 GO_PKG   := stash.appscode.dev
 REPO     := $(notdir $(shell pwd))
-BIN      := stash
-COMPRESS ?=no
+BIN      := apimachinery
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.16
 API_GROUPS           ?= repositories:v1alpha1 stash:v1alpha1 stash:v1beta1
-
-# Where to push the docker image.
-REGISTRY ?= appscode
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
@@ -57,7 +53,7 @@ NEW_RESTIC_VER   := 0.9.6
 ###
 
 SRC_PKGS := api apis client pkg
-SRC_DIRS := $(SRC_PKGS) *.go test hack/gencrd hack/gendocs # directories which hold app source (not vendored)
+SRC_DIRS := $(SRC_PKGS) hack/gencrd # directories which hold app source (not vendored)
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
 BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
@@ -66,17 +62,10 @@ BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 
-BASEIMAGE_PROD   ?= busybox:1.31.1
+BASEIMAGE_PROD   ?= gcr.io/distroless/static
 BASEIMAGE_DBG    ?= debian:stretch
 
-IMAGE            := $(REGISTRY)/$(BIN)
-VERSION_PROD     := $(VERSION)
-VERSION_DBG      := $(VERSION)-dbg
-TAG              := $(VERSION)_$(OS)_$(ARCH)
-TAG_PROD         := $(TAG)
-TAG_DBG          := $(VERSION)-dbg_$(OS)_$(ARCH)
-
-GO_VERSION       ?= 1.13.6
+GO_VERSION       ?= 1.13.8
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
 TEST_IMAGE       ?= appscode/golang-dev:$(GO_VERSION)-stash
 
@@ -94,8 +83,6 @@ BUILD_DIRS  := bin/$(OS)_$(ARCH)     \
                $(HOME)/.kube         \
                $(HOME)/.minikube
 
-DOCKERFILE_PROD  = Dockerfile.in
-DOCKERFILE_DBG   = Dockerfile.dbg
 DOCKERFILE_TEST  = Dockerfile.test
 
 DOCKER_REPO_ROOT := /go/src/$(GO_PKG)/$(REPO)
@@ -114,23 +101,7 @@ build-%:
 	    GOOS=$(firstword $(subst _, ,$*)) \
 	    GOARCH=$(lastword $(subst _, ,$*))
 
-container-%:
-	@$(MAKE) container                    \
-	    --no-print-directory              \
-	    GOOS=$(firstword $(subst _, ,$*)) \
-	    GOARCH=$(lastword $(subst _, ,$*))
-
-push-%:
-	@$(MAKE) push                         \
-	    --no-print-directory              \
-	    GOOS=$(firstword $(subst _, ,$*)) \
-	    GOARCH=$(lastword $(subst _, ,$*))
-
 all-build: $(addprefix build-, $(subst /,_, $(BIN_PLATFORMS)))
-
-all-container: $(addprefix container-, $(subst /,_, $(DOCKER_PLATFORMS)))
-
-all-push: $(addprefix push-, $(subst /,_, $(DOCKER_PLATFORMS)))
 
 version:
 	@echo ::set-output name=version::$(VERSION)
@@ -254,7 +225,7 @@ gen-crd-protos-%:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,stash.appscode.dev/stash/apis/$(subst _,/,$*)
+			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,stash.appscode.dev/apimachinery/apis/$(subst _,/,$*)
 
 .PHONY: gen-crd-protos-stash-v1beta1
 gen-crd-protos-stash-v1beta1:
@@ -272,7 +243,7 @@ gen-crd-protos-stash-v1beta1:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-stash.appscode.dev/stash/apis/stash/v1alpha1,stash.appscode.dev/stash/apis/stash/v1beta1
+			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-stash.appscode.dev/apimachinery/apis/stash/v1alpha1,stash.appscode.dev/apimachinery/apis/stash/v1beta1
 
 .PHONY: gen-bindata
 gen-bindata:
@@ -314,16 +285,8 @@ fmt: $(BUILD_DIRS)
 
 build: $(OUTBIN)
 
-# The following structure defeats Go's (intentional) behavior to always touch
-# result files, even if they have not changed.  This will still run `go` but
-# will not trigger further work if nothing has actually changed.
-
-$(OUTBIN): .go/$(OUTBIN).stamp
-	@true
-
-# This will build the binary under ./.go and update the real binary iff needed.
-.PHONY: .go/$(OUTBIN).stamp
-.go/$(OUTBIN).stamp: $(BUILD_DIRS)
+.PHONY: .go/$(OUTBIN)
+$(OUTBIN): $(BUILD_DIRS)
 	@echo "making $(OUTBIN)"
 	@docker run                                                 \
 	    -i                                                      \
@@ -348,60 +311,10 @@ $(OUTBIN): .go/$(OUTBIN).stamp
 	        commit_timestamp=$(commit_timestamp)                \
 	        ./hack/build.sh                                     \
 	    "
-	@if [ $(COMPRESS) = yes ] && [ $(OS) != darwin ]; then          \
-		echo "compressing $(OUTBIN)";                               \
-		@docker run                                                 \
-		    -i                                                      \
-		    --rm                                                    \
-		    -u $$(id -u):$$(id -g)                                  \
-		    -v $$(pwd):/src                                         \
-		    -w /src                                                 \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin                \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin/$(OS)_$(ARCH)  \
-		    -v $$(pwd)/.go/cache:/.cache                            \
-		    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-		    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-		    $(BUILD_IMAGE)                                          \
-		    upx --brute /go/$(OUTBIN);                              \
-	fi
-	@if ! cmp -s .go/$(OUTBIN) $(OUTBIN); then \
-	    mv .go/$(OUTBIN) $(OUTBIN);            \
-	    date >$@;                              \
-	fi
 	@echo
-
-# Used to track state in hidden files.
-DOTFILE_IMAGE    = $(subst /,_,$(IMAGE))-$(TAG)
-
-container: bin/.container-$(DOTFILE_IMAGE)-PROD bin/.container-$(DOTFILE_IMAGE)-DBG
-bin/.container-$(DOTFILE_IMAGE)-%: bin/$(OS)_$(ARCH)/$(BIN) $(DOCKERFILE_%)
-	@echo "container: $(IMAGE):$(TAG_$*)"
-	@sed                                            \
-	    -e 's|{ARG_BIN}|$(BIN)|g'                   \
-	    -e 's|{ARG_ARCH}|$(ARCH)|g'                 \
-	    -e 's|{ARG_OS}|$(OS)|g'                     \
-	    -e 's|{ARG_FROM}|$(BASEIMAGE_$*)|g'         \
-	    -e 's|{RESTIC_VER}|$(RESTIC_VER)|g'         \
-	    -e 's|{NEW_RESTIC_VER}|$(NEW_RESTIC_VER)|g' \
-	    $(DOCKERFILE_$*) > bin/.dockerfile-$*-$(OS)_$(ARCH)
-	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(IMAGE):$(TAG_$*) -f bin/.dockerfile-$*-$(OS)_$(ARCH) .
-	@docker images -q $(IMAGE):$(TAG_$*) > $@
-	@echo
-
-push: bin/.push-$(DOTFILE_IMAGE)-PROD bin/.push-$(DOTFILE_IMAGE)-DBG
-bin/.push-$(DOTFILE_IMAGE)-%: bin/.container-$(DOTFILE_IMAGE)-%
-	@docker push $(IMAGE):$(TAG_$*)
-	@echo "pushed: $(IMAGE):$(TAG_$*)"
-	@echo
-
-.PHONY: docker-manifest
-docker-manifest: docker-manifest-PROD docker-manifest-DBG
-docker-manifest-%:
-	DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create -a $(IMAGE):$(VERSION_$*) $(foreach PLATFORM,$(DOCKER_PLATFORMS),$(IMAGE):$(VERSION_$*)_$(subst /,_,$(PLATFORM)))
-	DOCKER_CLI_EXPERIMENTAL=enabled docker manifest push $(IMAGE):$(VERSION_$*)
 
 .PHONY: test
-test: unit-tests e2e-tests
+test: unit-tests
 
 bin/.container-$(DOTFILE_IMAGE)-TEST:
 	@echo "container: $(TEST_IMAGE)"
@@ -434,55 +347,8 @@ unit-tests: $(BUILD_DIRS) bin/.container-$(DOTFILE_IMAGE)-TEST
 	        ARCH=$(ARCH)                                        \
 	        OS=$(OS)                                            \
 	        VERSION=$(VERSION)                                  \
-	        ./hack/test.sh $(SRC_PKGS)                          \
+	        ./hack/test.sh $(SRC_DIRS)                          \
 	    "
-
-# - e2e-tests can hold both ginkgo args (as GINKGO_ARGS) and program/test args (as TEST_ARGS).
-#       make e2e-tests TEST_ARGS="--selfhosted-operator=false --storageclass=standard" GINKGO_ARGS="--flakeAttempts=2"
-#
-# - Minimalist:
-#       make e2e-tests
-#
-# NB: -t is used to catch ctrl-c interrupt from keyboard and -t will be problematic for CI.
-
-GINKGO_ARGS ?= "--flakeAttempts=2"
-TEST_ARGS   ?=
-
-.PHONY: e2e-tests
-e2e-tests: $(BUILD_DIRS)
-	@docker run                                                 \
-	    -i                                                      \
-	    --rm                                                    \
-	    -u $$(id -u):$$(id -g)                                  \
-	    -v $$(pwd):/src                                         \
-	    -w /src                                                 \
-	    --net=host                                              \
-	    -v $(HOME)/.kube:/.kube                                 \
-	    -v $(HOME)/.minikube:$(HOME)/.minikube                  \
-	    -v $(HOME)/.credentials:$(HOME)/.credentials            \
-	    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin                \
-	    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin/$(OS)_$(ARCH)  \
-	    -v $$(pwd)/.go/cache:/.cache                            \
-	    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-	    --env KUBECONFIG=$(KUBECONFIG)                          \
-	    --env-file=$$(pwd)/hack/config/.env                     \
-	    $(BUILD_IMAGE)                                          \
-	    /bin/bash -c "                                          \
-	        ARCH=$(ARCH)                                        \
-	        OS=$(OS)                                            \
-	        VERSION=$(VERSION)                                  \
-	        DOCKER_REGISTRY=$(REGISTRY)                         \
-	        TAG=$(TAG)                                          \
-	        KUBECONFIG=$${KUBECONFIG#$(HOME)}                   \
-	        GINKGO_ARGS='$(GINKGO_ARGS)'                        \
-	        TEST_ARGS='$(TEST_ARGS) --image-tag=$(TAG)'         \
-	        ./hack/e2e.sh                                       \
-	    "
-
-.PHONY: e2e-parallel
-e2e-parallel:
-	@$(MAKE) e2e-tests GINKGO_ARGS="$(GINKGO_ARGS) -p -stream" --no-print-directory
 
 ADDTL_LINTERS   := goconst,gofmt,goimports,unparam
 
@@ -508,40 +374,11 @@ lint: $(BUILD_DIRS)
 $(BUILD_DIRS):
 	@mkdir -p $@
 
-REGISTRY_SECRET ?=
-
-ifeq ($(strip $(REGISTRY_SECRET)),)
-	IMAGE_PULL_SECRETS =
-else
-	IMAGE_PULL_SECRETS = --set imagePullSecrets[0]=$(REGISTRY_SECRET)
-endif
-
-.PHONY: install
-install:
-	@cd ../installer; \
-	helm install stash charts/stash \
-		--namespace=kube-system \
-		--set operator.registry=$(REGISTRY) \
-		--set operator.tag=$(TAG) \
-		--set imagePullPolicy=Always \
-		$(IMAGE_PULL_SECRETS); \
-	kubectl wait --for=condition=Ready pods -n kube-system -l app=stash --timeout=5m; \
-	kubectl wait --for=condition=Available apiservice -l app=stash --timeout=5m
-
-.PHONY: uninstall
-uninstall:
-	@cd ../installer; \
-	helm uninstall stash --namespace=kube-system || true
-
-.PHONY: purge
-purge: uninstall
-	kubectl delete crds -l app=stash
-
 .PHONY: dev
 dev: gen fmt push
 
 .PHONY: verify
-verify: verify-gen # verify-modules
+verify: verify-modules verify-gen
 
 .PHONY: verify-modules
 verify-modules:
@@ -554,7 +391,7 @@ verify-modules:
 .PHONY: verify-gen
 verify-gen: gen fmt
 	@if !(git diff --exit-code HEAD); then \
-		echo "files are out of date, run make gen fmt"; exit 1; \
+		echo "generated files are out of date, run make gen"; exit 1; \
 	fi
 
 .PHONY: add-license
@@ -568,7 +405,7 @@ add-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib" -v
+		ltag -t "./hack/license" --excludes "vendor contrib libbuild" -v
 
 .PHONY: check-license
 check-license:
@@ -581,47 +418,11 @@ check-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib" --check -v
+		ltag -t "./hack/license" --excludes "vendor contrib libbuild" --check -v
 
 .PHONY: ci
 ci: verify check-license lint build unit-tests #cover
 
-.PHONY: qa
-qa:
-	@if [ "$$APPSCODE_ENV" = "prod" ]; then                                              \
-		echo "Nothing to do in prod env. Are you trying to 'release' binaries to prod?"; \
-		exit 1;                                                                          \
-	fi
-	@if [ "$(version_strategy)" = "tag" ]; then               \
-		echo "Are you trying to 'release' binaries to prod?"; \
-		exit 1;                                               \
-	fi
-	@$(MAKE) clean all-push docker-manifest --no-print-directory
-
-.PHONY: release
-release:
-	@if [ "$$APPSCODE_ENV" != "prod" ]; then      \
-		echo "'release' only works in PROD env."; \
-		exit 1;                                   \
-	fi
-	@if [ "$(version_strategy)" != "tag" ]; then                    \
-		echo "apply tag to release binaries and/or docker images."; \
-		exit 1;                                                     \
-	fi
-	@$(MAKE) clean all-push docker-manifest --no-print-directory
-
 .PHONY: clean
 clean:
 	rm -rf .go bin
-
-.PHONY: run
-run:
-	GO111MODULE=on go run -mod=vendor *.go run \
-		--v=3 \
-		--secure-port=8443 \
-		--kubeconfig=$(KUBECONFIG) \
-		--authorization-kubeconfig=$(KUBECONFIG) \
-		--authentication-kubeconfig=$(KUBECONFIG) \
-		--authentication-skip-lookup \
-		--docker-registry=$(REGISTRY) \
-		--image-tag=$(TAG)

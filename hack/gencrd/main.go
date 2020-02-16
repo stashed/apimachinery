@@ -21,11 +21,11 @@ import (
 	"os"
 	"path/filepath"
 
-	repoinstall "stash.appscode.dev/stash/apis/repositories/install"
-	repov1alpha1 "stash.appscode.dev/stash/apis/repositories/v1alpha1"
-	stashinstall "stash.appscode.dev/stash/apis/stash/install"
-	stashv1alpha1 "stash.appscode.dev/stash/apis/stash/v1alpha1"
-	stashv1beta1 "stash.appscode.dev/stash/apis/stash/v1beta1"
+	repoinstall "stash.appscode.dev/apimachinery/apis/repositories/install"
+	repov1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
+	stashinstall "stash.appscode.dev/apimachinery/apis/stash/install"
+	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
 	gort "github.com/appscode/go/runtime"
 	"github.com/go-openapi/spec"
@@ -91,7 +91,7 @@ func generateSwaggerJson() {
 		glog.Fatal(err)
 	}
 
-	filename := gort.GOPath() + "/src/stash.appscode.dev/stash/api/openapi-spec/swagger.json"
+	filename := gort.GOPath() + "/src/stash.appscode.dev/apimachinery/api/openapi-spec/swagger.json"
 	err = os.MkdirAll(filepath.Dir(filename), 0755)
 	if err != nil {
 		glog.Fatal(err)

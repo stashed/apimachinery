@@ -368,21 +368,21 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/prober/api/v1.FormEntry":                                        schema_kmodulesxyz_prober_api_v1_FormEntry(ref),
 		"kmodules.xyz/prober/api/v1.HTTPPostAction":                                   schema_kmodulesxyz_prober_api_v1_HTTPPostAction(ref),
 		"kmodules.xyz/prober/api/v1.Handler":                                          schema_kmodulesxyz_prober_api_v1_Handler(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.FileGroup":                      schema_stash_apis_stash_v1alpha1_FileGroup(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.LocalTypedReference":            schema_stash_apis_stash_v1alpha1_LocalTypedReference(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.Recovery":                       schema_stash_apis_stash_v1alpha1_Recovery(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RecoveryList":                   schema_stash_apis_stash_v1alpha1_RecoveryList(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RecoverySpec":                   schema_stash_apis_stash_v1alpha1_RecoverySpec(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RecoveryStatus":                 schema_stash_apis_stash_v1alpha1_RecoveryStatus(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.Repository":                     schema_stash_apis_stash_v1alpha1_Repository(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RepositoryList":                 schema_stash_apis_stash_v1alpha1_RepositoryList(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RepositorySpec":                 schema_stash_apis_stash_v1alpha1_RepositorySpec(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RepositoryStatus":               schema_stash_apis_stash_v1alpha1_RepositoryStatus(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.Restic":                         schema_stash_apis_stash_v1alpha1_Restic(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.ResticList":                     schema_stash_apis_stash_v1alpha1_ResticList(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.ResticSpec":                     schema_stash_apis_stash_v1alpha1_ResticSpec(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RestoreStats":                   schema_stash_apis_stash_v1alpha1_RestoreStats(ref),
-		"stash.appscode.dev/stash/apis/stash/v1alpha1.RetentionPolicy":                schema_stash_apis_stash_v1alpha1_RetentionPolicy(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.FileGroup":               schema_apimachinery_apis_stash_v1alpha1_FileGroup(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.LocalTypedReference":     schema_apimachinery_apis_stash_v1alpha1_LocalTypedReference(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Recovery":                schema_apimachinery_apis_stash_v1alpha1_Recovery(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoveryList":            schema_apimachinery_apis_stash_v1alpha1_RecoveryList(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoverySpec":            schema_apimachinery_apis_stash_v1alpha1_RecoverySpec(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoveryStatus":          schema_apimachinery_apis_stash_v1alpha1_RecoveryStatus(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Repository":              schema_apimachinery_apis_stash_v1alpha1_Repository(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositoryList":          schema_apimachinery_apis_stash_v1alpha1_RepositoryList(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositorySpec":          schema_apimachinery_apis_stash_v1alpha1_RepositorySpec(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositoryStatus":        schema_apimachinery_apis_stash_v1alpha1_RepositoryStatus(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Restic":                  schema_apimachinery_apis_stash_v1alpha1_Restic(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.ResticList":              schema_apimachinery_apis_stash_v1alpha1_ResticList(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.ResticSpec":              schema_apimachinery_apis_stash_v1alpha1_ResticSpec(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RestoreStats":            schema_apimachinery_apis_stash_v1alpha1_RestoreStats(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy":         schema_apimachinery_apis_stash_v1alpha1_RetentionPolicy(ref),
 	}
 }
 
@@ -17360,7 +17360,7 @@ func schema_kmodulesxyz_prober_api_v1_Handler(ref common.ReferenceCallback) comm
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_FileGroup(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_FileGroup(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17400,7 +17400,7 @@ func schema_stash_apis_stash_v1alpha1_FileGroup(ref common.ReferenceCallback) co
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_LocalTypedReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_LocalTypedReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17434,7 +17434,7 @@ func schema_stash_apis_stash_v1alpha1_LocalTypedReference(ref common.ReferenceCa
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_Recovery(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_Recovery(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17461,23 +17461,23 @@ func schema_stash_apis_stash_v1alpha1_Recovery(ref common.ReferenceCallback) com
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RecoverySpec"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoverySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RecoveryStatus"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoveryStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.RecoverySpec", "stash.appscode.dev/stash/apis/stash/v1alpha1.RecoveryStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoverySpec", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RecoveryStatus"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RecoveryList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RecoveryList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17508,7 +17508,7 @@ func schema_stash_apis_stash_v1alpha1_RecoveryList(ref common.ReferenceCallback)
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.Recovery"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Recovery"),
 									},
 								},
 							},
@@ -17518,11 +17518,11 @@ func schema_stash_apis_stash_v1alpha1_RecoveryList(ref common.ReferenceCallback)
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.Recovery"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Recovery"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RecoverySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RecoverySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17601,7 +17601,7 @@ func schema_stash_apis_stash_v1alpha1_RecoverySpec(ref common.ReferenceCallback)
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RecoveryStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RecoveryStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17626,7 +17626,7 @@ func schema_stash_apis_stash_v1alpha1_RecoveryStatus(ref common.ReferenceCallbac
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RestoreStats"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RestoreStats"),
 									},
 								},
 							},
@@ -17636,11 +17636,11 @@ func schema_stash_apis_stash_v1alpha1_RecoveryStatus(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"stash.appscode.dev/stash/apis/stash/v1alpha1.RestoreStats"},
+			"stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RestoreStats"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_Repository(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_Repository(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17667,23 +17667,23 @@ func schema_stash_apis_stash_v1alpha1_Repository(ref common.ReferenceCallback) c
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RepositorySpec"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositorySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RepositoryStatus"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositoryStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.RepositorySpec", "stash.appscode.dev/stash/apis/stash/v1alpha1.RepositoryStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositorySpec", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RepositoryStatus"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RepositoryList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RepositoryList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17714,7 +17714,7 @@ func schema_stash_apis_stash_v1alpha1_RepositoryList(ref common.ReferenceCallbac
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.Repository"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Repository"),
 									},
 								},
 							},
@@ -17724,11 +17724,11 @@ func schema_stash_apis_stash_v1alpha1_RepositoryList(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.Repository"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Repository"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RepositorySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RepositorySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17755,7 +17755,7 @@ func schema_stash_apis_stash_v1alpha1_RepositorySpec(ref common.ReferenceCallbac
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RepositoryStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RepositoryStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17836,7 +17836,7 @@ func schema_stash_apis_stash_v1alpha1_RepositoryStatus(ref common.ReferenceCallb
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_Restic(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_Restic(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17863,18 +17863,18 @@ func schema_stash_apis_stash_v1alpha1_Restic(ref common.ReferenceCallback) commo
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.ResticSpec"),
+							Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.ResticSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.ResticSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.ResticSpec"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_ResticList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_ResticList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17905,7 +17905,7 @@ func schema_stash_apis_stash_v1alpha1_ResticList(ref common.ReferenceCallback) c
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.Restic"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Restic"),
 									},
 								},
 							},
@@ -17915,11 +17915,11 @@ func schema_stash_apis_stash_v1alpha1_ResticList(ref common.ReferenceCallback) c
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/stash/apis/stash/v1alpha1.Restic"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.Restic"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_ResticSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_ResticSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -17936,7 +17936,7 @@ func schema_stash_apis_stash_v1alpha1_ResticSpec(ref common.ReferenceCallback) c
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.FileGroup"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.FileGroup"),
 									},
 								},
 							},
@@ -17978,7 +17978,7 @@ func schema_stash_apis_stash_v1alpha1_ResticSpec(ref common.ReferenceCallback) c
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("stash.appscode.dev/stash/apis/stash/v1alpha1.RetentionPolicy"),
+										Ref: ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy"),
 									},
 								},
 							},
@@ -18015,11 +18015,11 @@ func schema_stash_apis_stash_v1alpha1_ResticSpec(ref common.ReferenceCallback) c
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.VolumeMount", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector", "kmodules.xyz/objectstore-api/api/v1.Backend", "stash.appscode.dev/stash/apis/stash/v1alpha1.FileGroup", "stash.appscode.dev/stash/apis/stash/v1alpha1.RetentionPolicy"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.VolumeMount", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector", "kmodules.xyz/objectstore-api/api/v1.Backend", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.FileGroup", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy"},
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RestoreStats(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RestoreStats(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -18049,7 +18049,7 @@ func schema_stash_apis_stash_v1alpha1_RestoreStats(ref common.ReferenceCallback)
 	}
 }
 
-func schema_stash_apis_stash_v1alpha1_RetentionPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_stash_v1alpha1_RetentionPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{

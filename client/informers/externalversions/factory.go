@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "stash.appscode.dev/stash/client/clientset/versioned"
-	internalinterfaces "stash.appscode.dev/stash/client/informers/externalversions/internalinterfaces"
-	stash "stash.appscode.dev/stash/client/informers/externalversions/stash"
+	versioned "stash.appscode.dev/apimachinery/client/clientset/versioned"
+	internalinterfaces "stash.appscode.dev/apimachinery/client/informers/externalversions/internalinterfaces"
+	stash "stash.appscode.dev/apimachinery/client/informers/externalversions/stash"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
