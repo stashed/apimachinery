@@ -120,6 +120,7 @@ type RestoreSessionList struct {
 	Items           []RestoreSession `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
+// +kubebuilder:validation:Enum=Pending;Running;Succeeded;Failed;Unknown
 type RestoreSessionPhase string
 
 const (
@@ -130,6 +131,7 @@ const (
 	RestoreSessionUnknown   RestoreSessionPhase = "Unknown"
 )
 
+// +kubebuilder:validation:Enum=Succeeded;Failed;Unknown
 type HostRestorePhase string
 
 const (
