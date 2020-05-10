@@ -119,6 +119,7 @@ type EmptyDirSettings struct {
 	DisableCaching bool `json:"disableCaching,omitempty" protobuf:"varint,3,opt,name=disableCaching"`
 }
 
+// +kubebuilder:validation:Enum=Restic;VolumeSnapshotter
 type Snapshotter string
 
 const (
