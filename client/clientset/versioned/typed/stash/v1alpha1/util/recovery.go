@@ -98,8 +98,8 @@ func TryUpdateRecovery(c cs.StashV1alpha1Interface, meta metav1.ObjectMeta, tran
 	return
 }
 
-func SetRecoveryStats(c cs.StashV1alpha1Interface, recovery *api.Recovery, path string, d time.Duration, phase api.RecoveryPhase) (*api.Recovery, error) {
-	out, err := UpdateRecoveryStatus(c, recovery.ObjectMeta, func(in *api.RecoveryStatus) *api.RecoveryStatus {
+func SetRecoveryStats(c cs.StashV1alpha1Interface, recovery metav1.ObjectMeta, path string, d time.Duration, phase api.RecoveryPhase) (*api.Recovery, error) {
+	out, err := UpdateRecoveryStatus(c, recovery, func(in *api.RecoveryStatus) *api.RecoveryStatus {
 		found := false
 		for _, stats := range in.Stats {
 			if stats.Path == path {
@@ -109,7 +109,7 @@ func SetRecoveryStats(c cs.StashV1alpha1Interface, recovery *api.Recovery, path 
 			}
 		}
 		if !found {
-			recovery.Status.Stats = append(recovery.Status.Stats, api.RestoreStats{
+			in.Stats = append(in.Stats, api.RestoreStats{
 				Path:     path,
 				Duration: d.String(),
 				Phase:    phase,

@@ -97,9 +97,9 @@ func TryUpdateBackupSession(c cs.StashV1beta1Interface, meta metav1.ObjectMeta, 
 	return
 }
 
-func UpdateBackupSessionStatusForHost(c cs.StashV1beta1Interface, targetRef api_v1beta1.TargetRef, backupSession *api_v1beta1.BackupSession, hostStats api_v1beta1.HostBackupStats) (*api_v1beta1.BackupSession, error) {
-	out, err := UpdateBackupSessionStatus(c, backupSession.ObjectMeta, func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
-		targetIdx, hostIdx, targets := UpsertHostForTarget(backupSession.Status.Targets, targetRef, hostStats)
+func UpdateBackupSessionStatusForHost(c cs.StashV1beta1Interface, targetRef api_v1beta1.TargetRef, backupSession metav1.ObjectMeta, hostStats api_v1beta1.HostBackupStats) (*api_v1beta1.BackupSession, error) {
+	out, err := UpdateBackupSessionStatus(c, backupSession, func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		targetIdx, hostIdx, targets := UpsertHostForTarget(in.Targets, targetRef, hostStats)
 		in.Targets = targets
 		if int32(len(targets[targetIdx].Stats)) != *targets[targetIdx].TotalHosts {
 			in.Targets[targetIdx].Phase = api_v1beta1.TargetBackupRunning

@@ -97,10 +97,10 @@ func TryUpdateRestoreSession(c cs.StashV1beta1Interface, meta metav1.ObjectMeta,
 	return
 }
 
-func UpdateRestoreSessionStatusForHost(c cs.StashV1beta1Interface, restoreSession *api_v1beta1.RestoreSession, hostStats api_v1beta1.HostRestoreStats) (*api_v1beta1.RestoreSession, error) {
-	out, err := UpdateRestoreSessionStatus(c, restoreSession.ObjectMeta, func(in *api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus {
+func UpdateRestoreSessionStatusForHost(c cs.StashV1beta1Interface, restoreSession metav1.ObjectMeta, hostStats api_v1beta1.HostRestoreStats) (*api_v1beta1.RestoreSession, error) {
+	out, err := UpdateRestoreSessionStatus(c, restoreSession, func(in *api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus {
 		// if an entry already exist for this host then update it
-		for i, v := range restoreSession.Status.Stats {
+		for i, v := range in.Stats {
 			if v.Hostname == hostStats.Hostname {
 				in.Stats[i] = hostStats
 				return in
