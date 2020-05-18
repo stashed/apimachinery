@@ -32,6 +32,19 @@ type BackupInvokerRef struct {
 	Name string `json:"name" protobuf:"bytes,3,opt,name=name"`
 }
 
+// +kubebuilder:validation:Enum=BackupTargetFound;StashSidecarInjected;CronJobCreated
+type BackupInvokerCondition string
+
+const (
+	// BackupTargetFound indicates whether the backup target was found
+	BackupTargetFound BackupInvokerCondition = "BackupTargetFound"
+	// StashSidecarInjected indicates whether stash sidecar was injected into the targeted workload
+	// This condition is applicable only for sidecar model
+	StashSidecarInjected BackupInvokerCondition = "StashSidecarInjected"
+	// CronJobCreated indicates whether the backup triggering CronJob was created
+	CronJobCreated BackupInvokerCondition = "CronJobCreated"
+)
+
 // Param declares a value to use for the Param called Name.
 type Param struct {
 	Name  string `json:"name" protobuf:"bytes,1,opt,name=name"`

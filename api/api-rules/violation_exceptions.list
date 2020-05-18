@@ -188,8 +188,11 @@ API rule violation: list_type_missing,kmodules.xyz/prober/api/v1,HTTPPostAction,
 API rule violation: list_type_missing,kmodules.xyz/prober/api/v1,HTTPPostAction,HTTPHeaders
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupBatchList,Items
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupBatchSpec,Members
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupBatchStatus,Conditions
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupBatchStatus,MemberConditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupBlueprintList,Items
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupConfigurationList,Items
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupConfigurationStatus,Conditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupSessionList,Items
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupSessionStatus,Targets
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupTarget,Paths
@@ -202,6 +205,7 @@ API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,FunctionSpec,VolumeDevices
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,FunctionSpec,VolumeMounts
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,HostBackupStats,Snapshots
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,MemberConditions,Conditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionList,Items
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionSpec,Rules
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionStatus,Stats
