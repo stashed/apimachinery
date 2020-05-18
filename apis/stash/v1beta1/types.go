@@ -45,6 +45,28 @@ const (
 	CronJobCreated BackupInvokerCondition = "CronJobCreated"
 )
 
+type BackupInvokerConditionTransitionReason string
+
+const (
+	// TargetAvailable indicates that the condition transitioned to this state because the target was available
+	TargetAvailable BackupInvokerConditionTransitionReason = "TargetAvailable"
+	// TargetNotAvailable indicates that the condition transitioned to this state because the target was not available
+	TargetNotAvailable BackupInvokerConditionTransitionReason = "TargetNotAvailable"
+	// UnableToCheckTargetAvailability indicates that the condition transitioned to this state because operator was unable
+	// to check the target availability
+	UnableToCheckTargetAvailability BackupInvokerConditionTransitionReason = "UnableToCheckTargetAvailability"
+	// SidecarInjectionSucceeded indicates that the condition transitioned to this state because sidecar was injected
+	// successfully into the targeted workload
+	SidecarInjectionSucceeded BackupInvokerConditionTransitionReason = "SidecarInjectionSucceeded"
+	// SidecarInjectionFailed indicates that the condition transitioned to this state because operator was unable
+	// to inject sidecar into the targeted workload
+	SidecarInjectionFailed BackupInvokerConditionTransitionReason = "SidecarInjectionFailed"
+	// CronJobCreationSucceeded indicates that the condition transitioned to this state because backup triggering CronJob was created successfully
+	CronJobCreationSucceeded BackupInvokerConditionTransitionReason = "CronJobCreationSucceeded"
+	// CronJobCreationFailed indicates that the condition transitioned to this state because operator was unable to create backup triggering CronJob
+	CronJobCreationFailed BackupInvokerConditionTransitionReason = "CronJobCreationFailed"
+)
+
 // Param declares a value to use for the Param called Name.
 type Param struct {
 	Name  string `json:"name" protobuf:"bytes,1,opt,name=name"`
