@@ -616,6 +616,10 @@ message RestoreSessionStatus {
   // Stats shows statistics of individual hosts for this restore session
   // +optional
   repeated HostRestoreStats stats = 4;
+
+  // Conditions shows current restore condition of the RestoreSession.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 5;
 }
 
 message RestoreTarget {

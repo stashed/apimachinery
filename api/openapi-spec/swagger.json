@@ -10985,6 +10985,13 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RestoreSessionStatus": {
       "type": "object",
       "properties": {
+        "conditions": {
+          "description": "Conditions shows current restore condition of the RestoreSession.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
+          }
+        },
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete restore, Phase will be \"Failed\".",
           "type": "string"
