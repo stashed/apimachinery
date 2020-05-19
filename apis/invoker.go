@@ -44,6 +44,7 @@ type TargetInfo struct {
 }
 
 type Invoker struct {
+	TypeMeta           metav1.TypeMeta
 	ObjectMeta         metav1.ObjectMeta
 	Labels             map[string]string
 	Hash               string
@@ -76,7 +77,10 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 		if err != nil {
 			return invoker, err
 		}
-
+		invoker.TypeMeta = metav1.TypeMeta{
+			Kind:       v1beta1.ResourceKindBackupBatch,
+			APIVersion: v1beta1.SchemeGroupVersion.String(),
+		}
 		invoker.ObjectMeta = backupBatch.ObjectMeta
 		invoker.Labels = backupBatch.OffshootLabels()
 		invoker.Hash = backupBatch.GetSpecHash()
@@ -149,10 +153,6 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 
 		}
 		invoker.SetCondition = func(target *v1beta1.TargetRef, condition kmapi.Condition) error {
-			backupBatch, err := stashClient.StashV1beta1().BackupBatches(namespace).Get(invokerName, metav1.GetOptions{})
-			if err != nil {
-				return err
-			}
 			_, err = v1beta1_util.UpdateBackupBatchStatus(stashClient.StashV1beta1(), backupBatch.ObjectMeta, func(in *v1beta1.BackupBatchStatus) *v1beta1.BackupBatchStatus {
 				if target != nil {
 					in.MemberConditions = setMemberCondition(in.MemberConditions, *target, condition)
@@ -179,7 +179,10 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 		if err != nil {
 			return invoker, err
 		}
-
+		invoker.TypeMeta = metav1.TypeMeta{
+			Kind:       v1beta1.ResourceKindBackupConfiguration,
+			APIVersion: v1beta1.SchemeGroupVersion.String(),
+		}
 		invoker.ObjectMeta = backupConfig.ObjectMeta
 		invoker.Labels = backupConfig.OffshootLabels()
 		invoker.Hash = backupConfig.GetSpecHash()
@@ -241,10 +244,6 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 			return idx, cond, nil
 		}
 		invoker.SetCondition = func(target *v1beta1.TargetRef, condition kmapi.Condition) error {
-			backupConfig, err := stashClient.StashV1beta1().BackupConfigurations(namespace).Get(invokerName, metav1.GetOptions{})
-			if err != nil {
-				return err
-			}
 			_, err = v1beta1_util.UpdateBackupConfigurationStatus(stashClient.StashV1beta1(), backupConfig.ObjectMeta, func(in *v1beta1.BackupConfigurationStatus) *v1beta1.BackupConfigurationStatus {
 				in.Conditions = kmapi.SetCondition(in.Conditions, condition)
 				return in
