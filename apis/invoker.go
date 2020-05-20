@@ -313,10 +313,5 @@ func isMemberConditionTrue(conditions []v1beta1.MemberConditions, target v1beta1
 }
 
 func targetMatched(t1, t2 v1beta1.TargetRef) bool {
-	if t1.APIVersion == t2.APIVersion &&
-		t1.Kind == t2.Kind &&
-		t1.Name == t2.Name {
-		return true
-	}
-	return false
+	return t1.APIVersion == t2.APIVersion && t1.Kind == t2.Kind && t1.Name == t2.Name
 }
