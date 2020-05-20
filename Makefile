@@ -177,7 +177,7 @@ openapi-%:
 		openapi-gen                                      \
 			--v 1 --logtostderr                          \
 			--go-header-file "./hack/license/go.txt" \
-			--input-dirs "$(GO_PKG)/$(REPO)/apis/$(subst _,/,$*),k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/api/resource,k8s.io/apimachinery/pkg/runtime,k8s.io/apimachinery/pkg/util/intstr,k8s.io/apimachinery/pkg/version,k8s.io/api/core/v1,k8s.io/api/apps/v1,kmodules.xyz/offshoot-api/api/v1,github.com/appscode/go/encoding/json/types,kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1,k8s.io/api/rbac/v1,kmodules.xyz/objectstore-api/api/v1,kmodules.xyz/prober/api/v1" \
+			--input-dirs "$(GO_PKG)/$(REPO)/apis/$(subst _,/,$*),k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/api/resource,k8s.io/apimachinery/pkg/runtime,k8s.io/apimachinery/pkg/util/intstr,k8s.io/apimachinery/pkg/version,k8s.io/api/core/v1,k8s.io/api/apps/v1,kmodules.xyz/offshoot-api/api/v1,github.com/appscode/go/encoding/json/types,kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1,k8s.io/api/rbac/v1,kmodules.xyz/objectstore-api/api/v1,kmodules.xyz/prober/api/v1,kmodules.xyz/client-go/api/v1" \
 			--output-package "$(GO_PKG)/$(REPO)/apis/$(subst _,/,$*)" \
 			--report-filename api/api-rules/violation_exceptions.list
 
@@ -225,7 +225,7 @@ gen-crd-protos-%:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,stash.appscode.dev/apimachinery/apis/$(subst _,/,$*)
+			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-kmodules.xyz/client-go/api/v1,stash.appscode.dev/apimachinery/apis/$(subst _,/,$*)
 
 .PHONY: gen-crd-protos-stash-v1beta1
 gen-crd-protos-stash-v1beta1:
@@ -243,7 +243,7 @@ gen-crd-protos-stash-v1beta1:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-stash.appscode.dev/apimachinery/apis/stash/v1alpha1,stash.appscode.dev/apimachinery/apis/stash/v1beta1
+			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-kmodules.xyz/client-go/api/v1,-stash.appscode.dev/apimachinery/apis/stash/v1alpha1,stash.appscode.dev/apimachinery/apis/stash/v1beta1
 
 .PHONY: gen-bindata
 gen-bindata:

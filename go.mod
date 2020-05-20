@@ -32,7 +32,7 @@ require (
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20191107075043-30be4d16710a
 	k8s.io/kubernetes v1.16.3
-	kmodules.xyz/client-go v0.0.0-20200116162153-e083ae16abca
+	kmodules.xyz/client-go v0.0.0-20200515063639-98d65435fd5d
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20191129174258-81f984340891
 	kmodules.xyz/custom-resources v0.0.0-20191130062942-f41b54f62419
 	kmodules.xyz/objectstore-api v0.0.0-20200213071506-f176860e67f7

@@ -19,6 +19,7 @@ package v1beta1
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 	prober "kmodules.xyz/prober/api/v1"
 )
@@ -154,6 +155,9 @@ type RestoreSessionStatus struct {
 	// Stats shows statistics of individual hosts for this restore session
 	// +optional
 	Stats []HostRestoreStats `json:"stats,omitempty" protobuf:"bytes,4,rep,name=stats"`
+	// Conditions shows current restore condition of the RestoreSession.
+	// +optional
+	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,5,rep,name=conditions"`
 }
 
 type HostRestoreStats struct {

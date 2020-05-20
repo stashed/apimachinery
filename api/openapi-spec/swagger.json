@@ -10173,6 +10173,20 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupBatchStatus": {
       "type": "object",
       "properties": {
+        "conditions": {
+          "description": "Conditions shows current backup setup condition of the BackupBatch.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
+          }
+        },
+        "memberConditions": {
+          "description": "MemberConditions shows current backup setup condition of the members of the BackupBatch.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.MemberConditions"
+          }
+        },
         "observedGeneration": {
           "description": "ObservedGeneration is the most recent generation observed for this BackupBatch. It corresponds to the BackupBatch's generation, which is updated on mutation by the API Server.",
           "type": "integer",
@@ -10397,6 +10411,13 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupConfigurationStatus": {
       "type": "object",
       "properties": {
+        "conditions": {
+          "description": "Conditions shows current backup setup condition of the BackupConfiguration.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
+          }
+        },
         "observedGeneration": {
           "description": "ObservedGeneration is the most recent generation observed for this BackupConfiguration. It corresponds to the BackupConfiguration's generation, which is updated on mutation by the API Server.",
           "type": "integer",
@@ -10810,6 +10831,25 @@
         }
       }
     },
+    "dev.appscode.stash.apimachinery.apis.stash.v1beta1.MemberConditions": {
+      "type": "object",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "conditions": {
+          "description": "Conditions shows current backup setup condition of this member.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
+          }
+        },
+        "target": {
+          "description": "Target is the reference to the respective target whose condition is shown here.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.TargetRef"
+        }
+      }
+    },
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.Param": {
       "description": "Param declares a value to use for the Param called Name.",
       "type": "object",
@@ -10945,6 +10985,13 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RestoreSessionStatus": {
       "type": "object",
       "properties": {
+        "conditions": {
+          "description": "Conditions shows current restore condition of the RestoreSession.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
+          }
+        },
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete restore, Phase will be \"Failed\".",
           "type": "string"
@@ -13909,6 +13956,43 @@
       "description": "IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.",
       "type": "string",
       "format": "int-or-string"
+    },
+    "xyz.kmodules.client-go.api.v1.Condition": {
+      "type": "object",
+      "required": [
+        "type",
+        "status",
+        "lastTransitionTime",
+        "reason",
+        "message"
+      ],
+      "properties": {
+        "lastTransitionTime": {
+          "description": "Last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+        },
+        "message": {
+          "description": "A human readable message indicating details about the transition. This field may be empty.",
+          "type": "string"
+        },
+        "observedGeneration": {
+          "description": "If set, this represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.condition[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "reason": {
+          "description": "The reason for the condition's last transition in CamelCase. The specific API may choose whether or not this field is considered a guaranteed API. This field may not be empty.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the condition, one of True, False, Unknown.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of condition in CamelCase or in foo.example.com/CamelCase. Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important.",
+          "type": "string"
+        }
+      }
     },
     "xyz.kmodules.objectstore-api.api.v1.AzureSpec": {
       "type": "object",
