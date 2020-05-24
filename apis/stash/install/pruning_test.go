@@ -31,16 +31,70 @@ func TestPruneTypes(t *testing.T) {
 	Install(clientsetscheme.Scheme)
 
 	// v1alpha1
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1alpha1.Restic{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1alpha1.Recovery{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1alpha1.Repository{}.CustomResourceDefinition(), fuzzer.Funcs)
+	if crd := (v1alpha1.Restic{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1alpha1.Recovery{}.CustomResourceDefinition()); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1alpha1.Repository{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
 
 	// v1beta1
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.BackupBatch{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.BackupBlueprint{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.BackupConfiguration{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.BackupSession{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.Function{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.RestoreSession{}.CustomResourceDefinition(), fuzzer.Funcs)
-	crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, v1beta1.Task{}.CustomResourceDefinition(), fuzzer.Funcs)
+	if crd := (v1beta1.BackupBatch{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupBlueprint{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupConfiguration{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupSession{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.Function{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.RestoreSession{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.Task{}).CustomResourceDefinition(); crd.V1 != nil {
+		crdfuzz.SchemaFuzzTestForV1CRD(t, clientsetscheme.Scheme, crd.V1, fuzzer.Funcs)
+	}
+
+	// v1alpha1
+	if crd := (v1alpha1.Restic{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1alpha1.Recovery{}.CustomResourceDefinition()); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1alpha1.Repository{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+
+	// v1beta1
+	if crd := (v1beta1.BackupBatch{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupBlueprint{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupConfiguration{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.BackupSession{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.Function{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.RestoreSession{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
+	if crd := (v1beta1.Task{}).CustomResourceDefinition(); crd.V1beta1 != nil {
+		crdfuzz.SchemaFuzzTestForV1beta1CRD(t, clientsetscheme.Scheme, crd.V1beta1, fuzzer.Funcs)
+	}
 }
