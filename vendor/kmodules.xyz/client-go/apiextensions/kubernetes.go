@@ -75,7 +75,11 @@ func RegisterCRDs(client crd_cs.Interface, crds []*CustomResourceDefinition) err
 				// xref: https://github.com/stashed/stash/issues/1007#issuecomment-570888875
 				crd.V1beta1.Spec.Validation.OpenAPIV3Schema.Type = ""
 			}
-			removeDefaults(crd.V1beta1.Spec.Validation.OpenAPIV3Schema)
+
+			if crd.V1beta1.Spec.Validation != nil &&
+				crd.V1beta1.Spec.Validation.OpenAPIV3Schema != nil {
+				removeDefaults(crd.V1beta1.Spec.Validation.OpenAPIV3Schema)
+			}
 
 			_, _, err := v1beta1.CreateOrUpdateCustomResourceDefinition(
 				context.TODO(),
@@ -125,8 +129,9 @@ func removeDefaults(schema *crdv1beta1.JSONSchemaProps) {
 	if schema.Not != nil {
 		removeDefaults(schema.Not)
 	}
-	for _, prop := range schema.Properties {
+	for key, prop := range schema.Properties {
 		removeDefaults(&prop)
+		schema.Properties[key] = prop
 	}
 	if schema.AdditionalProperties != nil {
 		removeDefaults(schema.AdditionalProperties.Schema)
