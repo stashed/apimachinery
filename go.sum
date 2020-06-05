@@ -918,8 +918,8 @@ kmodules.xyz/client-go v0.0.0-20200525195850-2fd180961371/go.mod h1:sY/eoe4ktxZE
 kmodules.xyz/constants v0.0.0-20200506032633-a21e58ceec72/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20200521005638-2433a187de95 h1:v0S/+ftzL6Xrs9XevgchAOJyPKlRQXPiZf87xotj3X4=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20200521005638-2433a187de95/go.mod h1:jpu8xFsDKd6kAWUAKk8oTu/GQGBWqhrcaDeOJdaCJnk=
-kmodules.xyz/custom-resources v0.0.0-20200601101635-ec36afabe85b h1:wkYROQ3SvMYFaIKfLLN1OzcN5zYNOlZ/YtaOU7BI2to=
-kmodules.xyz/custom-resources v0.0.0-20200601101635-ec36afabe85b/go.mod h1:lPCUavh6ID2fHTY+ZyUwVPD8ZnGReAvZSbgjoES8z5c=
+kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9 h1:W+k1qhU0W1rptia2PWPOb7IWUvWnf31EMnatXt7MW6w=
+kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9/go.mod h1:bu1V7HdnuHc1hgvbqAdcwTViQ0TfZwF3Nu/SjB4vai4=
 kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d h1:ud3XDScnBdD5q6nLQI/tHLSbuuSwIFaav6IhcQAz2qA=
 kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d/go.mod h1:k6sbzLWYBLRGDNmCj/NwLgj1cniRXCl9ux/P6+7Xd+A=
 kmodules.xyz/offshoot-api v0.0.0-20200521035628-e135bf07b226 h1:RZ7H0gl1z/9jLI74YOlGEtNeAknxTEKeAeYH0jakUcM=
