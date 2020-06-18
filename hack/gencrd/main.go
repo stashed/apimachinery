@@ -91,7 +91,7 @@ func generateSwaggerJson() {
 		glog.Fatal(err)
 	}
 
-	filename := gort.GOPath() + "/src/stash.appscode.dev/apimachinery/api/openapi-spec/swagger.json"
+	filename := gort.GOPath() + "/src/stash.appscode.dev/apimachinery/openapi/swagger.json"
 	err = os.MkdirAll(filepath.Dir(filename), 0755)
 	if err != nil {
 		glog.Fatal(err)
