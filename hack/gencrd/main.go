@@ -79,6 +79,7 @@ func generateSwaggerJson() {
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourceKindBackupBatch, stashv1beta1.ResourceKindBackupBatch, false},
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourceKindBackupBlueprint, stashv1beta1.ResourceKindBackupBlueprint, false},
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourcePluralRestoreSession, stashv1beta1.ResourceKindRestoreSession, true},
+			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourcePluralRestoreBatch, stashv1beta1.ResourceKindRestoreBatch, true},
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourceKindFunction, stashv1beta1.ResourceKindFunction, false},
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourcePluralTask, stashv1beta1.ResourceKindTask, false},
 		},
