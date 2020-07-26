@@ -45,6 +45,12 @@ var (
 	stdoutPipeCommand = Command{Name: "cat"}
 )
 
+var testTargetRef = api_v1beta1.TargetRef{
+	APIVersion: "test.stash.appscode.com",
+	Kind:       "UnitTest",
+	Name:       "unit-test-demo",
+}
+
 func setupTest(tempDir string) (*ResticWrapper, error) {
 	localRepoDir = filepath.Join(tempDir, "repo")
 	scratchDir = filepath.Join(tempDir, "scratch")
@@ -95,6 +101,55 @@ func cleanup(tempDir string) {
 	}
 }
 
+func TestInitializeRepository(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	if err != nil {
+		t.Error(err)
+	}
+	w, err := setupTest(tempDir)
+	if err != nil {
+		t.Error(err)
+	}
+	defer cleanup(tempDir)
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestRepositoryAlreadyExist_AfterInitialization(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	if err != nil {
+		t.Error(err)
+	}
+	w, err := setupTest(tempDir)
+	if err != nil {
+		t.Error(err)
+	}
+	defer cleanup(tempDir)
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+	repoExist := w.RepositoryAlreadyExist()
+	assert.Equal(t, true, repoExist)
+}
+
+func TestRepositoryAlreadyExist_WithoutInitialization(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	if err != nil {
+		t.Error(err)
+	}
+	w, err := setupTest(tempDir)
+	if err != nil {
+		t.Error(err)
+	}
+	defer cleanup(tempDir)
+
+	repoExist := w.RepositoryAlreadyExist()
+	assert.Equal(t, false, repoExist)
+}
+
 func TestBackupRestoreDirs(t *testing.T) {
 	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
 	if err != nil {
@@ -107,6 +162,12 @@ func TestBackupRestoreDirs(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	backupOpt := BackupOptions{
 		BackupPaths: []string{targetPath},
 		RetentionPolicy: api_v1alpha1.RetentionPolicy{
@@ -116,7 +177,7 @@ func TestBackupRestoreDirs(t *testing.T) {
 			DryRun:   false,
 		},
 	}
-	backupOut, err := w.RunBackup(backupOpt)
+	backupOut, err := w.RunBackup(backupOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -129,7 +190,7 @@ func TestBackupRestoreDirs(t *testing.T) {
 	restoreOpt := RestoreOptions{
 		RestorePaths: []string{targetPath},
 	}
-	restoreOut, err := w.RunRestore(restoreOpt)
+	restoreOut, err := w.RunRestore(restoreOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -155,6 +216,12 @@ func TestBackupRestoreStdin(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	backupOpt := BackupOptions{
 		StdinPipeCommand: stdinPipeCommand,
 		StdinFileName:    fileName,
@@ -165,7 +232,7 @@ func TestBackupRestoreStdin(t *testing.T) {
 			DryRun:   false,
 		},
 	}
-	backupOut, err := w.RunBackup(backupOpt)
+	backupOut, err := w.RunBackup(backupOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -175,7 +242,7 @@ func TestBackupRestoreStdin(t *testing.T) {
 		FileName:          fileName,
 		StdoutPipeCommand: stdoutPipeCommand,
 	}
-	dumpOut, err := w.Dump(dumpOpt)
+	dumpOut, err := w.Dump(dumpOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -194,6 +261,12 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	w.config.IONice = &ofst.IONiceSettings{
 		Class:     types.Int32P(2),
 		ClassData: types.Int32P(3),
@@ -211,7 +284,7 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 			DryRun:   false,
 		},
 	}
-	backupOut, err := w.RunBackup(backupOpt)
+	backupOut, err := w.RunBackup(backupOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -224,7 +297,7 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 	restoreOpt := RestoreOptions{
 		RestorePaths: []string{targetPath},
 	}
-	restoreOut, err := w.RunRestore(restoreOpt)
+	restoreOut, err := w.RunRestore(restoreOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -250,6 +323,12 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	w.config.IONice = &ofst.IONiceSettings{
 		Class:     types.Int32P(2),
 		ClassData: types.Int32P(3),
@@ -268,7 +347,7 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 			DryRun:   false,
 		},
 	}
-	backupOut, err := w.RunBackup(backupOpt)
+	backupOut, err := w.RunBackup(backupOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -278,7 +357,7 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 		FileName:          fileName,
 		StdoutPipeCommand: stdoutPipeCommand,
 	}
-	dumpOut, err := w.Dump(dumpOpt)
+	dumpOut, err := w.Dump(dumpOpt, testTargetRef)
 	if err != nil {
 		t.Error(err)
 	}
@@ -301,19 +380,20 @@ func TestRunParallelBackup(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
-	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, 2)
+	// Initialize Repository
+	err = w.InitializeRepository()
 	if err != nil {
 		t.Error(err)
 	}
 
-	// verify repository stats
-	assert.Equal(t, *backupOutput.RepositoryStats.Integrity, true)
-	assert.Equal(t, backupOutput.RepositoryStats.SnapshotCount, int64(3))
-
+	backupOpts := newParallelBackupOptions()
+	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
+	if err != nil {
+		t.Error(err)
+	}
 	// verify each host status
-	for i := range backupOutput.HostBackupStats {
-		assert.Equal(t, backupOutput.HostBackupStats[i].Phase, api_v1beta1.HostBackupSucceeded)
+	for i := range backupOutput.BackupTargetStatus.Stats {
+		assert.Equal(t, backupOutput.BackupTargetStatus.Stats[i].Phase, api_v1beta1.HostBackupSucceeded)
 	}
 }
 
@@ -333,15 +413,21 @@ func TestRunParallelRestore(t *testing.T) {
 	}
 	defer cleanup(tempDir)
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, 2)
+	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// verify that all host backup has succeeded
-	for i := range backupOutput.HostBackupStats {
-		assert.Equal(t, backupOutput.HostBackupStats[i].Phase, api_v1beta1.HostBackupSucceeded)
+	for i := range backupOutput.BackupTargetStatus.Stats {
+		assert.Equal(t, backupOutput.BackupTargetStatus.Stats[i].Phase, api_v1beta1.HostBackupSucceeded)
 	}
 
 	// run parallel restore
@@ -349,14 +435,14 @@ func TestRunParallelRestore(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	restoreOutput, err := w.RunParallelRestore(restoreOptions, 2)
+	restoreOutput, err := w.RunParallelRestore(restoreOptions, testTargetRef, 2)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// verify that all host has been restored successfully
-	for i := range restoreOutput.HostRestoreStats {
-		assert.Equal(t, restoreOutput.HostRestoreStats[i].Phase, api_v1beta1.HostRestoreSucceeded)
+	for i := range restoreOutput.RestoreTargetStatus.Stats {
+		assert.Equal(t, restoreOutput.RestoreTargetStatus.Stats[i].Phase, api_v1beta1.HostRestoreSucceeded)
 	}
 
 	// verify that restored file contents are identical to the backed up file
@@ -386,30 +472,285 @@ func TestRunParallelDump(t *testing.T) {
 		t.Error(err)
 	}
 
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
 	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, 2)
+	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// verify that all host backup has succeeded
-	for i := range backupOutput.HostBackupStats {
-		assert.Equal(t, backupOutput.HostBackupStats[i].Phase, api_v1beta1.HostBackupSucceeded)
+	for i := range backupOutput.BackupTargetStatus.Stats {
+		assert.Equal(t, backupOutput.BackupTargetStatus.Stats[i].Phase, api_v1beta1.HostBackupSucceeded)
 	}
 
 	// run parallel dump
 	dumpOptions := newParallelDumpOptions()
 
-	dumpOutput, err := w.ParallelDump(dumpOptions, 2)
+	dumpOutput, err := w.ParallelDump(dumpOptions, testTargetRef, 2)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// verify that all host has been restored successfully
-	for i := range dumpOutput.HostRestoreStats {
-		t.Logf("Host: %s, Phase: %s", dumpOutput.HostRestoreStats[i].Hostname, dumpOutput.HostRestoreStats[i].Phase)
-		assert.Equal(t, dumpOutput.HostRestoreStats[i].Phase, api_v1beta1.HostRestoreSucceeded)
+	for i := range dumpOutput.RestoreTargetStatus.Stats {
+		t.Logf("Host: %s, Phase: %s",
+			dumpOutput.RestoreTargetStatus.Stats[i].Hostname,
+			dumpOutput.RestoreTargetStatus.Stats[i].Phase,
+		)
+		assert.Equal(t, dumpOutput.RestoreTargetStatus.Stats[i].Phase, api_v1beta1.HostRestoreSucceeded)
 	}
+}
+
+func TestIncludeExcludePattern(t *testing.T) {
+	retentionPolicy := api_v1alpha1.RetentionPolicy{
+		Name:     "keep-last-1",
+		KeepLast: 1,
+		Prune:    true,
+		DryRun:   false,
+	}
+
+	testCases := []struct {
+		name              string
+		backupOpt         BackupOptions
+		restoreOpt        RestoreOptions
+		sourceFileNames   []string
+		restoredFileNames []string
+	}{
+		{
+			name: "normal backup and restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-1", "file-2", "file-3"},
+		},
+		{
+			name: "exclude one file during backup",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+				Exclude:         []string{"file-1"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-2", "file-3"},
+		},
+		{
+			name: "exclude multiple files during backup",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+				Exclude:         []string{"file-1", "file-2"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-3"},
+		},
+		{
+			name: "include one file during restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+			},
+			restoreOpt: RestoreOptions{
+				Include: []string{"file-1"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-1"},
+		},
+		{
+			name: "include multiple files during restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+			},
+			restoreOpt: RestoreOptions{
+				Include: []string{"file-1", "file-2"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-1", "file-2"},
+		},
+		{
+			name: "exclude one file during restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+			},
+			restoreOpt: RestoreOptions{
+				Exclude: []string{"file-1"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-2", "file-3"},
+		},
+		{
+			name: "exclude multiple files during restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+			},
+			restoreOpt: RestoreOptions{
+				Exclude: []string{"file-1", "file-2"},
+			},
+			sourceFileNames:   []string{"file-1", "file-2", "file-3"},
+			restoredFileNames: []string{"file-3"},
+		},
+	}
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			w, err := setupTest(tempDir)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			defer cleanup(tempDir)
+
+			// Initialize Repository
+			err = w.InitializeRepository()
+			if err != nil {
+				t.Error(err)
+			}
+
+			// create the source files
+			err = os.Remove(filepath.Join(targetPath, fileName))
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			for _, name := range test.sourceFileNames {
+				err = ioutil.WriteFile(filepath.Join(targetPath, name), []byte(fileContent), 0777)
+				if err != nil {
+					t.Error(err)
+					return
+				}
+			}
+			test.backupOpt.BackupPaths = []string{targetPath}
+
+			_, err = w.RunBackup(test.backupOpt, testTargetRef)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			// delete target then restore
+			if err = os.RemoveAll(targetPath); err != nil {
+				t.Error(err)
+				return
+			}
+			test.restoreOpt.RestorePaths = []string{targetPath}
+
+			_, err = w.RunRestore(test.restoreOpt, testTargetRef)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			var restoredFiles []string
+			err = filepath.Walk(targetPath, func(path string, info os.FileInfo, err error) error {
+				if !info.IsDir() {
+					restoredFiles = append(restoredFiles, info.Name())
+				}
+				return nil
+			})
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			assert.Equal(t, test.restoredFileNames, restoredFiles)
+		})
+	}
+}
+
+func TestApplyRetentionPolicy(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	if err != nil {
+		t.Error(err)
+	}
+
+	w, err := setupTest(tempDir)
+	if err != nil {
+		t.Error(err)
+	}
+	defer cleanup(tempDir)
+
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
+	backupOpt := BackupOptions{
+		BackupPaths: []string{targetPath},
+		RetentionPolicy: api_v1alpha1.RetentionPolicy{
+			Name:     "keep-last-1",
+			KeepLast: 1,
+			Prune:    true,
+			DryRun:   false,
+		},
+	}
+	// take two backup
+	_, err = w.RunBackup(backupOpt, testTargetRef)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = w.RunBackup(backupOpt, testTargetRef)
+	if err != nil {
+		t.Error(err)
+	}
+	// apply retention policy
+	repoStats, err := w.ApplyRetentionPolicies(backupOpt.RetentionPolicy)
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, int64(1), repoStats.SnapshotCount)
+	assert.Equal(t, int64(1), repoStats.SnapshotsRemovedOnLastCleanup)
+}
+func TestVerifyRepositoryIntegrity(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	if err != nil {
+		t.Error(err)
+	}
+
+	w, err := setupTest(tempDir)
+	if err != nil {
+		t.Error(err)
+	}
+	defer cleanup(tempDir)
+
+	// Initialize Repository
+	err = w.InitializeRepository()
+	if err != nil {
+		t.Error(err)
+	}
+
+	backupOpt := BackupOptions{
+		BackupPaths: []string{targetPath},
+		RetentionPolicy: api_v1alpha1.RetentionPolicy{
+			Name:     "keep-last-1",
+			KeepLast: 1,
+			Prune:    true,
+			DryRun:   false,
+		},
+	}
+	// take two backup
+	_, err = w.RunBackup(backupOpt, testTargetRef)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = w.RunBackup(backupOpt, testTargetRef)
+	if err != nil {
+		t.Error(err)
+	}
+	// apply retention policy
+	repoStats, err := w.VerifyRepositoryIntegrity()
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, true, *repoStats.Integrity)
 }
 
 func newParallelBackupOptions() []BackupOptions {
