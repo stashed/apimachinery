@@ -144,6 +144,9 @@ const (
 
 	RetryInterval    = 50 * time.Millisecond
 	ReadinessTimeout = 2 * time.Minute
+
+	LicenseFileName             = "license.txt"
+	LicenseVerificationInterval = 1 * time.Hour
 )
 
 const (
