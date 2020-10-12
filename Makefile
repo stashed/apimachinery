@@ -44,9 +44,7 @@ else
 	endif
 endif
 
-RESTIC_VER       := 0.8.3
-# also update in restic wrapper library
-NEW_RESTIC_VER   := 0.9.6
+RESTIC_VER       := 0.10.0
 
 ###
 ### These variables should not need tweaking.
@@ -324,7 +322,6 @@ bin/.container-$(DOTFILE_IMAGE)-TEST:
 	    -e 's|{ARG_OS}|$(OS)|g'                     \
 	    -e 's|{ARG_FROM}|$(BUILD_IMAGE)|g'          \
 	    -e 's|{RESTIC_VER}|$(RESTIC_VER)|g'         \
-	    -e 's|{NEW_RESTIC_VER}|$(NEW_RESTIC_VER)|g' \
 	    $(DOCKERFILE_TEST) > bin/.dockerfile-TEST-$(OS)_$(ARCH)
 	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(TEST_IMAGE) -f bin/.dockerfile-TEST-$(OS)_$(ARCH) .
 	@docker images -q $(TEST_IMAGE) > $@
