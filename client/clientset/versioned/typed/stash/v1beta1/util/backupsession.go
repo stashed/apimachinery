@@ -105,7 +105,7 @@ func UpdateBackupSessionStatus(
 	ctx context.Context,
 	c cs.StashV1beta1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus,
+	transform func(types.UID, *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus,
 	opts metav1.UpdateOptions,
 ) (result *api_v1beta1.BackupSession, err error) {
 	apply := func(x *api_v1beta1.BackupSession) *api_v1beta1.BackupSession {
@@ -113,7 +113,7 @@ func UpdateBackupSessionStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}
@@ -158,8 +158,7 @@ func UpdateBackupSessionStatusForHost(
 	hostStats api_v1beta1.HostBackupStats,
 	opts metav1.UpdateOptions,
 ) (*api_v1beta1.BackupSession, error) {
-
-	return UpdateBackupSessionStatus(ctx, c, backupSession, func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+	return UpdateBackupSessionStatus(ctx, c, backupSession, func(uid types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 		in.Targets = UpsertHostForTarget(in.Targets, targetRef, hostStats)
 		return in
 	}, opts)

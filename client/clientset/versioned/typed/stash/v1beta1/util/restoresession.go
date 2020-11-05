@@ -105,7 +105,7 @@ func UpdateRestoreSessionStatus(
 	ctx context.Context,
 	c cs.StashV1beta1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus,
+	transform func(types.UID, *api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus,
 	opts metav1.UpdateOptions,
 ) (result *api_v1beta1.RestoreSession, err error) {
 	apply := func(x *api_v1beta1.RestoreSession) *api_v1beta1.RestoreSession {
@@ -113,7 +113,7 @@ func UpdateRestoreSessionStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}
@@ -151,7 +151,7 @@ func UpdateRestoreSessionStatus(
 }
 
 func UpdateRestoreSessionStatusForHost(ctx context.Context, c cs.StashV1beta1Interface, restoreSession metav1.ObjectMeta, hostStats api_v1beta1.HostRestoreStats, opts metav1.UpdateOptions) (*api_v1beta1.RestoreSession, error) {
-	return UpdateRestoreSessionStatus(ctx, c, restoreSession, func(in *api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus {
+	return UpdateRestoreSessionStatus(ctx, c, restoreSession, func(uid types.UID, in *api_v1beta1.RestoreSessionStatus) *api_v1beta1.RestoreSessionStatus {
 		// if an entry already exist for this host then update it
 		for i, v := range in.Stats {
 			if v.Hostname == hostStats.Hostname {

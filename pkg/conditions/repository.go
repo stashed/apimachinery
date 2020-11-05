@@ -25,9 +25,11 @@ import (
 	api_v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 	stash_util "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/util"
+	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
@@ -36,7 +38,7 @@ func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, b
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.BackendRepositoryInitialized,
 				Status:  core.ConditionFalse,
@@ -55,7 +57,7 @@ func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, ba
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.BackendRepositoryInitialized,
 				Status:  core.ConditionTrue,
@@ -69,9 +71,9 @@ func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, ba
 	)
 }
 
-func SetRepositoryFoundConditionToUnknown(invoker interface{}, err error) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetRepositoryFoundConditionToUnknown(i interface{}, err error) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionUnknown,
@@ -82,7 +84,7 @@ func SetRepositoryFoundConditionToUnknown(invoker interface{}, err error) error 
 				err.Error(),
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionUnknown,
@@ -98,9 +100,9 @@ func SetRepositoryFoundConditionToUnknown(invoker interface{}, err error) error 
 	}
 }
 
-func SetRepositoryFoundConditionToFalse(invoker interface{}) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetRepositoryFoundConditionToFalse(i interface{}) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionFalse,
@@ -110,7 +112,7 @@ func SetRepositoryFoundConditionToFalse(invoker interface{}) error {
 				in.Repository,
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionFalse,
@@ -125,9 +127,9 @@ func SetRepositoryFoundConditionToFalse(invoker interface{}) error {
 	}
 }
 
-func SetRepositoryFoundConditionToTrue(invoker interface{}) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetRepositoryFoundConditionToTrue(i interface{}) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionTrue,
@@ -137,7 +139,7 @@ func SetRepositoryFoundConditionToTrue(invoker interface{}) error {
 				in.Repository,
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.RepositoryFound,
 			Status: core.ConditionTrue,
@@ -152,9 +154,9 @@ func SetRepositoryFoundConditionToTrue(invoker interface{}) error {
 	}
 }
 
-func SetBackendSecretFoundConditionToUnknown(invoker interface{}, secretName string, err error) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetBackendSecretFoundConditionToUnknown(i interface{}, secretName string, err error) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionUnknown,
@@ -165,7 +167,7 @@ func SetBackendSecretFoundConditionToUnknown(invoker interface{}, secretName str
 				err.Error(),
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionUnknown,
@@ -181,9 +183,9 @@ func SetBackendSecretFoundConditionToUnknown(invoker interface{}, secretName str
 	}
 }
 
-func SetBackendSecretFoundConditionToFalse(invoker interface{}, secretName string) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetBackendSecretFoundConditionToFalse(i interface{}, secretName string) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionFalse,
@@ -193,7 +195,7 @@ func SetBackendSecretFoundConditionToFalse(invoker interface{}, secretName strin
 				secretName,
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionFalse,
@@ -208,9 +210,9 @@ func SetBackendSecretFoundConditionToFalse(invoker interface{}, secretName strin
 	}
 }
 
-func SetBackendSecretFoundConditionToTrue(invoker interface{}, secretName string) error {
-	switch in := invoker.(type) {
-	case apis.Invoker:
+func SetBackendSecretFoundConditionToTrue(i interface{}, secretName string) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionTrue,
@@ -220,7 +222,7 @@ func SetBackendSecretFoundConditionToTrue(invoker interface{}, secretName string
 				secretName,
 			),
 		})
-	case apis.RestoreInvoker:
+	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:   apis.BackendSecretFound,
 			Status: core.ConditionTrue,
@@ -240,7 +242,7 @@ func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupS
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RetentionPolicyApplied,
 				Status:  core.ConditionFalse,
@@ -259,7 +261,7 @@ func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSe
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RetentionPolicyApplied,
 				Status:  core.ConditionTrue,
@@ -278,7 +280,7 @@ func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, ba
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryIntegrityVerified,
 				Status:  core.ConditionFalse,
@@ -297,7 +299,7 @@ func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, bac
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryIntegrityVerified,
 				Status:  core.ConditionTrue,
@@ -316,7 +318,7 @@ func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backup
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryMetricsPushed,
 				Status:  core.ConditionFalse,
@@ -335,7 +337,7 @@ func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupS
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryMetricsPushed,
 				Status:  core.ConditionTrue,

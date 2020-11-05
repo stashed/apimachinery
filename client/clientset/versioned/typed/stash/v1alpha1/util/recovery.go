@@ -106,7 +106,7 @@ func UpdateRecoveryStatus(
 	ctx context.Context,
 	c cs.StashV1alpha1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api.RecoveryStatus) *api.RecoveryStatus,
+	transform func(types.UID, *api.RecoveryStatus) *api.RecoveryStatus,
 	opts metav1.UpdateOptions,
 ) (result *api.Recovery, err error) {
 	apply := func(x *api.Recovery) *api.Recovery {
@@ -114,7 +114,7 @@ func UpdateRecoveryStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}
@@ -152,7 +152,7 @@ func UpdateRecoveryStatus(
 }
 
 func SetRecoveryStats(ctx context.Context, c cs.StashV1alpha1Interface, recovery metav1.ObjectMeta, path string, d time.Duration, phase api.RecoveryPhase, opts metav1.UpdateOptions) (*api.Recovery, error) {
-	return UpdateRecoveryStatus(ctx, c, recovery, func(in *api.RecoveryStatus) *api.RecoveryStatus {
+	return UpdateRecoveryStatus(ctx, c, recovery, func(uid types.UID, in *api.RecoveryStatus) *api.RecoveryStatus {
 		found := false
 		for _, stats := range in.Stats {
 			if stats.Path == path {

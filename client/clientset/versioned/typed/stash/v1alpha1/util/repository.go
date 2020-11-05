@@ -105,7 +105,7 @@ func UpdateRepositoryStatus(
 	ctx context.Context,
 	c cs.StashV1alpha1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api.RepositoryStatus) *api.RepositoryStatus,
+	transform func(types.UID, *api.RepositoryStatus) *api.RepositoryStatus,
 	opts metav1.UpdateOptions,
 ) (result *api.Repository, err error) {
 	apply := func(x *api.Repository) *api.Repository {
@@ -113,7 +113,7 @@ func UpdateRepositoryStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}

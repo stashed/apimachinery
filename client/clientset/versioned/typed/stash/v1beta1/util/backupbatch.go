@@ -105,7 +105,7 @@ func UpdateBackupBatchStatus(
 	ctx context.Context,
 	c cs.StashV1beta1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api.BackupBatchStatus) *api.BackupBatchStatus,
+	transform func(types.UID, *api.BackupBatchStatus) *api.BackupBatchStatus,
 	opts metav1.UpdateOptions,
 ) (result *api.BackupBatch, err error) {
 	apply := func(x *api.BackupBatch) *api.BackupBatch {
@@ -113,7 +113,7 @@ func UpdateBackupBatchStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}

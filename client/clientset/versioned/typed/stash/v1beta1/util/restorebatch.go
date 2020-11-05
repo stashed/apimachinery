@@ -105,7 +105,7 @@ func UpdateRestoreBatchStatus(
 	ctx context.Context,
 	c cs.StashV1beta1Interface,
 	meta metav1.ObjectMeta,
-	transform func(*api.RestoreBatchStatus) *api.RestoreBatchStatus,
+	transform func(types.UID, *api.RestoreBatchStatus) *api.RestoreBatchStatus,
 	opts metav1.UpdateOptions,
 ) (result *api.RestoreBatch, err error) {
 	apply := func(x *api.RestoreBatch) *api.RestoreBatch {
@@ -113,7 +113,7 @@ func UpdateRestoreBatchStatus(
 			TypeMeta:   x.TypeMeta,
 			ObjectMeta: x.ObjectMeta,
 			Spec:       x.Spec,
-			Status:     *transform(x.Status.DeepCopy()),
+			Status:     *transform(x.UID, x.Status.DeepCopy()),
 		}
 		return out
 	}
