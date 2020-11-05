@@ -38,7 +38,7 @@ func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, b
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.BackendRepositoryInitialized,
 				Status:  core.ConditionFalse,
@@ -46,7 +46,7 @@ func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, b
 				Message: fmt.Sprintf("Failed to initialize backend repository. Reason: %v", err.Error()),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -57,15 +57,14 @@ func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, ba
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.BackendRepositoryInitialized,
 				Status:  core.ConditionTrue,
 				Reason:  apis.BackendRepositoryFound,
 				Message: "Repository exist in the backend.",
-			},
-			)
-			return in
+			})
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -242,7 +241,7 @@ func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupS
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RetentionPolicyApplied,
 				Status:  core.ConditionFalse,
@@ -250,7 +249,7 @@ func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupS
 				Message: fmt.Sprintf("Failed to apply retention policy. Reason: %v", err.Error()),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -261,7 +260,7 @@ func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSe
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RetentionPolicyApplied,
 				Status:  core.ConditionTrue,
@@ -269,7 +268,7 @@ func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSe
 				Message: "Successfully applied retention policy.",
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -280,7 +279,7 @@ func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, ba
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryIntegrityVerified,
 				Status:  core.ConditionFalse,
@@ -288,7 +287,7 @@ func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, ba
 				Message: fmt.Sprintf("Repository integrity verification failed. Reason: %v", err.Error()),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -299,7 +298,7 @@ func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, bac
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryIntegrityVerified,
 				Status:  core.ConditionTrue,
@@ -307,7 +306,7 @@ func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, bac
 				Message: "Repository integrity verification succeeded.",
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -318,7 +317,7 @@ func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backup
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryMetricsPushed,
 				Status:  core.ConditionFalse,
@@ -326,7 +325,7 @@ func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backup
 				Message: fmt.Sprintf("Failed to push repository metrics. Reason: %v", err.Error()),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -337,7 +336,7 @@ func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupS
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.RepositoryMetricsPushed,
 				Status:  core.ConditionTrue,
@@ -345,7 +344,7 @@ func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupS
 				Message: "Successfully pushed repository metrics.",
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)

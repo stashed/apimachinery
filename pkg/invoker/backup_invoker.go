@@ -156,13 +156,13 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 
 		}
 		invoker.SetCondition = func(target *v1beta1.TargetRef, condition kmapi.Condition) error {
-			_, err = v1beta1_util.UpdateBackupBatchStatus(context.TODO(), stashClient.StashV1beta1(), backupBatch.ObjectMeta, func(_ types.UID, in *v1beta1.BackupBatchStatus) *v1beta1.BackupBatchStatus {
+			_, err = v1beta1_util.UpdateBackupBatchStatus(context.TODO(), stashClient.StashV1beta1(), backupBatch.ObjectMeta, func(in *v1beta1.BackupBatchStatus) (types.UID, *v1beta1.BackupBatchStatus) {
 				if target != nil {
 					in.MemberConditions = setMemberCondition(in.MemberConditions, *target, condition)
 				} else {
 					in.Conditions = kmapi.SetCondition(in.Conditions, condition)
 				}
-				return in
+				return backupBatch.UID, in
 			}, metav1.UpdateOptions{})
 			return err
 		}
@@ -259,9 +259,9 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 			return idx, cond, nil
 		}
 		invoker.SetCondition = func(target *v1beta1.TargetRef, condition kmapi.Condition) error {
-			_, err = v1beta1_util.UpdateBackupConfigurationStatus(context.TODO(), stashClient.StashV1beta1(), backupConfig.ObjectMeta, func(_ types.UID, in *v1beta1.BackupConfigurationStatus) *v1beta1.BackupConfigurationStatus {
+			_, err = v1beta1_util.UpdateBackupConfigurationStatus(context.TODO(), stashClient.StashV1beta1(), backupConfig.ObjectMeta, func(in *v1beta1.BackupConfigurationStatus) (types.UID, *v1beta1.BackupConfigurationStatus) {
 				in.Conditions = kmapi.SetCondition(in.Conditions, condition)
-				return in
+				return backupConfig.UID, in
 			}, metav1.UpdateOptions{})
 			return err
 		}

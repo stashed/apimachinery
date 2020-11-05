@@ -37,7 +37,7 @@ func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, b
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.GlobalPreBackupHookSucceeded,
 				Status:  core.ConditionFalse,
@@ -45,7 +45,7 @@ func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, b
 				Message: fmt.Sprintf("Failed to execute global PreBackup Hook. Reason: %v.", hookErr),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -56,7 +56,7 @@ func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, ba
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.GlobalPreBackupHookSucceeded,
 				Status:  core.ConditionTrue,
@@ -64,7 +64,7 @@ func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, ba
 				Message: "Global PreBackup hook has been executed successfully",
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -75,7 +75,7 @@ func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, 
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.GlobalPostBackupHookSucceeded,
 				Status:  core.ConditionFalse,
@@ -83,7 +83,7 @@ func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, 
 				Message: fmt.Sprintf("Failed to execute global PostBackup Hook. Reason: %v.", hookErr),
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
@@ -94,7 +94,7 @@ func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, b
 		context.TODO(),
 		stashClient.StashV1beta1(),
 		backupSession.ObjectMeta,
-		func(_ types.UID, in *api_v1beta1.BackupSessionStatus) *api_v1beta1.BackupSessionStatus {
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
 			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
 				Type:    apis.GlobalPostBackupHookSucceeded,
 				Status:  core.ConditionTrue,
@@ -102,7 +102,7 @@ func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, b
 				Message: "Global PostBackup hook has been executed successfully",
 			},
 			)
-			return in
+			return backupSession.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
