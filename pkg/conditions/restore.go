@@ -22,14 +22,15 @@ import (
 
 	"stash.appscode.dev/apimachinery/apis"
 	api_v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-func SetRestoreTargetFoundConditionToTrue(invoker apis.RestoreInvoker, index int) error {
-	target := invoker.TargetsInfo[index].Target
-	return invoker.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToTrue(i invoker.RestoreInvoker, index int) error {
+	target := i.TargetsInfo[index].Target
+	return i.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionTrue,
 		Reason: apis.TargetAvailable,
@@ -41,9 +42,9 @@ func SetRestoreTargetFoundConditionToTrue(invoker apis.RestoreInvoker, index int
 	})
 }
 
-func SetRestoreTargetFoundConditionToFalse(invoker apis.RestoreInvoker, index int) error {
-	target := invoker.TargetsInfo[index].Target
-	return invoker.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToFalse(i invoker.RestoreInvoker, index int) error {
+	target := i.TargetsInfo[index].Target
+	return i.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionFalse,
 		Reason: apis.TargetNotAvailable,
@@ -55,9 +56,9 @@ func SetRestoreTargetFoundConditionToFalse(invoker apis.RestoreInvoker, index in
 	})
 }
 
-func SetRestoreTargetFoundConditionToUnknown(invoker apis.RestoreInvoker, index int, err error) error {
-	target := invoker.TargetsInfo[index].Target
-	return invoker.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToUnknown(i invoker.RestoreInvoker, index int, err error) error {
+	target := i.TargetsInfo[index].Target
+	return i.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionUnknown,
 		Reason: apis.UnableToCheckTargetAvailability,
@@ -70,8 +71,8 @@ func SetRestoreTargetFoundConditionToUnknown(invoker apis.RestoreInvoker, index 
 	})
 }
 
-func SetRestoreJobCreatedConditionToTrue(invoker apis.RestoreInvoker, tref *api_v1beta1.TargetRef) error {
-	return invoker.SetCondition(tref, kmapi.Condition{
+func SetRestoreJobCreatedConditionToTrue(i invoker.RestoreInvoker, tref *api_v1beta1.TargetRef) error {
+	return i.SetCondition(tref, kmapi.Condition{
 		Type:    apis.RestoreJobCreated,
 		Status:  core.ConditionTrue,
 		Reason:  apis.RestoreJobCreationSucceeded,
@@ -79,8 +80,8 @@ func SetRestoreJobCreatedConditionToTrue(invoker apis.RestoreInvoker, tref *api_
 	})
 }
 
-func SetRestoreJobCreatedConditionToFalse(invoker apis.RestoreInvoker, tref *api_v1beta1.TargetRef, err error) error {
-	return invoker.SetCondition(tref, kmapi.Condition{
+func SetRestoreJobCreatedConditionToFalse(i invoker.RestoreInvoker, tref *api_v1beta1.TargetRef, err error) error {
+	return i.SetCondition(tref, kmapi.Condition{
 		Type:    apis.RestoreJobCreated,
 		Status:  core.ConditionFalse,
 		Reason:  apis.RestoreJobCreationFailed,
@@ -88,8 +89,8 @@ func SetRestoreJobCreatedConditionToFalse(invoker apis.RestoreInvoker, tref *api
 	})
 }
 
-func SetInitContainerInjectedConditionToTrue(invoker apis.RestoreInvoker, tref api_v1beta1.TargetRef) error {
-	return invoker.SetCondition(&tref, kmapi.Condition{
+func SetInitContainerInjectedConditionToTrue(i invoker.RestoreInvoker, tref api_v1beta1.TargetRef) error {
+	return i.SetCondition(&tref, kmapi.Condition{
 		Type:    apis.StashInitContainerInjected,
 		Status:  core.ConditionTrue,
 		Reason:  apis.InitContainerInjectionSucceeded,
@@ -97,8 +98,8 @@ func SetInitContainerInjectedConditionToTrue(invoker apis.RestoreInvoker, tref a
 	})
 }
 
-func SetInitContainerInjectedConditionToFalse(invoker apis.RestoreInvoker, tref api_v1beta1.TargetRef, err error) error {
-	return invoker.SetCondition(&tref, kmapi.Condition{
+func SetInitContainerInjectedConditionToFalse(i invoker.RestoreInvoker, tref api_v1beta1.TargetRef, err error) error {
+	return i.SetCondition(&tref, kmapi.Condition{
 		Type:    apis.StashInitContainerInjected,
 		Status:  core.ConditionFalse,
 		Reason:  apis.InitContainerInjectionFailed,

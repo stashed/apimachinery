@@ -26,9 +26,9 @@ import (
 	api_v1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	api_v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
-	"github.com/appscode/go/log"
-	"github.com/appscode/go/types"
 	"github.com/stretchr/testify/assert"
+	"gomodules.xyz/pointer"
+	"gomodules.xyz/x/log"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -268,11 +268,11 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 	}
 
 	w.config.IONice = &ofst.IONiceSettings{
-		Class:     types.Int32P(2),
-		ClassData: types.Int32P(3),
+		Class:     pointer.Int32P(2),
+		ClassData: pointer.Int32P(3),
 	}
 	w.config.Nice = &ofst.NiceSettings{
-		Adjustment: types.Int32P(12),
+		Adjustment: pointer.Int32P(12),
 	}
 
 	backupOpt := BackupOptions{
@@ -330,11 +330,11 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 	}
 
 	w.config.IONice = &ofst.IONiceSettings{
-		Class:     types.Int32P(2),
-		ClassData: types.Int32P(3),
+		Class:     pointer.Int32P(2),
+		ClassData: pointer.Int32P(3),
 	}
 	w.config.Nice = &ofst.NiceSettings{
-		Adjustment: types.Int32P(12),
+		Adjustment: pointer.Int32P(12),
 	}
 
 	backupOpt := BackupOptions{
