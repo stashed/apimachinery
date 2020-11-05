@@ -455,12 +455,12 @@ func newRestoreHostMetrics(labels prometheus.Labels) *RestoreMetrics {
 }
 
 // SendBackupSessionMetrics send backup session related metrics to the Pushgateway
-func (metricOpt *MetricsOptions) SendBackupSessionMetrics(i invoker.BackupInvoker, status api_v1beta1.BackupSessionStatus) error {
+func (metricOpt *MetricsOptions) SendBackupSessionMetrics(inv invoker.BackupInvoker, status api_v1beta1.BackupSessionStatus) error {
 	// create metric registry
 	registry := prometheus.NewRegistry()
 
 	// generate metrics labels
-	labels, err := backupInvokerLabels(i, metricOpt.Labels)
+	labels, err := backupInvokerLabels(inv, metricOpt.Labels)
 	if err != nil {
 		return err
 	}
@@ -650,31 +650,31 @@ func (metricOpt *MetricsOptions) SendRepositoryMetrics(config *rest.Config, i in
 }
 
 // SendRestoreSessionMetrics send restore session related metrics to the Pushgateway
-func (metricOpt *MetricsOptions) SendRestoreSessionMetrics(i invoker.RestoreInvoker) error {
+func (metricOpt *MetricsOptions) SendRestoreSessionMetrics(inv invoker.RestoreInvoker) error {
 	// create metric registry
 	registry := prometheus.NewRegistry()
 
 	// generate metrics labels
-	labels, err := restoreInvokerLabels(i, metricOpt.Labels)
+	labels, err := restoreInvokerLabels(inv, metricOpt.Labels)
 	if err != nil {
 		return err
 	}
 	// create metrics
 	metrics := newRestoreSessionMetrics(labels)
 
-	if i.Status.Phase == api_v1beta1.RestoreSucceeded {
+	if inv.Status.Phase == api_v1beta1.RestoreSucceeded {
 		// mark the entire restore session as succeeded
 		metrics.RestoreSessionMetrics.SessionSuccess.Set(1)
 
 		// set total time taken to complete the restore session
-		duration, err := time.ParseDuration(i.Status.SessionDuration)
+		duration, err := time.ParseDuration(inv.Status.SessionDuration)
 		if err != nil {
 			return err
 		}
 		metrics.RestoreSessionMetrics.SessionDuration.Set(duration.Seconds())
 
 		// set total number of target that was restored in this restore session
-		metrics.RestoreSessionMetrics.TargetCount.Set(float64(len(i.Status.TargetStatus)))
+		metrics.RestoreSessionMetrics.TargetCount.Set(float64(len(inv.Status.TargetStatus)))
 
 		// register metrics to the registry
 		registry.MustRegister(
@@ -890,42 +890,42 @@ func (metricOpt *MetricsOptions) sendMetrics(registry *prometheus.Registry, jobN
 }
 
 // nolint:unparam
-func backupInvokerLabels(i invoker.BackupInvoker, userProvidedLabels []string) (prometheus.Labels, error) {
+func backupInvokerLabels(inv invoker.BackupInvoker, userProvidedLabels []string) (prometheus.Labels, error) {
 	// add user provided labels
 	promLabels := parseUserProvidedLabels(userProvidedLabels)
 
 	// add invoker information
-	promLabels[MetricLabelInvokerKind] = i.TypeMeta.Kind
-	promLabels[MetricLabelInvokerName] = i.ObjectMeta.Name
-	promLabels[MetricsLabelNamespace] = i.ObjectMeta.Namespace
+	promLabels[MetricLabelInvokerKind] = inv.TypeMeta.Kind
+	promLabels[MetricLabelInvokerName] = inv.ObjectMeta.Name
+	promLabels[MetricsLabelNamespace] = inv.ObjectMeta.Namespace
 
 	// insert target information as metrics label
-	if i.Driver == api_v1beta1.VolumeSnapshotter {
+	if inv.Driver == api_v1beta1.VolumeSnapshotter {
 		promLabels = upsertLabel(promLabels, volumeSnapshotterLabels())
 	} else {
 		promLabels[MetricsLabelDriver] = string(api_v1beta1.ResticSnapshotter)
-		promLabels[MetricsLabelRepository] = i.Repository
+		promLabels[MetricsLabelRepository] = inv.Repository
 	}
 
 	return promLabels, nil
 }
 
 // nolint:unparam
-func restoreInvokerLabels(i invoker.RestoreInvoker, userProvidedLabels []string) (prometheus.Labels, error) {
+func restoreInvokerLabels(inv invoker.RestoreInvoker, userProvidedLabels []string) (prometheus.Labels, error) {
 	// add user provided labels
 	promLabels := parseUserProvidedLabels(userProvidedLabels)
 
 	// add invoker information
-	promLabels[MetricLabelInvokerKind] = i.TypeMeta.Kind
-	promLabels[MetricLabelInvokerName] = i.ObjectMeta.Name
-	promLabels[MetricsLabelNamespace] = i.ObjectMeta.Namespace
+	promLabels[MetricLabelInvokerKind] = inv.TypeMeta.Kind
+	promLabels[MetricLabelInvokerName] = inv.ObjectMeta.Name
+	promLabels[MetricsLabelNamespace] = inv.ObjectMeta.Namespace
 
 	// insert target information as metrics label
-	if i.Driver == api_v1beta1.VolumeSnapshotter {
+	if inv.Driver == api_v1beta1.VolumeSnapshotter {
 		promLabels = upsertLabel(promLabels, volumeSnapshotterLabels())
 	} else {
 		promLabels[MetricsLabelDriver] = string(api_v1beta1.ResticSnapshotter)
-		promLabels[MetricsLabelRepository] = i.Repository
+		promLabels[MetricsLabelRepository] = inv.Repository
 	}
 
 	return promLabels, nil

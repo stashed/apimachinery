@@ -901,6 +901,8 @@ gomodules.xyz/jsonpatch/v2 v2.1.0/go.mod h1:IhYNNY4jnS53ZnfE4PAmpKtDpTCj1JFXc+3m
 gomodules.xyz/password-generator v0.2.6/go.mod h1:TvwYYTx9+P1pPwKQKfZgB/wr2Id9MqAQ3B5auY7reNg=
 gomodules.xyz/pointer v0.0.0-20201105040656-991dd254b680 h1:MqQStdJSfPUtcgDUQFU00ZmJBtGiujZWnBfXseFZK3g=
 gomodules.xyz/pointer v0.0.0-20201105040656-991dd254b680/go.mod h1:sPLsC0+yLTRecUiC5yVlyvXhZ6LAGojNCRWNNqoplvo=
+gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209 h1:7tRaHoF3a725gtWs/NKkRNK5sBMXUyopVIsJ4WvhcTI=
+gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209/go.mod h1:sPLsC0+yLTRecUiC5yVlyvXhZ6LAGojNCRWNNqoplvo=
 gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b h1:7Sd2I7mKCfwJ01/xTIZfWkwQ8K6zwCGKeacpK95pEEM=
 gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b/go.mod h1:EXjUBLZuX+7Fd7aE9W338XgtMbrAt9XvAgvxf2MjhuA=
 gomodules.xyz/sets v0.0.0-20200930152147-4f4543544799/go.mod h1:jKgNp01/iDs+svOWXaPk5cKP3VXy0mWUoTF/ore+aMc=
@@ -1020,8 +1022,8 @@ kmodules.xyz/crd-schema-fuzz v0.0.0-20200922204806-c1426cd7fcf4 h1:NWWv+Qju8xzHZ
 kmodules.xyz/crd-schema-fuzz v0.0.0-20200922204806-c1426cd7fcf4/go.mod h1:WrO3fryNyFCgqqyWnwI89lnzWA7kN072Ehya7ELGfzE=
 kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79 h1:BKPPUY/w0ac4R6g172zrejs+MLae2CHGqHCFpzrbRLc=
 kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79/go.mod h1:/r3/eJ3LIfwGyBEVaobqUZRZGh7GJv5RJojj/bdD14Q=
-kmodules.xyz/objectstore-api v0.0.0-20201105074844-6f969edd28f4 h1:yenyy7BtU3qwrug1kKO2nCpJdTSSxA0T+fpA1amJSWo=
-kmodules.xyz/objectstore-api v0.0.0-20201105074844-6f969edd28f4/go.mod h1:Ggg4wfWqxcw9tFvUl35KKT9YZ0xdKsUwnh6l7ANf6/c=
+kmodules.xyz/objectstore-api v0.0.0-20201105124034-eab2d5a7b116 h1:P3E9gv2AadO+v/+PK5L8/BEdfC88IBeUZFXX/aLFVnI=
+kmodules.xyz/objectstore-api v0.0.0-20201105124034-eab2d5a7b116/go.mod h1:L7RjO+Yu8x4no/upfQhzOjh8cY0yUvg1RdF3hlHLlYw=
 kmodules.xyz/offshoot-api v0.0.0-20201105074700-8675f5f686f2 h1:JVuNeHhVq/iRRM2yRF7nuYUdq1necfAPGpA5JjUcBuk=
 kmodules.xyz/offshoot-api v0.0.0-20201105074700-8675f5f686f2/go.mod h1:RMHLigHILAk04wMAuMqBerskKdWlLyjqb0zLLL68cBM=
 kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8 h1:UJb5lHQVFKbmlgmRLq5IWJGtz3JqYYbyVG+dNdjC9Cc=

@@ -28,9 +28,9 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-func SetRestoreTargetFoundConditionToTrue(i invoker.RestoreInvoker, index int) error {
-	target := i.TargetsInfo[index].Target
-	return i.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToTrue(inv invoker.RestoreInvoker, index int) error {
+	target := inv.TargetsInfo[index].Target
+	return inv.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionTrue,
 		Reason: apis.TargetAvailable,
@@ -42,9 +42,9 @@ func SetRestoreTargetFoundConditionToTrue(i invoker.RestoreInvoker, index int) e
 	})
 }
 
-func SetRestoreTargetFoundConditionToFalse(i invoker.RestoreInvoker, index int) error {
-	target := i.TargetsInfo[index].Target
-	return i.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToFalse(inv invoker.RestoreInvoker, index int) error {
+	target := inv.TargetsInfo[index].Target
+	return inv.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionFalse,
 		Reason: apis.TargetNotAvailable,
@@ -56,9 +56,9 @@ func SetRestoreTargetFoundConditionToFalse(i invoker.RestoreInvoker, index int) 
 	})
 }
 
-func SetRestoreTargetFoundConditionToUnknown(i invoker.RestoreInvoker, index int, err error) error {
-	target := i.TargetsInfo[index].Target
-	return i.SetCondition(&target.Ref, kmapi.Condition{
+func SetRestoreTargetFoundConditionToUnknown(inv invoker.RestoreInvoker, index int, err error) error {
+	target := inv.TargetsInfo[index].Target
+	return inv.SetCondition(&target.Ref, kmapi.Condition{
 		Type:   apis.RestoreTargetFound,
 		Status: core.ConditionUnknown,
 		Reason: apis.UnableToCheckTargetAvailability,
@@ -71,8 +71,8 @@ func SetRestoreTargetFoundConditionToUnknown(i invoker.RestoreInvoker, index int
 	})
 }
 
-func SetRestoreJobCreatedConditionToTrue(i invoker.RestoreInvoker, tref *api_v1beta1.TargetRef) error {
-	return i.SetCondition(tref, kmapi.Condition{
+func SetRestoreJobCreatedConditionToTrue(inv invoker.RestoreInvoker, tref *api_v1beta1.TargetRef) error {
+	return inv.SetCondition(tref, kmapi.Condition{
 		Type:    apis.RestoreJobCreated,
 		Status:  core.ConditionTrue,
 		Reason:  apis.RestoreJobCreationSucceeded,
@@ -80,8 +80,8 @@ func SetRestoreJobCreatedConditionToTrue(i invoker.RestoreInvoker, tref *api_v1b
 	})
 }
 
-func SetRestoreJobCreatedConditionToFalse(i invoker.RestoreInvoker, tref *api_v1beta1.TargetRef, err error) error {
-	return i.SetCondition(tref, kmapi.Condition{
+func SetRestoreJobCreatedConditionToFalse(inv invoker.RestoreInvoker, tref *api_v1beta1.TargetRef, err error) error {
+	return inv.SetCondition(tref, kmapi.Condition{
 		Type:    apis.RestoreJobCreated,
 		Status:  core.ConditionFalse,
 		Reason:  apis.RestoreJobCreationFailed,
@@ -89,8 +89,8 @@ func SetRestoreJobCreatedConditionToFalse(i invoker.RestoreInvoker, tref *api_v1
 	})
 }
 
-func SetInitContainerInjectedConditionToTrue(i invoker.RestoreInvoker, tref api_v1beta1.TargetRef) error {
-	return i.SetCondition(&tref, kmapi.Condition{
+func SetInitContainerInjectedConditionToTrue(inv invoker.RestoreInvoker, tref api_v1beta1.TargetRef) error {
+	return inv.SetCondition(&tref, kmapi.Condition{
 		Type:    apis.StashInitContainerInjected,
 		Status:  core.ConditionTrue,
 		Reason:  apis.InitContainerInjectionSucceeded,
@@ -98,8 +98,8 @@ func SetInitContainerInjectedConditionToTrue(i invoker.RestoreInvoker, tref api_
 	})
 }
 
-func SetInitContainerInjectedConditionToFalse(i invoker.RestoreInvoker, tref api_v1beta1.TargetRef, err error) error {
-	return i.SetCondition(&tref, kmapi.Condition{
+func SetInitContainerInjectedConditionToFalse(inv invoker.RestoreInvoker, tref api_v1beta1.TargetRef, err error) error {
+	return inv.SetCondition(&tref, kmapi.Condition{
 		Type:    apis.StashInitContainerInjected,
 		Status:  core.ConditionFalse,
 		Reason:  apis.InitContainerInjectionFailed,

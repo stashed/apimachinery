@@ -36,7 +36,7 @@ require (
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	golang.org/x/tools v0.0.0-20200603131246-cc40288be839 // indirect
-	gomodules.xyz/pointer v0.0.0-20201105040656-991dd254b680
+	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 	gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b
 	gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
 	google.golang.org/appengine v1.6.6 // indirect
@@ -51,7 +51,7 @@ require (
 	kmodules.xyz/client-go v0.0.0-20201105071625-0b277310b9b8
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20200922204806-c1426cd7fcf4
 	kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79
-	kmodules.xyz/objectstore-api v0.0.0-20201105074844-6f969edd28f4
+	kmodules.xyz/objectstore-api v0.0.0-20201105124034-eab2d5a7b116
 	kmodules.xyz/offshoot-api v0.0.0-20201105074700-8675f5f686f2
 	kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8
 	sigs.k8s.io/yaml v1.2.0
