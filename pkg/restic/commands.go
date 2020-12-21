@@ -135,6 +135,7 @@ func (w *ResticWrapper) backup(params backupParams) ([]byte, error) {
 	args = w.appendCleanupCacheFlag(args)
 	args = w.appendCaCertFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendIgnoreInodeFlag(args)
 
 	return w.run(Command{Name: ResticCMD, Args: args})
 }
@@ -365,6 +366,13 @@ func (w *ResticWrapper) appendCleanupCacheFlag(args []interface{}) []interface{}
 func (w *ResticWrapper) appendCaCertFlag(args []interface{}) []interface{} {
 	if w.config.CacertFile != "" {
 		return append(args, "--cacert", w.config.CacertFile)
+	}
+	return args
+}
+
+func (w *ResticWrapper) appendIgnoreInodeFlag(args []interface{}) []interface{} {
+	if w.config.IgnoreInode {
+		return append(args, "--ignore-inode")
 	}
 	return args
 }
