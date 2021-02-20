@@ -49,5 +49,12 @@ jobs:
           INSTALLER_REPOSITORY: ${{ secrets.INSTALLER_REPOSITORY }}
         run: |
           export INSTALLER_ROOT=$RUNNER_WORKSPACE/$(basename $INSTALLER_REPOSITORY)
-          crd-importer --input=./crds --out=$INSTALLER_ROOT/charts/stash-crds/crds --v=v1
+          crd-importer \
+            --input=./crds --out=$INSTALLER_ROOT/charts/stash-crds/crds --v=v1 \
+            --gk=BackupConfiguration.stash.appscode.com \
+            --gk=BackupSession.stash.appscode.com \
+            --gk=Function.stash.appscode.com \
+            --gk=Repository.stash.appscode.com \
+            --gk=RestoreSession.stash.appscode.com \
+            --gk=Task.stash.appscode.com
           $INSTALLER_ROOT/hack/scripts/open-pr.sh
