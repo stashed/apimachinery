@@ -694,7 +694,7 @@ kmodules.xyz/client-go/meta
 kmodules.xyz/client-go/openapi
 # kmodules.xyz/crd-schema-fuzz v0.0.0-20200922204806-c1426cd7fcf4
 kmodules.xyz/crd-schema-fuzz
-# kmodules.xyz/custom-resources v0.0.0-20210218144958-579bf8307d65
+# kmodules.xyz/custom-resources v0.0.0-20210222100152-7426e3678989
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned

@@ -24,7 +24,7 @@ require (
 	k8s.io/kubernetes v1.18.9
 	kmodules.xyz/client-go v0.0.0-20210218100652-8f345ddfe801
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20200922204806-c1426cd7fcf4
-	kmodules.xyz/custom-resources v0.0.0-20210218144958-579bf8307d65
+	kmodules.xyz/custom-resources v0.0.0-20210222100152-7426e3678989
 	kmodules.xyz/objectstore-api v0.0.0-20210218144135-bfabb80e0362
 	kmodules.xyz/offshoot-api v0.0.0-20210218144050-e1d794cb382a
 	kmodules.xyz/prober v0.0.0-20210218144026-43e923722d81
