@@ -10624,6 +10624,12 @@
         "repository": {
           "type": "string"
         },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "tree": {
           "type": "string"
         },
