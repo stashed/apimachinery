@@ -3,6 +3,7 @@ package util
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -13,7 +14,7 @@ import (
 )
 
 func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, targetRef v1beta1.TargetRef, namespace string) (*appcat.StashAddonSpec, error) {
-	addonInfo := appcat.StashAddonSpec{}
+	var addonInfo appcat.StashAddonSpec
 
 	// If the target is AppBinding and it has addon information set in the parameters section, then extract the addon info.
 	if targetOfGroupKind(targetRef, appcat.SchemeGroupVersion.Group, appcat.ResourceKindApp) {
@@ -23,6 +24,7 @@ func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, t
 			return nil, err
 		}
 
+		fmt.Println("================ Raw Parameters =========================\n",string(appBinding.Spec.Parameters.Raw))
 		// extract the parameters
 		if appBinding.Spec.Parameters != nil {
 			err = json.Unmarshal(appBinding.Spec.Parameters.Raw, &addonInfo)
