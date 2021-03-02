@@ -12,7 +12,7 @@ import (
 	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
 
-func ExtractAddonInfo(appClient appcatalog_cs.Clientset, task v1beta1.TaskRef, targetRef v1beta1.TargetRef, namespace string) (*appcat.StashAddonSpec, error) {
+func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, targetRef v1beta1.TargetRef, namespace string) (*appcat.StashAddonSpec, error) {
 	addonInfo := appcat.StashAddonSpec{}
 
 	// If the target is AppBinding and it has addon information set in the parameters section, then extract the addon info.
