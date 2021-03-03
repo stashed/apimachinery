@@ -12439,11 +12439,9 @@
     },
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.TaskRef": {
       "type": "object",
-      "required": [
-        "name"
-      ],
       "properties": {
         "name": {
+          "description": "Name specifies the name of the Task to use for backup/restore purpose. If your database has been deployed with KubeDB, then keep this field empty. Stash will read the Task info from the respective AppBinding.",
           "type": "string"
         },
         "params": {
