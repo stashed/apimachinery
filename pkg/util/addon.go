@@ -13,8 +13,8 @@ import (
 	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
 
-func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, targetRef v1beta1.TargetRef, namespace string) (*appcat.StashAddonSpec, error) {
-	var addonInfo appcat.StashAddonSpec
+func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, targetRef v1beta1.TargetRef, namespace string) (*appcat.StashTaskSpec, error) {
+	var params appcat.StashAddon
 
 	// If the target is AppBinding and it has addon information set in the parameters section, then extract the addon info.
 	if targetOfGroupKind(targetRef, appcat.SchemeGroupVersion.Group, appcat.ResourceKindApp) {
@@ -24,15 +24,17 @@ func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, t
 			return nil, err
 		}
 
-		fmt.Println("================ Raw Parameters =========================\n",string(appBinding.Spec.Parameters.Raw))
+		fmt.Println("================ Raw Parameters =========================\n", string(appBinding.Spec.Parameters.Raw))
 		// extract the parameters
 		if appBinding.Spec.Parameters != nil {
-			err = json.Unmarshal(appBinding.Spec.Parameters.Raw, &addonInfo)
+			err = json.Unmarshal(appBinding.Spec.Parameters.Raw, &params)
 			if err != nil {
 				return nil, err
 			}
 		}
 	}
+
+	addon := params.Stash.Addon
 
 	// If the user provides Task information in the backup/restore invoker spec, it should have higher precedence.
 	// We don't know whether this function was called from BackupSession controller or RestoreSession controller.
@@ -40,15 +42,15 @@ func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, t
 	// It does not have any adverse effect because when it is called from the BackupSession controller, we will overwrite with backup task info
 	// and when it is called from the RestoreSession controller, we will overwrite with restore task info.
 	if task.Name != "" {
-		addonInfo.Addon.BackupTask.Name = task.Name
-		addonInfo.Addon.RestoreTask.Name = task.Name
+		addon.BackupTask.Name = task.Name
+		addon.RestoreTask.Name = task.Name
 	}
 	if len(task.Params) != 0 {
-		addonInfo.Addon.BackupTask.Params = getTaskParams(task)
-		addonInfo.Addon.RestoreTask.Params = getTaskParams(task)
+		addon.BackupTask.Params = getTaskParams(task)
+		addon.RestoreTask.Params = getTaskParams(task)
 	}
 
-	return &addonInfo, nil
+	return &addon, nil
 }
 
 func targetOfGroupKind(targetRef v1beta1.TargetRef, group, kind string) bool {
