@@ -3,7 +3,6 @@ package util
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -24,7 +23,6 @@ func ExtractAddonInfo(appClient appcatalog_cs.Interface, task v1beta1.TaskRef, t
 			return nil, err
 		}
 
-		fmt.Println("================ Raw Parameters =========================\n", string(appBinding.Spec.Parameters.Raw))
 		// extract the parameters
 		if appBinding.Spec.Parameters != nil {
 			err = json.Unmarshal(appBinding.Spec.Parameters.Raw, &params)
