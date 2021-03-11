@@ -28,6 +28,7 @@ import (
 	v1beta1_util "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/util"
 
 	core "k8s.io/api/core/v1"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
@@ -267,6 +268,10 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 				// Get the respective AppBinding
 				appBinding, err := appClient.AppcatalogV1alpha1().AppBindings(restoreBatch.Namespace).Get(context.TODO(), target.Ref.Name, metav1.GetOptions{})
 				if err != nil {
+					// If the AppBinding does not exist, then don't do anything.
+					if kerr.IsNotFound(err) {
+						continue
+					}
 					return err
 				}
 				// If the AppBinding is not managed by KubeDB, then don't do anything
@@ -452,6 +457,10 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 			// Get the AppBinding
 			appBinding, err := appClient.AppcatalogV1alpha1().AppBindings(restoreSession.Namespace).Get(context.TODO(), restoreSession.Spec.Target.Ref.Name, metav1.GetOptions{})
 			if err != nil {
+				// If the AppBinding does not exist, then don't do anything.
+				if kerr.IsNotFound(err) {
+					return nil
+				}
 				return err
 			}
 			// If the AppBinding is not managed by KubeDB, then don't do anything
