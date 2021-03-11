@@ -274,7 +274,7 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 					continue
 				}
 				// Extract the name, and managed-by labels. We are not passing "instance" label because there could be multiple AppBindings.
-				appLabels, err := extractLabels(appBinding.Labels, meta.NameLabelKey, meta.ManagedByLabelKey)
+				appLabels, err := extractLabels(appBinding.Labels, meta.ManagedByLabelKey, meta.NameLabelKey)
 				if err != nil {
 					return err
 				}
@@ -459,7 +459,7 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 				return nil
 			}
 			// Extract the name, instance, and managed-by labels.
-			appLabels, err := extractLabels(appBinding.Labels, meta.NameLabelKey, meta.InstanceLabelKey, meta.ManagedByLabelKey)
+			appLabels, err := extractLabels(appBinding.Labels, meta.InstanceLabelKey, meta.ManagedByLabelKey, meta.NameLabelKey)
 			if err != nil {
 				return err
 			}
