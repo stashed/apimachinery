@@ -14,7 +14,7 @@ To install Stash, please follow the guide [here](https://stash.run/docs/latest/s
 
 ## Using Stash
 
-Want to learn how to use Stash? Please start [here](https://stash.run/docs/).
+Want to learn how to use Stash? Please start [here](https://stash.run/docs/latest/).
 
 ## Contribution guidelines
 
