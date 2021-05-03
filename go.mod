@@ -18,19 +18,24 @@ require (
 	gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
-	k8s.io/client-go v12.0.0+incompatible
+	k8s.io/client-go v0.21.0
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 	k8s.io/kubernetes v1.21.0
-	k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 // indirect
-	kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
+	kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20210503192455-da44af375c4c
-	kmodules.xyz/custom-resources v0.0.0-20210427204948-b63e86e6b5f6
+	kmodules.xyz/custom-resources v0.0.0-20210503065135-5267be335cb4
 	kmodules.xyz/objectstore-api v0.0.0-20210503064721-4fadb098d198
 	kmodules.xyz/offshoot-api v0.0.0-20210503065102-3250bbdedc8f
 	kmodules.xyz/prober v0.0.0-20210503064856-dbee486876b6
 	sigs.k8s.io/yaml v1.2.0
 )
+
+replace git.apache.org/thrift.git => github.com/apache/thrift v0.13.0
+
+replace github.com/Azure/go-autorest/autorest/azure/auth => github.com/Azure/go-autorest/autorest/azure/auth v0.2.0
+
+replace github.com/go-macaron/binding => github.com/gomodules/binding v0.0.0-20200811095614-c752727d2156
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
 
@@ -46,8 +51,6 @@ replace cloud.google.com/go/pubsub => cloud.google.com/go/pubsub v1.2.0
 
 replace cloud.google.com/go/storage => cloud.google.com/go/storage v1.6.0
 
-replace git.apache.org/thrift.git => github.com/apache/thrift v0.13.0
-
 replace github.com/Azure/azure-sdk-for-go => github.com/Azure/azure-sdk-for-go v43.0.0+incompatible
 
 replace github.com/Azure/go-ansiterm => github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78
@@ -57,8 +60,6 @@ replace github.com/Azure/go-autorest => github.com/Azure/go-autorest v14.2.0+inc
 replace github.com/Azure/go-autorest/autorest => github.com/Azure/go-autorest/autorest v0.11.12
 
 replace github.com/Azure/go-autorest/autorest/adal => github.com/Azure/go-autorest/autorest/adal v0.9.5
-
-replace github.com/Azure/go-autorest/autorest/azure/auth => github.com/Azure/go-autorest/autorest/azure/auth v0.2.0
 
 replace github.com/Azure/go-autorest/autorest/date => github.com/Azure/go-autorest/autorest/date v0.3.0
 
@@ -75,8 +76,6 @@ replace github.com/Azure/go-autorest/tracing => github.com/Azure/go-autorest/tra
 replace github.com/docker/distribution => github.com/docker/distribution v0.0.0-20191216044856-a8371794149d
 
 replace github.com/docker/docker => github.com/moby/moby v17.12.0-ce-rc1.0.20200618181300-9dc6525e6118+incompatible
-
-replace github.com/go-macaron/binding => github.com/gomodules/binding v0.0.0-20200811095614-c752727d2156
 
 replace github.com/go-openapi/analysis => github.com/go-openapi/analysis v0.19.5
 
