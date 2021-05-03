@@ -20,8 +20,8 @@ REPO     := $(notdir $(shell pwd))
 BIN      := apimachinery
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,crdVersions={v1beta1,v1}"
-CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.18
+CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,generateEmbeddedObjectMeta=true,crdVersions={v1beta1,v1}"
+CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
 API_GROUPS           ?= repositories:v1alpha1 stash:v1alpha1 stash:v1beta1
 
 # This version-strategy uses git tags to set the version string
@@ -113,6 +113,7 @@ version:
 .PHONY: clientset
 clientset:
 	# for EAS types
+	@rm -rf ./apis/repositories/v1alpha1/zz_generated.conversion.go
 	@docker run --rm 	                                          \
 		-u $$(id -u):$$(id -g)                                    \
 		-v /tmp:/.cache                                           \
@@ -128,7 +129,6 @@ clientset:
 			$(GO_PKG)/$(REPO)/apis                                \
 			repositories:v1alpha1                                 \
 			--go-header-file "./hack/license/go.txt"
-
 	# for both CRD and EAS types
 	@docker run --rm 	                                          \
 		-u $$(id -u):$$(id -g)                                    \
