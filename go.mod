@@ -3,32 +3,19 @@ module stash.appscode.dev/apimachinery
 go 1.15
 
 require (
-	cloud.google.com/go v0.58.0 // indirect
 	github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e
 	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
 	github.com/evanphx/json-patch v4.9.0+incompatible
-	github.com/go-openapi/spec v0.19.8
+	github.com/go-openapi/spec v0.19.5
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/gofuzz v1.1.0
-	github.com/googleapis/gnostic v0.5.4 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.12.1 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/json-iterator/go v1.1.10
-	github.com/onsi/ginkgo v1.15.0 // indirect
-	github.com/onsi/gomega v1.10.5 // indirect
-	github.com/prometheus/client_golang v1.9.0
+	github.com/prometheus/client_golang v1.7.1
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/stretchr/testify v1.7.0
-	go.uber.org/zap v1.16.0 // indirect
+	github.com/stretchr/testify v1.6.1
 	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 	gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b
 	gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
-	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/grpc v1.29.1 // indirect
-	honnef.co/go/tools v0.0.1-2020.1.6 // indirect
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/client-go v12.0.0+incompatible
