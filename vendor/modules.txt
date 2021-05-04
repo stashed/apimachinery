@@ -854,7 +854,7 @@ k8s.io/kube-openapi/pkg/validation/spec
 # k8s.io/kubernetes v1.21.0 => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210427080452-22d2e66bae50
 ## explicit
 k8s.io/kubernetes/pkg/util/hash
-# k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
+# k8s.io/utils v0.0.0-20201110183641-67b214c5f920 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 k8s.io/utils/buffer
 k8s.io/utils/integer
 k8s.io/utils/net
@@ -875,7 +875,7 @@ kmodules.xyz/client-go/openapi
 # kmodules.xyz/crd-schema-fuzz v0.0.0-20210503192455-da44af375c4c
 ## explicit
 kmodules.xyz/crd-schema-fuzz
-# kmodules.xyz/custom-resources v0.0.0-20210504014735-4cd8925c7e05
+# kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -886,13 +886,13 @@ kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/objectstore-api v0.0.0-20210503213845-6d516dbe9abe
+# kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3
 ## explicit
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20210504013721-d25dcd7cd3f5
+# kmodules.xyz/offshoot-api v0.0.0-20210504040651-7951e351f0f5
 ## explicit
 kmodules.xyz/offshoot-api/api/v1
-# kmodules.xyz/prober v0.0.0-20210504013248-51d0726f3d09
+# kmodules.xyz/prober v0.0.0-20210504042421-eca494e828bc
 ## explicit
 kmodules.xyz/prober/api/v1
 # sigs.k8s.io/apiserver-network-proxy/konnectivity-client v0.0.15

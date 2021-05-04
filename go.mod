@@ -23,10 +23,10 @@ require (
 	k8s.io/kubernetes v1.21.0
 	kmodules.xyz/client-go v0.0.0-20210504024435-1eb80721e9b8
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20210503192455-da44af375c4c
-	kmodules.xyz/custom-resources v0.0.0-20210504014735-4cd8925c7e05
-	kmodules.xyz/objectstore-api v0.0.0-20210503213845-6d516dbe9abe
-	kmodules.xyz/offshoot-api v0.0.0-20210504013721-d25dcd7cd3f5
-	kmodules.xyz/prober v0.0.0-20210504013248-51d0726f3d09
+	kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
+	kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3
+	kmodules.xyz/offshoot-api v0.0.0-20210504040651-7951e351f0f5
+	kmodules.xyz/prober v0.0.0-20210504042421-eca494e828bc
 	sigs.k8s.io/yaml v1.2.0
 )
 
