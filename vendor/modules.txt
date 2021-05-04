@@ -854,7 +854,8 @@ k8s.io/kube-openapi/pkg/validation/spec
 # k8s.io/kubernetes v1.21.0 => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210427080452-22d2e66bae50
 ## explicit
 k8s.io/kubernetes/pkg/util/hash
-# k8s.io/utils v0.0.0-20201110183641-67b214c5f920 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
+# k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
+## explicit
 k8s.io/utils/buffer
 k8s.io/utils/integer
 k8s.io/utils/net
