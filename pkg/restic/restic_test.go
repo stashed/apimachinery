@@ -28,7 +28,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"gomodules.xyz/pointer"
-	"gomodules.xyz/x/log"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
