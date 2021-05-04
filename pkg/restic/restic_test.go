@@ -28,6 +28,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"gomodules.xyz/pointer"
+	"k8s.io/klog/v2"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -96,7 +97,7 @@ func setupTest(tempDir string) (*ResticWrapper, error) {
 
 func cleanup(tempDir string) {
 	if err := os.RemoveAll(tempDir); err != nil {
-		log.Errorln(err)
+		klog.Errorln(err)
 	}
 }
 
