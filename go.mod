@@ -1,6 +1,6 @@
 module stash.appscode.dev/apimachinery
 
-go 1.15
+go 1.16
 
 require (
 	github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e
