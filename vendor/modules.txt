@@ -1,5 +1,7 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/Masterminds/semver/v3 v3.1.1
+github.com/Masterminds/semver/v3
 # github.com/NYTimes/gziphandler v1.1.1
 github.com/NYTimes/gziphandler
 # github.com/PuerkitoBio/purell v1.1.1
@@ -17,9 +19,6 @@ github.com/blang/semver
 github.com/cespare/xxhash/v2
 # github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0
 github.com/codegangsta/inject
-# github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
-## explicit
-github.com/codeskyblue/go-sh
 # github.com/coreos/go-semver v0.3.0
 github.com/coreos/go-semver/semver
 # github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
@@ -245,6 +244,9 @@ golang.org/x/tools/internal/typesinternal
 # golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
+# gomodules.xyz/go-sh v0.1.0
+## explicit
+gomodules.xyz/go-sh
 # gomodules.xyz/jsonpatch/v2 v2.1.0
 gomodules.xyz/jsonpatch/v2
 # gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
@@ -253,8 +255,6 @@ gomodules.xyz/pointer
 # gomodules.xyz/runtime v0.2.0
 ## explicit
 gomodules.xyz/runtime
-# gomodules.xyz/version v0.1.0
-gomodules.xyz/version
 # google.golang.org/appengine v1.6.5
 google.golang.org/appengine/internal
 google.golang.org/appengine/internal/base
@@ -659,6 +659,7 @@ k8s.io/client-go/applyconfigurations/storage/v1
 k8s.io/client-go/applyconfigurations/storage/v1alpha1
 k8s.io/client-go/applyconfigurations/storage/v1beta1
 k8s.io/client-go/discovery
+k8s.io/client-go/discovery/cached/memory
 k8s.io/client-go/discovery/fake
 k8s.io/client-go/informers
 k8s.io/client-go/informers/admissionregistration
@@ -811,6 +812,7 @@ k8s.io/client-go/pkg/version
 k8s.io/client-go/plugin/pkg/client/auth/exec
 k8s.io/client-go/rest
 k8s.io/client-go/rest/watch
+k8s.io/client-go/restmapper
 k8s.io/client-go/testing
 k8s.io/client-go/tools/auth
 k8s.io/client-go/tools/cache
@@ -861,7 +863,7 @@ k8s.io/utils/net
 k8s.io/utils/path
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210505231546-fa4fb8e1d04e
+# kmodules.xyz/client-go v0.0.0-20210605021217-cabaee7b953e
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -875,15 +877,18 @@ kmodules.xyz/client-go/openapi
 # kmodules.xyz/crd-schema-fuzz v0.0.0-20210503192455-da44af375c4c
 ## explicit
 kmodules.xyz/crd-schema-fuzz
-# kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
+# kmodules.xyz/custom-resources v0.0.0-20210605111625-741fcb992541
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
+kmodules.xyz/custom-resources/apis/auditor
+kmodules.xyz/custom-resources/apis/auditor/v1alpha1
 kmodules.xyz/custom-resources/apis/metrics
 kmodules.xyz/custom-resources/apis/metrics/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned
 kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
+kmodules.xyz/custom-resources/client/clientset/versioned/typed/auditor/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
 # kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3
@@ -960,5 +965,4 @@ sigs.k8s.io/yaml
 # k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 # k8s.io/kubernetes => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210427080452-22d2e66bae50
 # k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
-# kmodules.xyz/resource-metadata => kmodules.xyz/resource-metadata v0.5.0
 # sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad

@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e
-	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
 	github.com/evanphx/json-patch v4.9.0+incompatible
 	github.com/go-openapi/spec v0.19.5
 	github.com/gogo/protobuf v1.3.2
@@ -13,6 +12,7 @@ require (
 	github.com/prometheus/client_golang v1.7.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.6.1
+	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 	gomodules.xyz/runtime v0.2.0
 	k8s.io/api v0.21.0
@@ -21,9 +21,9 @@ require (
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 	k8s.io/kubernetes v1.21.0
-	kmodules.xyz/client-go v0.0.0-20210505231546-fa4fb8e1d04e
+	kmodules.xyz/client-go v0.0.0-20210605021217-cabaee7b953e
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20210503192455-da44af375c4c
-	kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
+	kmodules.xyz/custom-resources v0.0.0-20210605111625-741fcb992541
 	kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3
 	kmodules.xyz/offshoot-api v0.0.0-20210504040651-7951e351f0f5
 	kmodules.xyz/prober v0.0.0-20210504042421-eca494e828bc
@@ -135,7 +135,5 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20210305001622-591a79e
 replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210427080452-22d2e66bae50
 
 replace k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
-
-replace kmodules.xyz/resource-metadata => kmodules.xyz/resource-metadata v0.5.0
 
 replace sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
