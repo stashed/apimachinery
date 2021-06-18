@@ -89,6 +89,7 @@ type SetupOptions struct {
 	MaxConnections int64
 	Nice           *ofst.NiceSettings
 	IONice         *ofst.IONiceSettings
+	IgnoreInode    bool
 }
 
 type MetricsOptions struct {
