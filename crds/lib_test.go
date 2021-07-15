@@ -53,9 +53,6 @@ func TestCustomResourceDefinition(t *testing.T) {
 			if got.V1 == nil {
 				t.Errorf("Missing V1 CustomResourceDefinition for gvr = %v", tt.args.gvr)
 			}
-			if got.V1beta1 == nil {
-				t.Errorf("Missing V1beta1 CustomResourceDefinition for gvr = %v", tt.args.gvr)
-			}
 		})
 	}
 }
