@@ -20,8 +20,8 @@ REPO     := $(notdir $(shell pwd))
 BIN      := apimachinery
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,crdVersions={v1beta1,v1}"
-CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.18
+CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,generateEmbeddedObjectMeta=true"
+CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
 API_GROUPS           ?= repositories:v1alpha1 stash:v1alpha1 stash:v1beta1
 
 # This version-strategy uses git tags to set the version string
@@ -44,7 +44,7 @@ else
 	endif
 endif
 
-RESTIC_VER       := 0.11.0
+RESTIC_VER       := 0.12.1
 
 ###
 ### These variables should not need tweaking.
@@ -63,7 +63,7 @@ ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 BASEIMAGE_PROD   ?= gcr.io/distroless/static-debian10
 BASEIMAGE_DBG    ?= debian:buster
 
-GO_VERSION       ?= 1.15
+GO_VERSION       ?= 1.17
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
 TEST_IMAGE       ?= appscode/golang-dev:$(GO_VERSION)-stash
 
@@ -113,6 +113,7 @@ version:
 .PHONY: clientset
 clientset:
 	# for EAS types
+	@rm -rf ./apis/repositories/v1alpha1/zz_generated.conversion.go
 	@docker run --rm 	                                          \
 		-u $$(id -u):$$(id -g)                                    \
 		-v /tmp:/.cache                                           \
@@ -128,7 +129,6 @@ clientset:
 			$(GO_PKG)/$(REPO)/apis                                \
 			repositories:v1alpha1                                 \
 			--go-header-file "./hack/license/go.txt"
-
 	# for both CRD and EAS types
 	@docker run --rm 	                                          \
 		-u $$(id -u):$$(id -g)                                    \
@@ -243,22 +243,8 @@ gen-crd-protos-stash-v1beta1:
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
 			--packages=-k8s.io/api/core/v1,-kmodules.xyz/offshoot-api/api/v1,-kmodules.xyz/objectstore-api/api/v1,-kmodules.xyz/prober/api/v1,-kmodules.xyz/client-go/api/v1,-stash.appscode.dev/apimachinery/apis/stash/v1alpha1,stash.appscode.dev/apimachinery/apis/stash/v1beta1
 
-.PHONY: gen-bindata
-gen-bindata:
-	@docker run                                                 \
-	    -i                                                      \
-	    --rm                                                    \
-	    -u $$(id -u):$$(id -g)                                  \
-	    -v $$(pwd):/src                                         \
-	    -w /src/crds                                        \
-		-v /tmp:/.cache                                         \
-	    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-	    $(BUILD_IMAGE)                                          \
-	    go-bindata -ignore=\\.go -ignore=\\.DS_Store -mode=0644 -modtime=1573722179 -o bindata.go -pkg crds ./...
-
 .PHONY: manifests
-manifests: gen-crds label-crds gen-bindata
+manifests: gen-crds label-crds
 
 .PHONY: gen
 gen: clientset gen-crd-protos manifests openapi
@@ -375,7 +361,7 @@ $(BUILD_DIRS):
 dev: gen fmt push
 
 .PHONY: verify
-verify: verify-modules verify-gen
+verify: verify-gen verify-modules
 
 .PHONY: verify-modules
 verify-modules:

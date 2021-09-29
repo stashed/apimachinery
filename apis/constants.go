@@ -56,6 +56,7 @@ const (
 
 	InvokerKind = "INVOKER_KIND"
 	InvokerName = "INVOKER_NAME"
+	AddonImage  = "ADDON_IMAGE"
 
 	ExcludePatterns = "EXCLUDE_PATTERNS"
 	IncludePatterns = "INCLUDE_PATTERNS"
@@ -105,14 +106,16 @@ const (
 	PrefixStashBackup         = "stash-backup"
 	PrefixStashRestore        = "stash-restore"
 	PrefixStashVolumeSnapshot = "stash-vs"
+	PrefixStashTrigger        = "stash-trigger"
 
-	StashContainer       = "stash"
-	StashInitContainer   = "stash-init"
-	LocalVolumeName      = "stash-local"
-	ScratchDirVolumeName = "stash-scratchdir"
-	TmpDirVolumeName     = "tmp-dir"
-	TmpDirMountPath      = "/tmp"
-	PodinfoVolumeName    = "stash-podinfo"
+	StashContainer        = "stash"
+	StashInitContainer    = "stash-init"
+	StashCronJobContainer = "stash-trigger"
+	LocalVolumeName       = "stash-local"
+	ScratchDirVolumeName  = "stash-scratchdir"
+	TmpDirVolumeName      = "tmp-dir"
+	TmpDirMountPath       = "/tmp"
+	PodinfoVolumeName     = "stash-podinfo"
 
 	RecoveryJobPrefix   = "stash-recovery-"
 	ScaledownCronPrefix = "stash-scaledown-cron-"

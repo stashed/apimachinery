@@ -28,7 +28,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"gomodules.xyz/pointer"
-	"gomodules.xyz/x/log"
+	"k8s.io/klog/v2"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -97,7 +97,7 @@ func setupTest(tempDir string) (*ResticWrapper, error) {
 
 func cleanup(tempDir string) {
 	if err := os.RemoveAll(tempDir); err != nil {
-		log.Errorln(err)
+		klog.Errorln(err)
 	}
 }
 
@@ -223,8 +223,8 @@ func TestBackupRestoreStdin(t *testing.T) {
 	}
 
 	backupOpt := BackupOptions{
-		StdinPipeCommand: stdinPipeCommand,
-		StdinFileName:    fileName,
+		StdinPipeCommands: []Command{stdinPipeCommand},
+		StdinFileName:     fileName,
 		RetentionPolicy: api_v1alpha1.RetentionPolicy{
 			Name:     "keep-last-1",
 			KeepLast: 1,
@@ -239,8 +239,8 @@ func TestBackupRestoreStdin(t *testing.T) {
 	fmt.Println("backup output:", backupOut)
 
 	dumpOpt := DumpOptions{
-		FileName:          fileName,
-		StdoutPipeCommand: stdoutPipeCommand,
+		FileName:           fileName,
+		StdoutPipeCommands: []Command{stdoutPipeCommand},
 	}
 	dumpOut, err := w.Dump(dumpOpt, testTargetRef)
 	if err != nil {
@@ -338,8 +338,8 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 	}
 
 	backupOpt := BackupOptions{
-		StdinPipeCommand: stdinPipeCommand,
-		StdinFileName:    fileName,
+		StdinPipeCommands: []Command{stdinPipeCommand},
+		StdinFileName:     fileName,
 		RetentionPolicy: api_v1alpha1.RetentionPolicy{
 			Name:     "keep-last-1",
 			KeepLast: 1,
@@ -354,8 +354,8 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 	fmt.Println("backup output:", backupOut)
 
 	dumpOpt := DumpOptions{
-		FileName:          fileName,
-		StdoutPipeCommand: stdoutPipeCommand,
+		FileName:           fileName,
+		StdoutPipeCommands: []Command{stdoutPipeCommand},
 	}
 	dumpOut, err := w.Dump(dumpOpt, testTargetRef)
 	if err != nil {
@@ -825,19 +825,19 @@ func newParallelDumpOptions() []DumpOptions {
 
 	return []DumpOptions{
 		{
-			Host:              "host-0",
-			FileName:          filepath.Join(targetPath, fileName),
-			StdoutPipeCommand: stdoutPipeCommand,
+			Host:               "host-0",
+			FileName:           filepath.Join(targetPath, fileName),
+			StdoutPipeCommands: []Command{stdoutPipeCommand},
 		},
 		{
-			Host:              "host-1",
-			FileName:          filepath.Join(targetPath, fileName),
-			StdoutPipeCommand: stdoutPipeCommand,
+			Host:               "host-1",
+			FileName:           filepath.Join(targetPath, fileName),
+			StdoutPipeCommands: []Command{stdoutPipeCommand},
 		},
 		{
-			Host:              "host-2",
-			FileName:          filepath.Join(targetPath, fileName),
-			StdoutPipeCommand: stdoutPipeCommand,
+			Host:               "host-2",
+			FileName:           filepath.Join(targetPath, fileName),
+			StdoutPipeCommands: []Command{stdoutPipeCommand},
 		},
 	}
 }
