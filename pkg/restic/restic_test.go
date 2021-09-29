@@ -665,6 +665,88 @@ func TestIncludeExcludePattern(t *testing.T) {
 	}
 }
 
+func TestBackupRestoreWithArgs(t *testing.T) {
+	retentionPolicy := api_v1alpha1.RetentionPolicy{
+		Name:     "keep-last-1",
+		KeepLast: 1,
+		Prune:    true,
+		DryRun:   false,
+	}
+
+	testCases := []struct {
+		name       string
+		backupOpt  BackupOptions
+		restoreOpt RestoreOptions
+	}{
+		{
+			name: "pass --ignore-inode flag during backup",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+				Args:            []string{"--ignore-inode"},
+			},
+		},
+		{
+			name: "pass --tags during backup and restore",
+			backupOpt: BackupOptions{
+				RetentionPolicy: retentionPolicy,
+				Args:            []string{"--tag=t1,t2"},
+			},
+			restoreOpt: RestoreOptions{
+				Args: []string{"--tag=t1,t2"},
+			},
+		},
+	}
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			w, err := setupTest(tempDir)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			defer cleanup(tempDir)
+
+			// Initialize Repository
+			err = w.InitializeRepository()
+			if err != nil {
+				t.Error(err)
+			}
+
+			// create the source files
+			err = os.Remove(filepath.Join(targetPath, fileName))
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			test.backupOpt.BackupPaths = []string{targetPath}
+
+			_, err = w.RunBackup(test.backupOpt, testTargetRef)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			// delete target then restore
+			if err = os.RemoveAll(targetPath); err != nil {
+				t.Error(err)
+				return
+			}
+			test.restoreOpt.RestorePaths = []string{targetPath}
+
+			_, err = w.RunRestore(test.restoreOpt, testTargetRef)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+		})
+	}
+}
+
 func TestApplyRetentionPolicy(t *testing.T) {
 	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
 	if err != nil {

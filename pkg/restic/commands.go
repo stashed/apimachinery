@@ -56,6 +56,7 @@ type backupParams struct {
 	host     string
 	tags     []string
 	excludes []string
+	args     []string
 }
 
 type restoreParams struct {
@@ -65,6 +66,7 @@ type restoreParams struct {
 	destination string
 	excludes    []string
 	includes    []string
+	args        []string
 }
 
 func (w *ResticWrapper) listSnapshots(snapshotIDs []string) ([]Snapshot, error) {
@@ -130,6 +132,10 @@ func (w *ResticWrapper) backup(params backupParams) ([]byte, error) {
 	for _, exclude := range params.excludes {
 		args = append(args, "--exclude")
 		args = append(args, exclude)
+	}
+	// add additional arguments passed by user to the backup process
+	for i := range params.args {
+		args = append(args, params.args[i])
 	}
 	args = w.appendCacheDirFlag(args)
 	args = w.appendCleanupCacheFlag(args)
@@ -255,6 +261,10 @@ func (w *ResticWrapper) restore(params restoreParams) ([]byte, error) {
 	for _, exclude := range params.excludes {
 		args = append(args, "--exclude")
 		args = append(args, exclude)
+	}
+	// add additional arguments passed by user to the restore process
+	for i := range params.args {
+		args = append(args, params.args[i])
 	}
 	args = w.appendCacheDirFlag(args)
 	args = w.appendCaCertFlag(args)
