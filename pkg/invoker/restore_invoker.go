@@ -292,7 +292,7 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 				if err != nil {
 					return nil, err
 				}
-				return restoreBatch.OffshootLabels(), nil
+				return restoreBatch.Labels, nil
 			}
 			return nil, nil
 		}
@@ -484,7 +484,7 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 			if err != nil {
 				return nil, err
 			}
-			return restoreSession.OffshootLabels(), nil
+			return restoreSession.Labels, nil
 		}
 	default:
 		return invoker, fmt.Errorf("failed to extract invoker info. Reason: unknown invoker")
