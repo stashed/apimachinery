@@ -455,20 +455,20 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 		invoker.EnsureKubeDBIntegration = func(appClient appcatalog_cs.Interface) (map[string]string, error) {
 			// Don't do anything if the target is not an AppBinding
 			if restoreSession.Spec.Target == nil || !TargetOfGroupKind(restoreSession.Spec.Target.Ref, appcat.SchemeGroupVersion.Group, appcat.ResourceKindApp) {
-				return nil, err
+				return nil, nil
 			}
 			// Get the AppBinding
 			appBinding, err := appClient.AppcatalogV1alpha1().AppBindings(restoreSession.Namespace).Get(context.TODO(), restoreSession.Spec.Target.Ref.Name, metav1.GetOptions{})
 			if err != nil {
 				// If the AppBinding does not exist, then don't do anything.
 				if kerr.IsNotFound(err) {
-					return nil, err
+					return nil, nil
 				}
 				return nil, err
 			}
 			// If the AppBinding is not managed by KubeDB, then don't do anything
 			if manager, err := meta.GetStringValue(appBinding.Labels, meta.ManagedByLabelKey); err != nil || manager != "kubedb.com" {
-				return nil, err
+				return nil, nil
 			}
 			// Extract the name, instance, and managed-by labels.
 			appLabels, err := extractLabels(appBinding.Labels, meta.InstanceLabelKey, meta.ManagedByLabelKey, meta.NameLabelKey)
