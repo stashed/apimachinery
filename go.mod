@@ -12,6 +12,7 @@ require (
 	github.com/prometheus/client_golang v1.11.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/crypto v0.0.0-20210314154223-e6e6c4f2bb5b // indirect
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
@@ -21,11 +22,11 @@ require (
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 	k8s.io/kubernetes v1.21.1
-	kmodules.xyz/client-go v0.0.0-20210921150324-f005c6dfcb32
+	kmodules.xyz/client-go v0.0.0-20210928133955-8df5bb467db6
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4
-	kmodules.xyz/custom-resources v0.0.0-20210829135624-c63be82e13c0
-	kmodules.xyz/objectstore-api v0.0.0-20210829122106-d39859fc2d56
-	kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d
+	kmodules.xyz/custom-resources v0.0.0-20211007064058-70fba50e58a4
+	kmodules.xyz/objectstore-api v0.0.0-20210928135706-fdf68f88ea6e
+	kmodules.xyz/offshoot-api v0.0.0-20210829122105-6f4d481b0c61
 	kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 	sigs.k8s.io/yaml v1.2.0
 )
@@ -135,3 +136,5 @@ replace k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 replace sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
 
 replace github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
+
+replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.1+incompatible
