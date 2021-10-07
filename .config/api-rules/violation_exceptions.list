@@ -178,6 +178,7 @@ API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupConfigurationStatus,Conditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupSessionStatus,Conditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupSessionStatus,Targets
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupTarget,Args
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupTarget,Exclude
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupTarget,Paths
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,BackupTarget,VolumeMounts
@@ -200,6 +201,7 @@ API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionSpec,Rules
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionStatus,Conditions
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreSessionStatus,Stats
+API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreTarget,Args
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreTarget,Rules
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreTarget,VolumeClaimTemplates
 API rule violation: list_type_missing,stash.appscode.dev/apimachinery/apis/stash/v1beta1,RestoreTarget,VolumeMounts
