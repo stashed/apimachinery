@@ -22,7 +22,7 @@ require (
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 	k8s.io/kubernetes v1.21.1
-	kmodules.xyz/client-go v0.0.0-20210928133955-8df5bb467db6
+	kmodules.xyz/client-go v0.0.0-20211028132207-0cf6ea46b030
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4
 	kmodules.xyz/custom-resources v0.0.0-20211007080833-72bd9e8cae6e
 	kmodules.xyz/objectstore-api v0.0.0-20210928135706-fdf68f88ea6e
