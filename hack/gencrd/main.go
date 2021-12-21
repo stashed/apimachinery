@@ -69,9 +69,7 @@ func generateSwaggerJson() {
 		//nolint:govet
 		Resources: []openapi.TypeInfo{
 			// v1alpha1 resources
-			{stashv1alpha1.SchemeGroupVersion, stashv1alpha1.ResourcePluralRestic, stashv1alpha1.ResourceKindRestic, true},
 			{stashv1alpha1.SchemeGroupVersion, stashv1alpha1.ResourcePluralRepository, stashv1alpha1.ResourceKindRepository, true},
-			{stashv1alpha1.SchemeGroupVersion, stashv1alpha1.ResourcePluralRecovery, stashv1alpha1.ResourceKindRecovery, true},
 
 			// v1beta1 resources
 			{stashv1beta1.SchemeGroupVersion, stashv1beta1.ResourcePluralBackupConfiguration, stashv1beta1.ResourceKindBackupConfiguration, true},

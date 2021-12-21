@@ -121,9 +121,6 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/robfig/cron/v3 v3.0.1
-## explicit
-github.com/robfig/cron/v3
 # github.com/sergi/go-diff v1.1.0
 github.com/sergi/go-diff/diffmatchpatch
 # github.com/spf13/pflag v1.0.5
@@ -813,7 +810,7 @@ kmodules.xyz/client-go/openapi
 # kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4
 ## explicit
 kmodules.xyz/crd-schema-fuzz
-# kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52
+# kmodules.xyz/custom-resources v0.0.0-20211221054614-ef837cc2b4be
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1

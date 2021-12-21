@@ -28,12 +28,6 @@ import (
 var Funcs = func(codecs runtimeserializer.CodecFactory) []interface{} {
 	return []interface{}{
 		// v1alpha1
-		func(s *v1alpha1.Restic, c fuzz.Continue) {
-			c.FuzzNoCustom(s) // fuzz self without calling this function again
-		},
-		func(s *v1alpha1.Recovery, c fuzz.Continue) {
-			c.FuzzNoCustom(s) // fuzz self without calling this function again
-		},
 		func(s *v1alpha1.Repository, c fuzz.Continue) {
 			c.FuzzNoCustom(s) // fuzz self without calling this function again
 		},
