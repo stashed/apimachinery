@@ -301,14 +301,6 @@ func ExtractBackupInvokerInfo(stashClient cs.Interface, invokerType, invokerName
 	return invoker, nil
 }
 
-func (in *BackupInvoker) GetRepositoryNamespace() string {
-	ns := in.Repository.Namespace
-	if ns == "" {
-		ns = in.ObjectMeta.Namespace
-	}
-	return ns
-}
-
 func hasMemberCondition(conditions []v1beta1.MemberConditions, target v1beta1.TargetRef, condType string) bool {
 	// If the target is present in the list, then return the respective value
 	for i := range conditions {

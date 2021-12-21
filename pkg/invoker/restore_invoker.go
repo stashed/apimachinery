@@ -500,14 +500,6 @@ func ExtractRestoreInvokerInfo(kubeClient kubernetes.Interface, stashClient cs.I
 	return invoker, nil
 }
 
-func (in *RestoreInvoker) GetRepositoryNamespace() string {
-	ns := in.Repository.Namespace
-	if ns == "" {
-		ns = in.ObjectMeta.Namespace
-	}
-	return ns
-}
-
 func hasRestoreMemberCondition(status []v1beta1.RestoreMemberStatus, target v1beta1.TargetRef, condType string) bool {
 	// If the target is present in the list, then return the respective value
 	for i := range status {
