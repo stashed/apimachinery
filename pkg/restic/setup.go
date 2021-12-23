@@ -87,15 +87,15 @@ func (w *ResticWrapper) setupEnv() error {
 	// ref: https://restic.readthedocs.io/en/stable/manual_rest.html
 	w.sh.SetEnv(RESTIC_PROGRESS_FPS, "0.016666")
 
-	if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, RESTIC_PASSWORD)); err != nil {
+	if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, RESTIC_PASSWORD)); err != nil {
 		return err
 	} else {
 		w.sh.SetEnv(RESTIC_PASSWORD, string(v))
 	}
 
-	if _, err := os.Stat(filepath.Join(w.config.SecretDir, CA_CERT_DATA)); err == nil {
+	if _, err := os.Stat(filepath.Join(w.config.StorageSecret.MountDir, CA_CERT_DATA)); err == nil {
 		// ca-cert file exists
-		w.config.CacertFile = filepath.Join(w.config.SecretDir, CA_CERT_DATA)
+		w.config.CacertFile = filepath.Join(w.config.StorageSecret.MountDir, CA_CERT_DATA)
 	}
 
 	tmpDir := filepath.Join(w.config.ScratchDir, resticTempDir)
@@ -126,10 +126,10 @@ func (w *ResticWrapper) setupEnv() error {
 		r := fmt.Sprintf("s3:%s/%s", w.config.Endpoint, filepath.Join(w.config.Bucket, w.config.Path))
 		w.sh.SetEnv(RESTIC_REPOSITORY, r)
 
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, AWS_ACCESS_KEY_ID)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, AWS_ACCESS_KEY_ID)); err == nil {
 			w.sh.SetEnv(AWS_ACCESS_KEY_ID, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, AWS_SECRET_ACCESS_KEY)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, AWS_SECRET_ACCESS_KEY)); err == nil {
 			w.sh.SetEnv(AWS_SECRET_ACCESS_KEY, string(v))
 		}
 
@@ -141,23 +141,23 @@ func (w *ResticWrapper) setupEnv() error {
 		r := fmt.Sprintf("gs:%s:/%s", w.config.Bucket, w.config.Path)
 		w.sh.SetEnv(RESTIC_REPOSITORY, r)
 
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, GOOGLE_PROJECT_ID)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, GOOGLE_PROJECT_ID)); err == nil {
 			w.sh.SetEnv(GOOGLE_PROJECT_ID, string(v))
 		}
 
-		if _, err := os.Stat(filepath.Join(w.config.SecretDir, GOOGLE_SERVICE_ACCOUNT_JSON_KEY)); err == nil {
+		if _, err := os.Stat(filepath.Join(w.config.StorageSecret.MountDir, GOOGLE_SERVICE_ACCOUNT_JSON_KEY)); err == nil {
 			// json key file exists
-			w.sh.SetEnv(GOOGLE_APPLICATION_CREDENTIALS, filepath.Join(w.config.SecretDir, GOOGLE_SERVICE_ACCOUNT_JSON_KEY))
+			w.sh.SetEnv(GOOGLE_APPLICATION_CREDENTIALS, filepath.Join(w.config.StorageSecret.MountDir, GOOGLE_SERVICE_ACCOUNT_JSON_KEY))
 		}
 
 	case storage.ProviderAzure:
 		r := fmt.Sprintf("azure:%s:/%s", w.config.Bucket, w.config.Path)
 		w.sh.SetEnv(RESTIC_REPOSITORY, r)
 
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, AZURE_ACCOUNT_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, AZURE_ACCOUNT_NAME)); err == nil {
 			w.sh.SetEnv(AZURE_ACCOUNT_NAME, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, AZURE_ACCOUNT_KEY)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, AZURE_ACCOUNT_KEY)); err == nil {
 			w.sh.SetEnv(AZURE_ACCOUNT_KEY, string(v))
 		}
 
@@ -170,13 +170,13 @@ func (w *ResticWrapper) setupEnv() error {
 		// ST_AUTH
 		// ST_USER
 		// ST_KEY
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, ST_AUTH)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, ST_AUTH)); err == nil {
 			w.sh.SetEnv(ST_AUTH, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, ST_USER)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, ST_USER)); err == nil {
 			w.sh.SetEnv(ST_USER, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, ST_KEY)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, ST_KEY)); err == nil {
 			w.sh.SetEnv(ST_KEY, string(v))
 		}
 
@@ -188,22 +188,22 @@ func (w *ResticWrapper) setupEnv() error {
 		// OS_PASSWORD
 		// OS_TENANT_ID
 		// OS_TENANT_NAME
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_AUTH_URL)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_AUTH_URL)); err == nil {
 			w.sh.SetEnv(OS_AUTH_URL, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_REGION_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_REGION_NAME)); err == nil {
 			w.sh.SetEnv(OS_REGION_NAME, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_USERNAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_USERNAME)); err == nil {
 			w.sh.SetEnv(OS_USERNAME, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_PASSWORD)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_PASSWORD)); err == nil {
 			w.sh.SetEnv(OS_PASSWORD, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_TENANT_ID)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_TENANT_ID)); err == nil {
 			w.sh.SetEnv(OS_TENANT_ID, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_TENANT_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_TENANT_NAME)); err == nil {
 			w.sh.SetEnv(OS_TENANT_NAME, string(v))
 		}
 
@@ -216,13 +216,13 @@ func (w *ResticWrapper) setupEnv() error {
 		// OS_USER_DOMAIN_NAME
 		// OS_PROJECT_NAME
 		// OS_PROJECT_DOMAIN_NAME
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_USER_DOMAIN_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_USER_DOMAIN_NAME)); err == nil {
 			w.sh.SetEnv(OS_USER_DOMAIN_NAME, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_PROJECT_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_PROJECT_NAME)); err == nil {
 			w.sh.SetEnv(OS_PROJECT_NAME, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_PROJECT_DOMAIN_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_PROJECT_DOMAIN_NAME)); err == nil {
 			w.sh.SetEnv(OS_PROJECT_DOMAIN_NAME, string(v))
 		}
 
@@ -231,10 +231,10 @@ func (w *ResticWrapper) setupEnv() error {
 		// OS_AUTH_URL (already set in v2 authentication section)
 		// OS_APPLICATION_CREDENTIAL_ID
 		// OS_APPLICATION_CREDENTIAL_SECRET
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_APPLICATION_CREDENTIAL_ID)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_APPLICATION_CREDENTIAL_ID)); err == nil {
 			w.sh.SetEnv(OS_APPLICATION_CREDENTIAL_ID, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_APPLICATION_CREDENTIAL_SECRET)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_APPLICATION_CREDENTIAL_SECRET)); err == nil {
 			w.sh.SetEnv(OS_APPLICATION_CREDENTIAL_SECRET, string(v))
 		}
 
@@ -245,7 +245,7 @@ func (w *ResticWrapper) setupEnv() error {
 		// OS_USER_DOMAIN_NAME (already set in v3 authentication section)
 		// OS_APPLICATION_CREDENTIAL_NAME
 		// OS_APPLICATION_CREDENTIAL_SECRET (already set in v3 authentication with credential id section)
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_APPLICATION_CREDENTIAL_NAME)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_APPLICATION_CREDENTIAL_NAME)); err == nil {
 			w.sh.SetEnv(OS_APPLICATION_CREDENTIAL_NAME, string(v))
 		}
 
@@ -253,10 +253,10 @@ func (w *ResticWrapper) setupEnv() error {
 		// Necessary Envs:
 		// OS_STORAGE_URL
 		// OS_AUTH_TOKEN
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_STORAGE_URL)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_STORAGE_URL)); err == nil {
 			w.sh.SetEnv(OS_STORAGE_URL, string(v))
 		}
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, OS_AUTH_TOKEN)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, OS_AUTH_TOKEN)); err == nil {
 			w.sh.SetEnv(OS_AUTH_TOKEN, string(v))
 		}
 
@@ -264,11 +264,11 @@ func (w *ResticWrapper) setupEnv() error {
 		r := fmt.Sprintf("b2:%s:/%s", w.config.Bucket, w.config.Path)
 		w.sh.SetEnv(RESTIC_REPOSITORY, r)
 
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, B2_ACCOUNT_ID)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, B2_ACCOUNT_ID)); err == nil {
 			w.sh.SetEnv(B2_ACCOUNT_ID, string(v))
 		}
 
-		if v, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, B2_ACCOUNT_KEY)); err == nil {
+		if v, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, B2_ACCOUNT_KEY)); err == nil {
 			w.sh.SetEnv(B2_ACCOUNT_KEY, string(v))
 		}
 
@@ -277,8 +277,8 @@ func (w *ResticWrapper) setupEnv() error {
 		if err != nil {
 			return err
 		}
-		if username, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, REST_SERVER_USERNAME)); err == nil {
-			if password, err := ioutil.ReadFile(filepath.Join(w.config.SecretDir, REST_SERVER_PASSWORD)); err == nil {
+		if username, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, REST_SERVER_USERNAME)); err == nil {
+			if password, err := ioutil.ReadFile(filepath.Join(w.config.StorageSecret.MountDir, REST_SERVER_PASSWORD)); err == nil {
 				u.User = url.UserPassword(string(username), string(password))
 			} else {
 				u.User = url.User(string(username))
