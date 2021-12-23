@@ -85,11 +85,11 @@ type SetupOptions struct {
 	Endpoint       string
 	Region         string
 	Path           string
-	StorageSecret  *core.Secret
 	CacertFile     string
 	ScratchDir     string
 	EnableCache    bool
 	MaxConnections int64
+	StorageSecret  *core.Secret
 	Nice           *ofst.NiceSettings
 	IONice         *ofst.IONiceSettings
 }
