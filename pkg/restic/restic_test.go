@@ -28,6 +28,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -36,7 +37,7 @@ import (
 var (
 	localRepoDir      string
 	scratchDir        string
-	secretDir         string
+	storageSecret     *core.Secret
 	targetPath        string
 	password          = "password"
 	fileName          = "some-file"
@@ -54,8 +55,12 @@ var testTargetRef = api_v1beta1.TargetRef{
 func setupTest(tempDir string) (*ResticWrapper, error) {
 	localRepoDir = filepath.Join(tempDir, "repo")
 	scratchDir = filepath.Join(tempDir, "scratch")
-	secretDir = filepath.Join(tempDir, "secret")
 	targetPath = filepath.Join(tempDir, "target")
+	storageSecret = &core.Secret{
+		Data: map[string][]byte{
+			"RESTIC_PASSWORD": []byte(password),
+		},
+	}
 
 	if err := os.MkdirAll(localRepoDir, 0777); err != nil {
 		return nil, err
@@ -64,28 +69,20 @@ func setupTest(tempDir string) (*ResticWrapper, error) {
 		return nil, err
 	}
 
-	if err := os.MkdirAll(secretDir, 0777); err != nil {
-		return nil, err
-	}
-	err := ioutil.WriteFile(filepath.Join(secretDir, RESTIC_PASSWORD), []byte(password), os.ModePerm)
-	if err != nil {
-		return nil, err
-	}
-
 	if err := os.MkdirAll(targetPath, 0777); err != nil {
 		return nil, err
 	}
-	err = ioutil.WriteFile(filepath.Join(targetPath, fileName), []byte(fileContent), os.ModePerm)
+	err := ioutil.WriteFile(filepath.Join(targetPath, fileName), []byte(fileContent), os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
 
 	setupOpt := SetupOptions{
-		Provider:    storage.ProviderLocal,
-		Bucket:      localRepoDir,
-		SecretDir:   secretDir,
-		ScratchDir:  scratchDir,
-		EnableCache: false,
+		Provider:      storage.ProviderLocal,
+		Bucket:        localRepoDir,
+		StorageSecret: storageSecret,
+		ScratchDir:    scratchDir,
+		EnableCache:   false,
 	}
 
 	w, err := NewResticWrapper(setupOpt)
