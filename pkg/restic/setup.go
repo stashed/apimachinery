@@ -100,7 +100,6 @@ func (w *ResticWrapper) setupEnv() error {
 		return err
 	}
 	w.sh.SetEnv(TMPDIR, tmpDir)
-	defer os.RemoveAll(tmpDir)
 
 	if _, ok := w.config.StorageSecret.Data[CA_CERT_DATA]; ok {
 		filePath, err := w.writeSecretKeyToFile(CA_CERT_DATA, "ca.crt")
