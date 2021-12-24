@@ -26,6 +26,7 @@ require (
 	kmodules.xyz/objectstore-api v0.0.0-20211116180107-8720be0c9bf7
 	kmodules.xyz/offshoot-api v0.0.0-20210829122105-6f4d481b0c61
 	kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
+	sigs.k8s.io/controller-runtime v0.9.0
 	sigs.k8s.io/yaml v1.2.0
 )
 
