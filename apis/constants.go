@@ -29,6 +29,7 @@ const (
 	RestoreSession = "RESTORE_SESSION"
 
 	RepositoryName       = "REPOSITORY_NAME"
+	RepositoryNamespace  = "REPOSITORY_NAMESPACE"
 	RepositoryProvider   = "REPOSITORY_PROVIDER"
 	RepositorySecretName = "REPOSITORY_SECRET_NAME"
 	RepositoryBucket     = "REPOSITORY_BUCKET"
