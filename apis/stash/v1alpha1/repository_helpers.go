@@ -51,10 +51,10 @@ func (r *Repository) UsageAllowed(srcNamespace *core.Namespace) bool {
 	if r.Spec.UsagePolicy == nil {
 		return r.Namespace == srcNamespace.Name
 	}
-	return r.IsNamespaceAllowed(srcNamespace)
+	return r.isNamespaceAllowed(srcNamespace)
 }
 
-func (r *Repository) IsNamespaceAllowed(srcNamespace *core.Namespace) bool {
+func (r *Repository) isNamespaceAllowed(srcNamespace *core.Namespace) bool {
 	allowedNamespaces := r.Spec.UsagePolicy.AllowedNamespaces
 
 	if allowedNamespaces.From == nil {
