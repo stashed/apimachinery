@@ -30,13 +30,23 @@ spec:
             type: string
           metadata:
             type: object
-          spec:
-            description: BackupOverviewSpec defines the desired state of BackupOverview
+          request:
+            description: BackupOverviewRequest defines the request fields of BackupOverview
             properties:
-              backupStorage:
+              group:
                 type: string
-              dataDirectory:
+              resource:
                 type: string
+              version:
+                type: string
+            required:
+            - group
+            - resource
+            - version
+            type: object
+          response:
+            description: BackupOverviewResponse defines the response fields of BackupOverview
+            properties:
               dataIntegrity:
                 type: boolean
               dataSize:
@@ -47,13 +57,15 @@ spec:
               numberOfSnapshots:
                 format: int64
                 type: integer
+              repository:
+                type: string
               schedule:
+                type: string
+              status:
                 type: string
               upcomingBackupTime:
                 format: date-time
                 type: string
-            required:
-            - dataSize
             type: object
         type: object
     served: true
