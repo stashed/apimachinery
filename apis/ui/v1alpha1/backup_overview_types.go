@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	core "k8s.io/api/core/v1"
+	api "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -27,12 +27,6 @@ const (
 	ResourceBackupOverview     = "backupoverview"
 	ResourceBackupOverviews    = "backupoverviews"
 )
-
-// BackupOverviewRequest defines the request fields of BackupOverview
-type BackupOverviewRequest struct {
-	Resource kmapi.ResourceID          `json:"resource"`
-	Ref      core.LocalObjectReference `json:"ref"`
-}
 
 // +kubebuilder:validation:Enum=Active;Paused
 type BackupStatus string
@@ -42,8 +36,8 @@ const (
 	BackupStatusPaused = "Paused"
 )
 
-// BackupOverviewResponse defines the response fields of BackupOverview
-type BackupOverviewResponse struct {
+// BackupOverviewSpec defines the desired state of BackupOverview
+type BackupOverviewSpec struct {
 	Schedule           string       `json:"schedule,omitempty" protobuf:"bytes,1,opt,name=schedule"`
 	Status             BackupStatus `json:"status,omitempty" protobuf:"bytes,2,opt,name=status"`
 	LastBackupTime     *metav1.Time `json:"lastBackupTime,omitempty" protobuf:"bytes,3,opt,name=lastBackupTime"`
@@ -58,10 +52,11 @@ type BackupOverviewResponse struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type BackupOverview struct {
-	metav1.TypeMeta `json:",inline"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 
-	Request  BackupOverviewRequest  `json:"request,omitempty" protobuf:"bytes,2,opt,name=request"`
-	Response BackupOverviewResponse `json:"response,omitempty" protobuf:"bytes,3,opt,name=response"`
+	Spec   BackupOverviewSpec            `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Status api.BackupConfigurationStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
 }
 
 // BackupOverviewList contains a list of BackupOverview
