@@ -17,7 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -28,11 +30,11 @@ const (
 
 // BackupOverviewRequest defines the request fields of BackupOverview
 type BackupOverviewRequest struct {
-	Group    string `json:"group" protobuf:"bytes,1,opt,name=group"`
-	Version  string `json:"version" protobuf:"version,2,opt,name=version"`
-	Resource string `json:"resource" protobuf:"resource,3,opt,name=resource"`
+	Resource kmapi.ResourceID          `json:"resource"`
+	Ref      core.LocalObjectReference `json:"ref"`
 }
 
+// +kubebuilder:validation:Enum=Active;Paused
 type BackupStatus string
 
 const (
@@ -56,8 +58,7 @@ type BackupOverviewResponse struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type BackupOverview struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.TypeMeta `json:",inline"`
 
 	Request  BackupOverviewRequest  `json:"request,omitempty" protobuf:"bytes,2,opt,name=request"`
 	Response BackupOverviewResponse `json:"response,omitempty" protobuf:"bytes,3,opt,name=response"`
