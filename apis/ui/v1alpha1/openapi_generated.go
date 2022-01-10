@@ -387,7 +387,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/prober/api/v1.Handler":                                          schema_kmodulesxyz_prober_api_v1_Handler(ref),
 		"stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverview":             schema_apimachinery_apis_ui_v1alpha1_BackupOverview(ref),
 		"stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewList":         schema_apimachinery_apis_ui_v1alpha1_BackupOverviewList(ref),
-		"stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewSpec":         schema_apimachinery_apis_ui_v1alpha1_BackupOverviewSpec(ref),
+		"stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewRequest":      schema_apimachinery_apis_ui_v1alpha1_BackupOverviewRequest(ref),
+		"stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewResponse":     schema_apimachinery_apis_ui_v1alpha1_BackupOverviewResponse(ref),
 	}
 }
 
@@ -19050,17 +19051,23 @@ func schema_apimachinery_apis_ui_v1alpha1_BackupOverview(ref common.ReferenceCal
 							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
 						},
 					},
-					"spec": {
+					"request": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewSpec"),
+							Ref:     ref("stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewRequest"),
+						},
+					},
+					"response": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewResponse"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewRequest", "stash.appscode.dev/apimachinery/apis/ui/v1alpha1.BackupOverviewResponse"},
 	}
 }
 
@@ -19112,14 +19119,55 @@ func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewList(ref common.Referenc
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "BackupOverviewSpec defines the desired state of BackupOverview",
+				Description: "BackupOverviewRequest defines the request fields of BackupOverview",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"resource": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"group", "version", "resource"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewResponse(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "BackupOverviewResponse defines the response fields of BackupOverview",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"schedule": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"status": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -19135,7 +19183,7 @@ func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewSpec(ref common.Referenc
 							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
-					"backupStorage": {
+					"repository": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -19143,9 +19191,8 @@ func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewSpec(ref common.Referenc
 					},
 					"dataSize": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"numberOfSnapshots": {
@@ -19160,14 +19207,7 @@ func schema_apimachinery_apis_ui_v1alpha1_BackupOverviewSpec(ref common.Referenc
 							Format: "",
 						},
 					},
-					"dataDirectory": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
 				},
-				Required: []string{"dataSize"},
 			},
 		},
 		Dependencies: []string{
