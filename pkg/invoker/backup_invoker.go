@@ -34,6 +34,24 @@ type BackupInvoker interface {
 	ConditionHandler
 	BackupExecutionOrderHandler
 	BackupTargetHandler
+	RepositoryGetter
+	DriverHandler
+	ObjectFormatter
+}
+
+type BackupExecutionOrderHandler interface {
+	GetExecutionOrder() v1beta1.ExecutionOrder
+	NextInOrder(curTarget v1beta1.TargetRef, targetStatus []v1beta1.BackupTargetStatus) bool
+}
+
+type BackupTargetHandler interface {
+	GetTargetInfo() []BackupTargetInfo
+	GetRuntimeSettings() ofst.RuntimeSettings
+	GetSchedule() string
+	GetRetentionPolicy() v1alpha1.RetentionPolicy
+	IsPaused() bool
+	GetBackupHistoryLimit() *int32
+	GetGlobalHooks() *v1beta1.BackupHooks
 }
 
 type BackupTargetInfo struct {
@@ -43,11 +61,6 @@ type BackupTargetInfo struct {
 	TempDir               v1beta1.EmptyDirSettings
 	InterimVolumeTemplate *ofst.PersistentVolumeClaim
 	Hooks                 *v1beta1.BackupHooks
-}
-
-type BackupExecutionOrderHandler interface {
-	GetExecutionOrder() v1beta1.ExecutionOrder
-	NextInOrder(curTarget v1beta1.TargetRef, targetStatus []v1beta1.BackupTargetStatus) bool
 }
 
 func NewBackupInvoker(stashClient cs.Interface, kind, name, namespace string) (BackupInvoker, error) {
@@ -67,22 +80,6 @@ func NewBackupInvoker(stashClient cs.Interface, kind, name, namespace string) (B
 	default:
 		return nil, fmt.Errorf("unknown backup invoker kind: %s", kind)
 	}
-}
-
-type BackupTargetHandler interface {
-	GetTargetInfo() []BackupTargetInfo
-	GetDriver() v1beta1.Snapshotter
-	GetRepoRef() kmapi.ObjectReference
-	GetRepository() (*v1alpha1.Repository, error)
-
-	GetRuntimeSettings() ofst.RuntimeSettings
-	GetSchedule() string
-	GetRetentionPolicy() v1alpha1.RetentionPolicy
-	IsPaused() bool
-	GetBackupHistoryLimit() *int32
-	GetGlobalHooks() *v1beta1.BackupHooks
-	GetHash() string
-	GetObjectJSON() (string, error)
 }
 
 func hasMemberCondition(conditions []v1beta1.MemberConditions, target v1beta1.TargetRef, condType string) bool {

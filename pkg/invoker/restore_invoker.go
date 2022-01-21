@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"strings"
 
-	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 
@@ -29,7 +28,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/meta"
-	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -38,27 +36,17 @@ const (
 	EventSourceRestoreSessionController = "RestoreSession Controller"
 )
 
-type RestoreInvokerStatus struct {
-	Phase           v1beta1.RestorePhase
-	SessionDuration string
-	Conditions      []kmapi.Condition
-	TargetStatus    []v1beta1.RestoreMemberStatus
-}
-
 type RestoreInvoker interface {
 	MetadataHandler
 	ConditionHandler
 	RestoreExecutionOrderHandler
 	RestoreTargetHandler
-}
-
-type RestoreTargetInfo struct {
-	Task                  v1beta1.TaskRef
-	Target                *v1beta1.RestoreTarget
-	RuntimeSettings       ofst.RuntimeSettings
-	TempDir               v1beta1.EmptyDirSettings
-	InterimVolumeTemplate *ofst.PersistentVolumeClaim
-	Hooks                 *v1beta1.RestoreHooks
+	RepositoryGetter
+	DriverHandler
+	Eventer
+	KubeDBIntegrator
+	ObjectFormatter
+	RestoreStatusHandler
 }
 
 type RestoreExecutionOrderHandler interface {
@@ -68,19 +56,28 @@ type RestoreExecutionOrderHandler interface {
 
 type RestoreTargetHandler interface {
 	GetTargetInfo() []RestoreTargetInfo
-	GetDriver() v1beta1.Snapshotter
-	GetRepoRef() kmapi.ObjectReference
-	GetRepository() (*v1alpha1.Repository, error)
-
 	GetGlobalHooks() *v1beta1.RestoreHooks
-	GetHash() string
-	GetObjectJSON() (string, error)
+}
 
-	UpdateStatus(status RestoreInvokerStatus) error
-	CreateEvent(eventType, source, reason, message string) error
-	EnsureKubeDBIntegration(appClient appcatalog_cs.Interface) error
-
+type RestoreStatusHandler interface {
 	GetStatus() RestoreInvokerStatus
+	UpdateStatus(status RestoreInvokerStatus) error
+}
+
+type RestoreInvokerStatus struct {
+	Phase           v1beta1.RestorePhase
+	SessionDuration string
+	Conditions      []kmapi.Condition
+	TargetStatus    []v1beta1.RestoreMemberStatus
+}
+
+type RestoreTargetInfo struct {
+	Task                  v1beta1.TaskRef
+	Target                *v1beta1.RestoreTarget
+	RuntimeSettings       ofst.RuntimeSettings
+	TempDir               v1beta1.EmptyDirSettings
+	InterimVolumeTemplate *ofst.PersistentVolumeClaim
+	Hooks                 *v1beta1.RestoreHooks
 }
 
 func NewRestoreInvoker(kubeClient kubernetes.Interface, stashClient cs.Interface, kind, name, namespace string) (RestoreInvoker, error) {

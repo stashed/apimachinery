@@ -17,11 +17,13 @@ limitations under the License.
 package invoker
 
 import (
+	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
 
 type MetadataHandler interface {
@@ -39,4 +41,26 @@ type ConditionHandler interface {
 	GetCondition(target *v1beta1.TargetRef, conditionType string) (int, *kmapi.Condition, error)
 	SetCondition(target *v1beta1.TargetRef, newCondition kmapi.Condition) error
 	IsConditionTrue(target *v1beta1.TargetRef, conditionType string) (bool, error)
+}
+
+type RepositoryGetter interface {
+	GetRepoRef() kmapi.ObjectReference
+	GetRepository() (*v1alpha1.Repository, error)
+}
+
+type DriverHandler interface {
+	GetDriver() v1beta1.Snapshotter
+}
+
+type Eventer interface {
+	CreateEvent(eventType, source, reason, message string) error
+}
+
+type KubeDBIntegrator interface {
+	EnsureKubeDBIntegration(appClient appcatalog_cs.Interface) error
+}
+
+type ObjectFormatter interface {
+	GetHash() string
+	GetObjectJSON() (string, error)
 }
