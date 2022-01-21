@@ -166,7 +166,7 @@ func (inv *RestoreSessionInvoker) GetRepoRef() kmapi.ObjectReference {
 	if repo.Namespace == "" {
 		repo.Namespace = inv.restoreSession.Namespace
 	}
-	return inv.restoreSession.Spec.Repository
+	return repo
 }
 
 func (inv *RestoreSessionInvoker) GetRepository() (*v1alpha1.Repository, error) {

@@ -158,7 +158,7 @@ func (inv *BackupConfigurationInvoker) GetRepoRef() kmapi.ObjectReference {
 	if repo.Namespace == "" {
 		repo.Namespace = inv.backupConfig.Namespace
 	}
-	return inv.backupConfig.Spec.Repository
+	return repo
 }
 
 func (inv *BackupConfigurationInvoker) GetRepository() (*v1alpha1.Repository, error) {
