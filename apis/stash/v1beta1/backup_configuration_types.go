@@ -43,6 +43,7 @@ const (
 // +kubebuilder:printcolumn:name="Task",type="string",JSONPath=".spec.task.name"
 // +kubebuilder:printcolumn:name="Schedule",type="string",JSONPath=".spec.schedule"
 // +kubebuilder:printcolumn:name="Paused",type="boolean",JSONPath=".spec.paused"
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type BackupConfiguration struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
@@ -129,6 +130,15 @@ const (
 	VolumeSnapshotter Snapshotter = "VolumeSnapshotter"
 )
 
+// +kubebuilder:validation:Enum=Invalid;Ready;Not Ready
+type BackupConfigurationPhase string
+
+const (
+	BackupConfigurationInvalid  BackupConfigurationPhase = "Invalid"
+	BackupConfigurationReady    BackupConfigurationPhase = "Ready"
+	BackupConfigurationNotReady BackupConfigurationPhase = "Not Ready"
+)
+
 type BackupConfigurationStatus struct {
 	// ObservedGeneration is the most recent generation observed for this BackupConfiguration. It corresponds to the
 	// BackupConfiguration's generation, which is updated on mutation by the API Server.
@@ -137,6 +147,12 @@ type BackupConfigurationStatus struct {
 	// Conditions shows current backup setup condition of the BackupConfiguration.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,2,rep,name=conditions"`
+	// Phase indicates phase of this BackupConfiguration.
+	// Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
+	// If any of the condition is false, then the Phase will be "not Ready".
+	// If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
+	// +optional
+	Phase BackupConfigurationPhase `json:"phase,omitempty" protobuf:"bytes,3,opt,name=phase,casttype=BackupConfigurationPhase"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

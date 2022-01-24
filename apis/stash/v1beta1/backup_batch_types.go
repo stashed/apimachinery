@@ -99,6 +99,12 @@ type BackupBatchStatus struct {
 	// MemberConditions shows current backup setup condition of the members of the BackupBatch.
 	// +optional
 	MemberConditions []MemberConditions `json:"memberConditions,omitempty" protobuf:"bytes,3,rep,name=memberConditions"`
+	// Phase indicates phase of this BackupConfiguration.
+	// Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
+	// If any of the condition is false, then the Phase will be "not Ready".
+	// If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
+	// +optional
+	Phase BackupConfigurationPhase `json:"phase,omitempty" protobuf:"bytes,4,opt,name=phase,casttype=BackupConfigurationPhase"`
 }
 
 type MemberConditions struct {

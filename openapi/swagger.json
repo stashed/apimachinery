@@ -9211,6 +9211,10 @@
           "description": "ObservedGeneration is the most recent generation observed for this BackupBatch. It corresponds to the BackupBatch's generation, which is updated on mutation by the API Server.",
           "type": "integer",
           "format": "int64"
+        },
+        "phase": {
+          "description": "Phase indicates phase of this BackupConfiguration. Phase will be \"Ready\" only if All the conditions of this BackupConfiguration are true. If any of the condition is false, then the Phase will be \"not Ready\". If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid",
+          "type": "string"
         }
       }
     },
@@ -9466,6 +9470,10 @@
           "description": "ObservedGeneration is the most recent generation observed for this BackupConfiguration. It corresponds to the BackupConfiguration's generation, which is updated on mutation by the API Server.",
           "type": "integer",
           "format": "int64"
+        },
+        "phase": {
+          "description": "Phase indicates phase of this BackupConfiguration. Phase will be \"Ready\" only if All the conditions of this BackupConfiguration are true. If any of the condition is false, then the Phase will be \"not Ready\". If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid",
+          "type": "string"
         }
       }
     },

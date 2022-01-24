@@ -117,6 +117,13 @@ message BackupBatchStatus {
   // MemberConditions shows current backup setup condition of the members of the BackupBatch.
   // +optional
   repeated MemberConditions memberConditions = 3;
+
+  // Phase indicates phase of this BackupConfiguration.
+  // Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
+  // If any of the condition is false, then the Phase will be "not Ready".
+  // If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
+  // +optional
+  optional string phase = 4;
 }
 
 // +kubebuilder:object:root=true
@@ -177,6 +184,7 @@ message BackupBlueprintSpec {
 // +kubebuilder:printcolumn:name="Task",type="string",JSONPath=".spec.task.name"
 // +kubebuilder:printcolumn:name="Schedule",type="string",JSONPath=".spec.schedule"
 // +kubebuilder:printcolumn:name="Paused",type="boolean",JSONPath=".spec.paused"
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 message BackupConfiguration {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
@@ -233,6 +241,13 @@ message BackupConfigurationStatus {
   // Conditions shows current backup setup condition of the BackupConfiguration.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 2;
+
+  // Phase indicates phase of this BackupConfiguration.
+  // Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
+  // If any of the condition is false, then the Phase will be "not Ready".
+  // If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
+  // +optional
+  optional string phase = 3;
 }
 
 message BackupConfigurationTemplateSpec {

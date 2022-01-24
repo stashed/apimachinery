@@ -153,6 +153,56 @@ func SetRepositoryFoundConditionToTrue(i interface{}) error {
 	}
 }
 
+func SetValidConditionToTrue(i interface{}) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
+		return in.SetCondition(nil, kmapi.Condition{
+			Type:    apis.Valid,
+			Status:  core.ConditionTrue,
+			Reason:  apis.ValidReference,
+			Message: fmt.Sprintf("References from %s/%s are valid", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+		})
+	case invoker.RestoreInvoker:
+		return in.SetCondition(nil, kmapi.Condition{
+			Type:    apis.Valid,
+			Status:  core.ConditionTrue,
+			Reason:  apis.ValidReference,
+			Message: fmt.Sprintf("References from %s/%s are valid", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+		})
+	default:
+		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.Valid)
+	}
+}
+
+func SetValidConditionToFalse(i interface{}) error {
+	switch in := i.(type) {
+	case invoker.BackupInvoker:
+		return in.SetCondition(nil, kmapi.Condition{
+			Type:   apis.Valid,
+			Status: core.ConditionFalse,
+			Reason: apis.InvalidReference,
+			Message: fmt.Sprintf("Repository %s/%s is not allowed to be referred from %s namespace .",
+				in.GetRepoRef().Namespace,
+				in.GetRepoRef().Name,
+				in.GetObjectMeta().Namespace,
+			),
+		})
+	case invoker.RestoreInvoker:
+		return in.SetCondition(nil, kmapi.Condition{
+			Type:   apis.Valid,
+			Status: core.ConditionFalse,
+			Reason: apis.InvalidReference,
+			Message: fmt.Sprintf("Repository %s/%s is not allowed to be referred from %s namespace .",
+				in.GetRepoRef().Namespace,
+				in.GetRepoRef().Name,
+				in.GetObjectMeta().Namespace,
+			),
+		})
+	default:
+		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.Valid)
+	}
+}
+
 func SetBackendSecretFoundConditionToUnknown(i interface{}, secretName string, err error) error {
 	switch in := i.(type) {
 	case invoker.BackupInvoker:

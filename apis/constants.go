@@ -188,6 +188,8 @@ const (
 const (
 	// RepositoryFound indicates whether the respective Repository object was found or not.
 	RepositoryFound = "RepositoryFound"
+	// Valid indicates the validity of the CRD according to the specs mentioned
+	Valid = "Valid"
 	// BackendSecretFound indicates whether the respective backend secret was found or not.
 	BackendSecretFound = "BackendSecretFound"
 
@@ -219,7 +221,6 @@ const (
 	GlobalPreRestoreHookSucceeded = "GlobalPreRestoreHookSucceeded"
 	// GlobalPostRestoreHookSucceeded indicates whether the global PostRestoreHook was executed successfully or not
 	GlobalPostRestoreHookSucceeded = "GlobalPostRestoreHookSucceeded"
-
 	// BackendRepositoryInitialized indicates that whether backend repository was initialized or not
 	BackendRepositoryInitialized = "BackendRepositoryInitialized"
 	// RetentionPolicyApplied indicates that whether the retention policies were applied or not
@@ -236,6 +237,10 @@ const (
 	RepositoryAvailable = "RepositoryAvailable"
 	// RepositoryNotAvailable indicates that the condition transitioned to this state because the Repository was not available
 	RepositoryNotAvailable = "RepositoryNotAvailable"
+	// ValidReference indicates that the condition transitioned to this state because the references of this repository are valid
+	ValidReference = "ValidReference"
+	// InvalidReference indicates that the condition transitioned to this state because the references to this CRD is invalid
+	InvalidReference = "Invalid"
 	// UnableToCheckRepositoryAvailability indicates that the condition transitioned to this state because operator was unable
 	// to check the Repository availability
 	UnableToCheckRepositoryAvailability = "UnableToCheckRepositoryAvailability"
