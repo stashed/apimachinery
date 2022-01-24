@@ -21,16 +21,19 @@ package v1beta1
 
 import (
 	fmt "fmt"
+
 	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
 
 	proto "github.com/gogo/protobuf/proto"
 	k8s_io_api_core_v1 "k8s.io/api/core/v1"
 	v14 "k8s.io/api/core/v1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
+
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+
 	v12 "kmodules.xyz/client-go/api/v1"
 	v11 "kmodules.xyz/offshoot-api/api/v1"
 	v13 "kmodules.xyz/prober/api/v1"

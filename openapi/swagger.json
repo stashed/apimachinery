@@ -1574,7 +1574,7 @@
         }
       }
     },
-    "/apis/stash.appscode.com/v1beta1/backupbatch": {
+    "/apis/stash.appscode.com/v1beta1/backupbatches": {
       "get": {
         "description": "list or watch objects of kind BackupBatch",
         "consumes": [
@@ -1870,7 +1870,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/backupbatch/{name}": {
+    "/apis/stash.appscode.com/v1beta1/backupbatches/{name}": {
       "get": {
         "description": "read the specified BackupBatch",
         "consumes": [
@@ -2124,7 +2124,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/backupblueprint": {
+    "/apis/stash.appscode.com/v1beta1/backupblueprints": {
       "get": {
         "description": "list or watch objects of kind BackupBlueprint",
         "consumes": [
@@ -2420,7 +2420,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/backupblueprint/{name}": {
+    "/apis/stash.appscode.com/v1beta1/backupblueprints/{name}": {
       "get": {
         "description": "read the specified BackupBlueprint",
         "consumes": [
@@ -2782,7 +2782,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/backupsession": {
+    "/apis/stash.appscode.com/v1beta1/backupsessions": {
       "get": {
         "description": "list or watch objects of kind BackupSession",
         "consumes": [
@@ -2890,7 +2890,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/function": {
+    "/apis/stash.appscode.com/v1beta1/functions": {
       "get": {
         "description": "list or watch objects of kind Function",
         "consumes": [
@@ -3186,7 +3186,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/function/{name}": {
+    "/apis/stash.appscode.com/v1beta1/functions/{name}": {
       "get": {
         "description": "read the specified Function",
         "consumes": [
@@ -4006,7 +4006,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/namespaces/{namespace}/backupsession": {
+    "/apis/stash.appscode.com/v1beta1/namespaces/{namespace}/backupsessions": {
       "get": {
         "description": "list or watch objects of kind BackupSession",
         "consumes": [
@@ -4310,7 +4310,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/namespaces/{namespace}/backupsession/{name}": {
+    "/apis/stash.appscode.com/v1beta1/namespaces/{namespace}/backupsessions/{name}": {
       "get": {
         "description": "read the specified BackupSession",
         "consumes": [
@@ -6470,7 +6470,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/backupbatch": {
+    "/apis/stash.appscode.com/v1beta1/watch/backupbatches": {
       "get": {
         "description": "watch individual changes to a list of BackupBatch. deprecated: use the 'watch' parameter with a list operation instead.",
         "consumes": [
@@ -6578,7 +6578,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/backupbatch/{name}": {
+    "/apis/stash.appscode.com/v1beta1/watch/backupbatches/{name}": {
       "get": {
         "description": "watch changes to an object of kind BackupBatch. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
         "consumes": [
@@ -6694,7 +6694,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/backupblueprint": {
+    "/apis/stash.appscode.com/v1beta1/watch/backupblueprints": {
       "get": {
         "description": "watch individual changes to a list of BackupBlueprint. deprecated: use the 'watch' parameter with a list operation instead.",
         "consumes": [
@@ -6802,7 +6802,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/backupblueprint/{name}": {
+    "/apis/stash.appscode.com/v1beta1/watch/backupblueprints/{name}": {
       "get": {
         "description": "watch changes to an object of kind BackupBlueprint. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
         "consumes": [
@@ -7026,7 +7026,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/backupsession": {
+    "/apis/stash.appscode.com/v1beta1/watch/backupsessions": {
       "get": {
         "description": "watch individual changes to a list of BackupSession. deprecated: use the 'watch' parameter with a list operation instead.",
         "consumes": [
@@ -7134,7 +7134,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/function": {
+    "/apis/stash.appscode.com/v1beta1/watch/functions": {
       "get": {
         "description": "watch individual changes to a list of Function. deprecated: use the 'watch' parameter with a list operation instead.",
         "consumes": [
@@ -7242,7 +7242,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/function/{name}": {
+    "/apis/stash.appscode.com/v1beta1/watch/functions/{name}": {
       "get": {
         "description": "watch changes to an object of kind Function. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
         "consumes": [
@@ -7598,7 +7598,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/namespaces/{namespace}/backupsession": {
+    "/apis/stash.appscode.com/v1beta1/watch/namespaces/{namespace}/backupsessions": {
       "get": {
         "description": "watch individual changes to a list of BackupSession. deprecated: use the 'watch' parameter with a list operation instead.",
         "consumes": [
@@ -7714,7 +7714,7 @@
         }
       ]
     },
-    "/apis/stash.appscode.com/v1beta1/watch/namespaces/{namespace}/backupsession/{name}": {
+    "/apis/stash.appscode.com/v1beta1/watch/namespaces/{namespace}/backupsessions/{name}": {
       "get": {
         "description": "watch changes to an object of kind BackupSession. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
         "consumes": [

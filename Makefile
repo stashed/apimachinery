@@ -19,6 +19,9 @@ GO_PKG   := stash.appscode.dev
 REPO     := $(notdir $(shell pwd))
 BIN      := apimachinery
 
+# Where to push the docker image.
+REGISTRY ?= stashed
+
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS          ?= "crd:generateEmbeddedObjectMeta=true"
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
@@ -409,3 +412,24 @@ ci: verify check-license lint build unit-tests #cover
 .PHONY: clean
 clean:
 	rm -rf .go bin
+
+push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
+	@echo "Pushing CRD installer image....."
+	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) ko publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+
+.PHONY: install-ko
+install-ko:
+	@echo "Installing: github.com/google/ko"
+	go install github.com/google/ko@latest
+
+.PHONY: release
+release: ## Release final production docker image and push into the DockerHub.
+	@if [ "$$APPSCODE_ENV" != "prod" ]; then      \
+		echo "'release' only works in PROD env."; \
+		exit 1;                                   \
+	fi
+	@if [ "$(version_strategy)" != "tag" ]; then                    \
+		echo "apply tag to release binaries and/or docker images."; \
+		exit 1;                                                     \
+	fi
+	@$(MAKE) push-crd-installer --no-print-directory
