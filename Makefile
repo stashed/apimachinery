@@ -54,7 +54,7 @@ RESTIC_VER       := 0.12.1
 ###
 
 SRC_PKGS := apis client crds pkg # directories which hold app source (not vendored)
-SRC_DIRS := $(SRC_PKGS) hack/gencrd
+SRC_DIRS := $(SRC_PKGS) hack/gencrd hack/stash-crd-installer
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
 BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
@@ -413,6 +413,10 @@ ci: verify check-license lint build unit-tests #cover
 clean:
 	rm -rf .go bin
 
+.PHONY: push
+push: push-crd-installer
+
+.PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
 	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) ko publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
@@ -432,4 +436,4 @@ release: ## Release final production docker image and push into the DockerHub.
 		echo "apply tag to release binaries and/or docker images."; \
 		exit 1;                                                     \
 	fi
-	@$(MAKE) push-crd-installer --no-print-directory
+	@$(MAKE) push --no-print-directory

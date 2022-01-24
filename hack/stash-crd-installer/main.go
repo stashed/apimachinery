@@ -20,27 +20,31 @@ import (
 	"flag"
 	"os"
 
-	uiv1alpha1 "stash.appscode.dev/apimachinery/apis/ui/v1alpha1"
-
+	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+	uiv1alpha1 "stash.appscode.dev/apimachinery/apis/ui/v1alpha1"
+	"stash.appscode.dev/apimachinery/crds"
 
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
-	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
-	"stash.appscode.dev/apimachinery/crds"
+	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	metrics "kmodules.xyz/custom-resources/apis/metrics/v1alpha1"
+	kmodules_crds "kmodules.xyz/custom-resources/crds"
 )
 
 var (
-	masterURL  string
-	kubeConfig string
+	masterURL                string
+	kubeConfig               string
+	enableEnterpriseFeatures bool
 )
 
 func init() {
 	flag.StringVar(&kubeConfig, "kube-config", "", "Path to a kube config file. Only required if out-of-cluster.")
 	flag.StringVar(&masterURL, "master", "", "The address of the Kubernetes API server. Overrides any value in kube config file. Only required if out-of-cluster.")
+	flag.BoolVar(&enableEnterpriseFeatures, "enterprise", false, "Specify whether enterprise features enabled or not.")
 }
 
 func main() {
@@ -66,7 +70,31 @@ func main() {
 }
 
 func registerCRDs(crdClient crd_cs.Interface) error {
+	var resources []*apiextensions.CustomResourceDefinition
 
+	stashCRDs, err := getStashCRDs()
+	if err != nil {
+		return err
+	}
+	resources = append(resources, stashCRDs...)
+
+	appCatalogCRDs, err := getAppCatalogCRDs()
+	if err != nil {
+		return err
+	}
+	resources = append(resources, appCatalogCRDs...)
+
+	if enableEnterpriseFeatures {
+		metricCRDs, err := getMetricCRDs()
+		if err != nil {
+			return err
+		}
+		resources = append(resources, metricCRDs...)
+	}
+	return apiextensions.RegisterCRDs(crdClient, resources)
+}
+
+func getStashCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
 	gvrs := []schema.GroupVersionResource{
 		// v1alpha1 resources
 		{Group: stashv1alpha1.SchemeGroupVersion.Group, Version: stashv1alpha1.SchemeGroupVersion.Version, Resource: stashv1alpha1.ResourcePluralRepository},
@@ -85,13 +113,46 @@ func registerCRDs(crdClient crd_cs.Interface) error {
 		{Group: uiv1alpha1.SchemeGroupVersion.Group, Version: uiv1alpha1.SchemeGroupVersion.Version, Resource: uiv1alpha1.ResourceBackupOverviews},
 	}
 
-	var resources []*apiextensions.CustomResourceDefinition
+	var stashCRDs []*apiextensions.CustomResourceDefinition
 	for i := range gvrs {
 		crd, err := crds.CustomResourceDefinition(gvrs[i])
 		if err != nil {
-			return err
+			return nil, err
 		}
-		resources = append(resources, crd)
+		stashCRDs = append(stashCRDs, crd)
 	}
-	return apiextensions.RegisterCRDs(crdClient, resources)
+	return stashCRDs, nil
+}
+
+func getAppCatalogCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
+	gvrs := []schema.GroupVersionResource{
+		// v1alpha1 resources
+		{Group: appcatalog.SchemeGroupVersion.Group, Version: appcatalog.SchemeGroupVersion.Version, Resource: appcatalog.ResourceApps},
+	}
+	var appCatalogCRDs []*apiextensions.CustomResourceDefinition
+	for i := range gvrs {
+		crd, err := kmodules_crds.CustomResourceDefinition(gvrs[i])
+		if err != nil {
+			return nil, err
+		}
+		appCatalogCRDs = append(appCatalogCRDs, crd)
+	}
+	return appCatalogCRDs, nil
+}
+
+func getMetricCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
+	gvrs := []schema.GroupVersionResource{
+		// v1alpha1 resources
+		{Group: metrics.SchemeGroupVersion.Group, Version: metrics.SchemeGroupVersion.Version, Resource: metrics.ResourceMetricsConfigurations},
+	}
+
+	var metricCRDs []*apiextensions.CustomResourceDefinition
+	for i := range gvrs {
+		crd, err := kmodules_crds.CustomResourceDefinition(gvrs[i])
+		if err != nil {
+			return nil, err
+		}
+		metricCRDs = append(metricCRDs, crd)
+	}
+	return metricCRDs, nil
 }
