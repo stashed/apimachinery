@@ -37,6 +37,7 @@ type BackupInvoker interface {
 	RepositoryGetter
 	DriverHandler
 	ObjectFormatter
+	BackupStatusHandler
 }
 
 type BackupExecutionOrderHandler interface {
