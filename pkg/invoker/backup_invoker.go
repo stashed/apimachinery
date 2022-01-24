@@ -54,6 +54,17 @@ type BackupTargetHandler interface {
 	GetGlobalHooks() *v1beta1.BackupHooks
 }
 
+type BackupStatusHandler interface {
+	GetStatus() BackupInvokerStatus
+	UpdateStatus(status BackupInvokerStatus) error
+}
+
+type BackupInvokerStatus struct {
+	Phase              v1beta1.BackupConfigurationPhase
+	Conditions         []kmapi.Condition
+	ObservedGeneration int64
+}
+
 type BackupTargetInfo struct {
 	Task                  v1beta1.TaskRef
 	Target                *v1beta1.BackupTarget
@@ -154,4 +165,18 @@ func TargetBackupCompleted(ref v1beta1.TargetRef, targetStatus []v1beta1.BackupT
 		}
 	}
 	return false
+}
+
+func getInvokerStatusFromBackupConfiguration(backupconfiguration *v1beta1.BackupConfiguration) BackupInvokerStatus {
+	return BackupInvokerStatus{
+		Phase:      backupconfiguration.Status.Phase,
+		Conditions: backupconfiguration.Status.Conditions,
+	}
+}
+
+func getInvokerStatusFromBackupBatch(backupbatch *v1beta1.BackupBatch) BackupInvokerStatus {
+	return BackupInvokerStatus{
+		Phase:      backupbatch.Status.Phase,
+		Conditions: backupbatch.Status.Conditions,
+	}
 }
