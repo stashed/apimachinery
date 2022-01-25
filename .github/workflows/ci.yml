@@ -29,6 +29,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Login Docker
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          USERNAME: 1gtm
+        run: |
+          docker login --username ${USERNAME} --password ${DOCKER_TOKEN}
+
+      - name: Build
+        env:
+          REGISTRY: appscodeci
+        run: |
+          make push
+
       - name: Run checks
         run: |
           sudo apt-get -qq update || true
