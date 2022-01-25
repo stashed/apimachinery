@@ -416,14 +416,17 @@ clean:
 .PHONY: push
 push: push-crd-installer
 
+KO := $(GOPATH)/bin/ko
 .PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
-	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) ko publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+	@echo "KO: $(KO)"
+	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
 
 .PHONY: install-ko
 install-ko:
 	@echo "Installing: github.com/google/ko"
+	@echo "GOPATH: $(GOPATH)"
 	go install github.com/google/ko@latest
 
 .PHONY: release
