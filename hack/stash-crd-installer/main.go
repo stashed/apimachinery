@@ -95,6 +95,7 @@ func registerCRDs(crdClient crd_cs.Interface) error {
 }
 
 func getStashCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
+	// community features CRDs
 	gvrs := []schema.GroupVersionResource{
 		// v1alpha1 resources
 		{Group: stashv1alpha1.SchemeGroupVersion.Group, Version: stashv1alpha1.SchemeGroupVersion.Version, Resource: stashv1alpha1.ResourcePluralRepository},
@@ -102,15 +103,22 @@ func getStashCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
 		// v1beta1 resources
 		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupConfiguration},
 		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupSession},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBatch},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBlueprint},
 		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralRestoreSession},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralRestoreBatch},
 		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralFunction},
 		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralTask},
+	}
 
-		// UI resources
-		{Group: uiv1alpha1.SchemeGroupVersion.Group, Version: uiv1alpha1.SchemeGroupVersion.Version, Resource: uiv1alpha1.ResourceBackupOverviews},
+	// enterprise features CRDs
+	if enableEnterpriseFeatures {
+		gvrs = append(gvrs, []schema.GroupVersionResource{
+			// v1beta1 resources
+			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBatch},
+			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBlueprint},
+			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralRestoreBatch},
+
+			// UI resources
+			{Group: uiv1alpha1.SchemeGroupVersion.Group, Version: uiv1alpha1.SchemeGroupVersion.Version, Resource: uiv1alpha1.ResourceBackupOverviews},
+		}...)
 	}
 
 	var stashCRDs []*apiextensions.CustomResourceDefinition
