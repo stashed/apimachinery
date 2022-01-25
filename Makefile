@@ -421,6 +421,8 @@ KO := $(GOPATH)/bin/ko
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
 	@echo "KO: $(KO)"
+	@echo "which ko: $(which ko)"
+	@go env
 	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
 
 .PHONY: install-ko

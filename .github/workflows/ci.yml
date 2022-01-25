@@ -40,6 +40,8 @@ jobs:
         env:
           REGISTRY: appscodeci
         run: |
+          go env
+          echo $PATH
           make push
 
       - name: Run checks
