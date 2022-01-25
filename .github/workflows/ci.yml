@@ -36,7 +36,7 @@ jobs:
         run: |
           docker login --username ${USERNAME} --password ${DOCKER_TOKEN}
 
-      - name: Build
+      - name: Push Docker Image
         env:
           REGISTRY: appscodeci
         run: |
