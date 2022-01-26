@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 
+	"stash.appscode.dev/apimachinery/apis"
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
@@ -37,7 +38,6 @@ type BackupInvoker interface {
 	RepositoryGetter
 	DriverHandler
 	ObjectFormatter
-	BackupStatusHandler
 }
 
 type BackupExecutionOrderHandler interface {
@@ -55,13 +55,8 @@ type BackupTargetHandler interface {
 	GetGlobalHooks() *v1beta1.BackupHooks
 }
 
-type BackupStatusHandler interface {
-	GetStatus() BackupInvokerStatus
-	UpdateStatus(status BackupInvokerStatus) error
-}
-
 type BackupInvokerStatus struct {
-	Phase              v1beta1.BackupConfigurationPhase
+	Phase              v1beta1.BackupInvokerPhase
 	Conditions         []kmapi.Condition
 	ObservedGeneration int64
 }
@@ -168,16 +163,27 @@ func TargetBackupCompleted(ref v1beta1.TargetRef, targetStatus []v1beta1.BackupT
 	return false
 }
 
-func getInvokerStatusFromBackupConfiguration(backupconfiguration *v1beta1.BackupConfiguration) BackupInvokerStatus {
-	return BackupInvokerStatus{
-		Phase:      backupconfiguration.Status.Phase,
-		Conditions: backupconfiguration.Status.Conditions,
+func calculateBackupInvokerPhase(driver v1beta1.Snapshotter, conditions []kmapi.Condition) v1beta1.BackupInvokerPhase {
+	if kmapi.IsConditionFalse(conditions, apis.Valid) {
+		return v1beta1.BackupInvokerInvalid
 	}
+	if kmapi.IsConditionFalse(conditions, apis.RepositoryFound) ||
+		kmapi.IsConditionFalse(conditions, apis.BackendSecretFound) ||
+		kmapi.IsConditionFalse(conditions, apis.CronJobCreated) {
+		return v1beta1.BackupInvokerNotReady
+	}
+
+	if kmapi.IsConditionTrue(conditions, apis.Valid) &&
+		kmapi.IsConditionTrue(conditions, apis.CronJobCreated) &&
+		backendRequirementsSatisfied(driver, conditions) {
+		return v1beta1.BackupInvokerReady
+	}
+	return ""
 }
 
-func getInvokerStatusFromBackupBatch(backupbatch *v1beta1.BackupBatch) BackupInvokerStatus {
-	return BackupInvokerStatus{
-		Phase:      backupbatch.Status.Phase,
-		Conditions: backupbatch.Status.Conditions,
+func backendRequirementsSatisfied(driver v1beta1.Snapshotter, conditions []kmapi.Condition) bool {
+	if driver == v1beta1.ResticSnapshotter {
+		return kmapi.IsConditionTrue(conditions, apis.RepositoryFound) && kmapi.IsConditionTrue(conditions, apis.BackendSecretFound)
 	}
+	return true
 }

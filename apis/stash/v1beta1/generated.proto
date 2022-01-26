@@ -118,10 +118,7 @@ message BackupBatchStatus {
   // +optional
   repeated MemberConditions memberConditions = 3;
 
-  // Phase indicates phase of this BackupConfiguration.
-  // Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
-  // If any of the condition is false, then the Phase will be "not Ready".
-  // If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
+  // Phase indicates phase of this BackupBatch.
   // +optional
   optional string phase = 4;
 }
@@ -243,9 +240,6 @@ message BackupConfigurationStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 2;
 
   // Phase indicates phase of this BackupConfiguration.
-  // Phase will be "Ready" only if All the conditions of this BackupConfiguration are true.
-  // If any of the condition is false, then the Phase will be "not Ready".
-  // If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid
   // +optional
   optional string phase = 3;
 }

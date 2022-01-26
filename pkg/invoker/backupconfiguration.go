@@ -113,6 +113,7 @@ func (inv *BackupConfigurationInvoker) GetCondition(target *v1beta1.TargetRef, c
 func (inv *BackupConfigurationInvoker) SetCondition(target *v1beta1.TargetRef, newCondition kmapi.Condition) error {
 	updatedBackupConfig, err := v1beta1_util.UpdateBackupConfigurationStatus(context.TODO(), inv.stashClient.StashV1beta1(), inv.backupConfig.ObjectMeta, func(in *v1beta1.BackupConfigurationStatus) (types.UID, *v1beta1.BackupConfigurationStatus) {
 		in.Conditions = kmapi.SetCondition(in.Conditions, newCondition)
+		in.Phase = calculateBackupInvokerPhase(inv.GetDriver(), in.Conditions)
 		return inv.backupConfig.UID, in
 	}, metav1.UpdateOptions{})
 	if err != nil {
@@ -219,31 +220,4 @@ func (inv *BackupConfigurationInvoker) GetObjectJSON() (string, error) {
 
 func (inv *BackupConfigurationInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
 	return inv.backupConfig.Spec.RetentionPolicy
-}
-
-func (inv *BackupConfigurationInvoker) GetStatus() BackupInvokerStatus {
-	return getInvokerStatusFromBackupConfiguration(inv.backupConfig)
-}
-
-func (inv *BackupConfigurationInvoker) UpdateStatus(status BackupInvokerStatus) error {
-	updatedBackupConfiguration, err := v1beta1_util.UpdateBackupConfigurationStatus(
-		context.TODO(),
-		inv.stashClient.StashV1beta1(),
-		inv.backupConfig.ObjectMeta,
-		func(in *v1beta1.BackupConfigurationStatus) (types.UID, *v1beta1.BackupConfigurationStatus) {
-			if status.Phase != "" {
-				in.Phase = status.Phase
-			}
-			if len(status.Conditions) > 0 {
-				in.Conditions = upsertConditions(in.Conditions, status.Conditions)
-			}
-			return inv.backupConfig.ObjectMeta.UID, in
-		},
-		metav1.UpdateOptions{},
-	)
-	if err != nil {
-		return err
-	}
-	inv.backupConfig = updatedBackupConfiguration
-	return nil
 }

@@ -19401,7 +19401,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchStatus(ref common.Referen
 					},
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Phase indicates phase of this BackupConfiguration. Phase will be \"Ready\" only if All the conditions of this BackupConfiguration are true. If any of the condition is false, then the Phase will be \"not Ready\". If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid",
+							Description: "Phase indicates phase of this BackupBatch.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -19801,7 +19801,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationStatus(ref common
 					},
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Phase indicates phase of this BackupConfiguration. Phase will be \"Ready\" only if All the conditions of this BackupConfiguration are true. If any of the condition is false, then the Phase will be \"not Ready\". If any of the condition is set to invalid, then the phase of the BackupConfiguration will be invalid",
+							Description: "Phase indicates phase of this BackupConfiguration.",
 							Type:        []string{"string"},
 							Format:      "",
 						},

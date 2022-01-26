@@ -5521,15 +5521,11 @@ spec:
                 format: int64
                 type: integer
               phase:
-                description: Phase indicates phase of this BackupConfiguration. Phase
-                  will be "Ready" only if All the conditions of this BackupConfiguration
-                  are true. If any of the condition is false, then the Phase will
-                  be "not Ready". If any of the condition is set to invalid, then
-                  the phase of the BackupConfiguration will be invalid
+                description: Phase indicates phase of this BackupBatch.
                 enum:
                 - Invalid
                 - Ready
-                - Not Ready
+                - NotReady
                 type: string
             type: object
         type: object

@@ -124,6 +124,7 @@ func (inv *BackupBatchInvoker) SetCondition(target *v1beta1.TargetRef, newCondit
 		} else {
 			in.Conditions = kmapi.SetCondition(in.Conditions, newCondition)
 		}
+		in.Phase = calculateBackupInvokerPhase(inv.GetDriver(), in.Conditions)
 		return inv.backupBatch.UID, in
 	}, metav1.UpdateOptions{})
 	if err != nil {
@@ -235,31 +236,4 @@ func (inv *BackupBatchInvoker) GetObjectJSON() (string, error) {
 
 func (inv *BackupBatchInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
 	return inv.backupBatch.Spec.RetentionPolicy
-}
-
-func (inv *BackupBatchInvoker) GetStatus() BackupInvokerStatus {
-	return getInvokerStatusFromBackupBatch(inv.backupBatch)
-}
-
-func (inv *BackupBatchInvoker) UpdateStatus(status BackupInvokerStatus) error {
-	updatedBackupBatch, err := v1beta1_util.UpdateBackupBatchStatus(
-		context.TODO(),
-		inv.stashClient.StashV1beta1(),
-		inv.backupBatch.ObjectMeta,
-		func(in *v1beta1.BackupBatchStatus) (types.UID, *v1beta1.BackupBatchStatus) {
-			if status.Phase != "" {
-				in.Phase = status.Phase
-			}
-			if len(status.Conditions) > 0 {
-				in.Conditions = upsertConditions(in.Conditions, status.Conditions)
-			}
-			return inv.backupBatch.ObjectMeta.UID, in
-		},
-		metav1.UpdateOptions{},
-	)
-	if err != nil {
-		return err
-	}
-	inv.backupBatch = updatedBackupBatch
-	return nil
 }
