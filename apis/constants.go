@@ -188,8 +188,12 @@ const (
 const (
 	// RepositoryFound indicates whether the respective Repository object was found or not.
 	RepositoryFound = "RepositoryFound"
-	// Valid indicates the validity of the CRD according to the specs mentioned
-	Valid = "Valid"
+	// ValidationPassed indicates the validation conditions of the CRD are passed or not.
+	ValidationPassed = "ValidationPassed"
+	// ResourceValidationPassed indicates that the condition transitioned to this state because the CRD meets validation criteria
+	ResourceValidationPassed = "ResourceValidationPassed"
+	// ResourceValidationFailed indicates that the condition transitioned to this state because the CRD does not meet validation criteria
+	ResourceValidationFailed = "ResourceValidationFailed"
 	// BackendSecretFound indicates whether the respective backend secret was found or not.
 	BackendSecretFound = "BackendSecretFound"
 
@@ -237,10 +241,6 @@ const (
 	RepositoryAvailable = "RepositoryAvailable"
 	// RepositoryNotAvailable indicates that the condition transitioned to this state because the Repository was not available
 	RepositoryNotAvailable = "RepositoryNotAvailable"
-	// ValidReference indicates that the condition transitioned to this state because the references of this repository are valid
-	ValidReference = "ValidReference"
-	// InvalidReference indicates that the condition transitioned to this state because the references to this CRD is invalid
-	InvalidReference = "Invalid"
 	// UnableToCheckRepositoryAvailability indicates that the condition transitioned to this state because operator was unable
 	// to check the Repository availability
 	UnableToCheckRepositoryAvailability = "UnableToCheckRepositoryAvailability"

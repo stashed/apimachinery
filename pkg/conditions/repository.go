@@ -153,53 +153,45 @@ func SetRepositoryFoundConditionToTrue(i interface{}) error {
 	}
 }
 
-func SetValidConditionToTrue(i interface{}) error {
+func SetValidationPassedToTrue(i interface{}) error {
 	switch in := i.(type) {
 	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    apis.Valid,
+			Type:    apis.ValidationPassed,
 			Status:  core.ConditionTrue,
-			Reason:  apis.ValidReference,
-			Message: fmt.Sprintf("References from %s/%s are valid", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+			Reason:  apis.ResourceValidationPassed,
+			Message: fmt.Sprintf("Validation is passed for %s/%s", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    apis.Valid,
+			Type:    apis.ValidationPassed,
 			Status:  core.ConditionTrue,
-			Reason:  apis.ValidReference,
-			Message: fmt.Sprintf("References from %s/%s are valid", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+			Reason:  apis.ResourceValidationPassed,
+			Message: fmt.Sprintf("Validation is passed for %s/%s", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
 		})
 	default:
-		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.Valid)
+		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.ValidationPassed)
 	}
 }
 
-func SetValidConditionToFalse(i interface{}) error {
+func SetValidationPassedToFalse(i interface{}, err error) error {
 	switch in := i.(type) {
 	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:   apis.Valid,
-			Status: core.ConditionFalse,
-			Reason: apis.InvalidReference,
-			Message: fmt.Sprintf("Repository %s/%s is not allowed to be referred from %s namespace .",
-				in.GetRepoRef().Namespace,
-				in.GetRepoRef().Name,
-				in.GetObjectMeta().Namespace,
-			),
+			Type:    apis.ValidationPassed,
+			Status:  core.ConditionFalse,
+			Reason:  apis.ResourceValidationFailed,
+			Message: err.Error(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:   apis.Valid,
-			Status: core.ConditionFalse,
-			Reason: apis.InvalidReference,
-			Message: fmt.Sprintf("Repository %s/%s is not allowed to be referred from %s namespace .",
-				in.GetRepoRef().Namespace,
-				in.GetRepoRef().Name,
-				in.GetObjectMeta().Namespace,
-			),
+			Type:    apis.ValidationPassed,
+			Status:  core.ConditionFalse,
+			Reason:  apis.ResourceValidationFailed,
+			Message: err.Error(),
 		})
 	default:
-		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.Valid)
+		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.ValidationPassed)
 	}
 }
 
