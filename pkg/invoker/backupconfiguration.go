@@ -221,3 +221,14 @@ func (inv *BackupConfigurationInvoker) GetObjectJSON() (string, error) {
 func (inv *BackupConfigurationInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
 	return inv.backupConfig.Spec.RetentionPolicy
 }
+
+func (inv *BackupConfigurationInvoker) GetStatus() BackupInvokerStatus {
+	return getInvokerStatusFromBackupConfiguration(inv.backupConfig)
+}
+
+func getInvokerStatusFromBackupConfiguration(configuration *v1beta1.BackupConfiguration) BackupInvokerStatus {
+	return BackupInvokerStatus{
+		Phase:      calculateBackupInvokerPhase(configuration.Spec.Driver, configuration.Status.Conditions),
+		Conditions: configuration.Status.Conditions,
+	}
+}
