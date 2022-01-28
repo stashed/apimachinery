@@ -38,7 +38,7 @@ type BackupInvoker interface {
 	RepositoryGetter
 	DriverHandler
 	ObjectFormatter
-	BackupInvokerPhaseHandler
+	BackupInvokerStatusHandler
 }
 
 type BackupExecutionOrderHandler interface {
@@ -56,7 +56,7 @@ type BackupTargetHandler interface {
 	GetGlobalHooks() *v1beta1.BackupHooks
 }
 
-type BackupInvokerPhaseHandler interface {
+type BackupInvokerStatusHandler interface {
 	GetPhase() v1beta1.BackupInvokerPhase
 }
 
