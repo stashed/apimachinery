@@ -38,7 +38,7 @@ type BackupInvoker interface {
 	RepositoryGetter
 	DriverHandler
 	ObjectFormatter
-	BackupStatusHandler
+	BackupInvokerPhaseHandler
 }
 
 type BackupExecutionOrderHandler interface {
@@ -56,13 +56,8 @@ type BackupTargetHandler interface {
 	GetGlobalHooks() *v1beta1.BackupHooks
 }
 
-type BackupStatusHandler interface {
-	GetStatus() BackupInvokerStatus
-}
-
-type BackupInvokerStatus struct {
-	Phase      v1beta1.BackupInvokerPhase
-	Conditions []kmapi.Condition
+type BackupInvokerPhaseHandler interface {
+	GetPhase() v1beta1.BackupInvokerPhase
 }
 
 type BackupTargetInfo struct {

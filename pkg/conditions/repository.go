@@ -160,14 +160,14 @@ func SetValidationPassedToTrue(i interface{}) error {
 			Type:    apis.ValidationPassed,
 			Status:  core.ConditionTrue,
 			Reason:  apis.ResourceValidationPassed,
-			Message: fmt.Sprintf("Validation is passed for %s/%s", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+			Message: fmt.Sprintf("Validations are passed."),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
 			Type:    apis.ValidationPassed,
 			Status:  core.ConditionTrue,
 			Reason:  apis.ResourceValidationPassed,
-			Message: fmt.Sprintf("Validation is passed for %s/%s", in.GetObjectMeta().Namespace, in.GetObjectMeta().Name),
+			Message: fmt.Sprintf("Validations are passed."),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", apis.ValidationPassed)
