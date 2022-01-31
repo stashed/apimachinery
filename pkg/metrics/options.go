@@ -1,3 +1,19 @@
+/*
+Copyright AppsCode Inc. and Contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package metrics
 
 import (
@@ -16,6 +32,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/rest"
+	"kmodules.xyz/client-go/tools/pushgateway"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
@@ -41,6 +58,21 @@ type MetricsOptions struct {
 	MetricFileDir  string
 	Labels         []string
 	JobName        string
+}
+
+var (
+	pushgatewayURL string
+)
+
+func SetPushgatewayURL(customURL string) {
+	if customURL != "" {
+		pushgatewayURL = customURL
+	}
+	pushgatewayURL = pushgateway.URL()
+}
+
+func GetPushgatewayURL() string {
+	return pushgatewayURL
 }
 
 func (metricOpt *MetricsOptions) sendMetrics(registry *prometheus.Registry, jobName string) error {
