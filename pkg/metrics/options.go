@@ -68,10 +68,10 @@ const (
 )
 
 func SetPushgatewayURL(url string) {
+	pushgatewayURL = PushgatewayLocalURL
 	if url != "" {
 		pushgatewayURL = url
 	}
-	pushgatewayURL = PushgatewayLocalURL
 }
 
 func GetPushgatewayURL() string {
