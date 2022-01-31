@@ -162,14 +162,27 @@ func TargetBackupCompleted(ref v1beta1.TargetRef, targetStatus []v1beta1.BackupT
 	return false
 }
 
+func isConditionSatisfied(conditions []kmapi.Condition, condType string, required bool) bool {
+	if required && kmapi.HasCondition(conditions, condType) {
+		return kmapi.IsConditionTrue(conditions, condType)
+	}
+
+	if kmapi.IsConditionFalse(conditions, condType) || kmapi.IsConditionUnknown(conditions, condType) {
+		return false
+	}
+
+	return true
+}
+
 func calculateBackupInvokerPhase(driver v1beta1.Snapshotter, conditions []kmapi.Condition) v1beta1.BackupInvokerPhase {
+	if !isConditionSatisfied(conditions, apis.RepositoryFound, false) ||
+		!isConditionSatisfied(conditions, apis.BackendSecretFound, false) ||
+		!isConditionSatisfied(conditions, apis.CronJobCreated, true) {
+		return v1beta1.BackupInvokerNotReady
+	}
+
 	if kmapi.IsConditionFalse(conditions, apis.ValidationPassed) {
 		return v1beta1.BackupInvokerInvalid
-	}
-	if kmapi.IsConditionFalse(conditions, apis.RepositoryFound) ||
-		kmapi.IsConditionFalse(conditions, apis.BackendSecretFound) ||
-		kmapi.IsConditionFalse(conditions, apis.CronJobCreated) {
-		return v1beta1.BackupInvokerNotReady
 	}
 
 	if kmapi.IsConditionTrue(conditions, apis.ValidationPassed) &&
