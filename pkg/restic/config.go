@@ -127,14 +127,14 @@ func NewResticWrapperFromShell(options SetupOptions, sh *shell.Session) (*Restic
 	return wrapper, nil
 }
 
-func (wrapper *ResticWrapper) configure() error {
-	wrapper.sh.SetDir(wrapper.config.ScratchDir)
-	wrapper.sh.ShowCMD = true
-	wrapper.sh.PipeFail = true
-	wrapper.sh.PipeStdErrors = true
+func (w *ResticWrapper) configure() error {
+	w.sh.SetDir(w.config.ScratchDir)
+	w.sh.ShowCMD = true
+	w.sh.PipeFail = true
+	w.sh.PipeStdErrors = true
 
 	// Setup restic environments
-	return wrapper.setupEnv()
+	return w.setupEnv()
 }
 
 func (w *ResticWrapper) SetEnv(key, value string) {
@@ -150,6 +150,9 @@ func (w *ResticWrapper) GetEnv(key string) string {
 	return ""
 }
 
+func (w *ResticWrapper) GetCertDir() string {
+	return w.config.CacertFile
+}
 func (w *ResticWrapper) DumpEnv(path string, dumpedFile string) error {
 	if err := os.MkdirAll(path, 0755); err != nil {
 		return err
