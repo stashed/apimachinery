@@ -162,11 +162,7 @@ func TargetBackupCompleted(ref v1beta1.TargetRef, targetStatus []v1beta1.BackupT
 	return false
 }
 
-func isConditionSatisfied(conditions []kmapi.Condition, condType string, required bool) bool {
-	if required && kmapi.HasCondition(conditions, condType) {
-		return kmapi.IsConditionTrue(conditions, condType)
-	}
-
+func isConditionSatisfied(conditions []kmapi.Condition, condType string) bool {
 	if kmapi.IsConditionFalse(conditions, condType) || kmapi.IsConditionUnknown(conditions, condType) {
 		return false
 	}
@@ -175,9 +171,8 @@ func isConditionSatisfied(conditions []kmapi.Condition, condType string, require
 }
 
 func calculateBackupInvokerPhase(driver v1beta1.Snapshotter, conditions []kmapi.Condition) v1beta1.BackupInvokerPhase {
-	if !isConditionSatisfied(conditions, apis.RepositoryFound, false) ||
-		!isConditionSatisfied(conditions, apis.BackendSecretFound, false) ||
-		!isConditionSatisfied(conditions, apis.CronJobCreated, true) {
+	if !isConditionSatisfied(conditions, apis.RepositoryFound) ||
+		!isConditionSatisfied(conditions, apis.BackendSecretFound) {
 		return v1beta1.BackupInvokerNotReady
 	}
 
@@ -190,7 +185,8 @@ func calculateBackupInvokerPhase(driver v1beta1.Snapshotter, conditions []kmapi.
 		backendRequirementsSatisfied(driver, conditions) {
 		return v1beta1.BackupInvokerReady
 	}
-	return ""
+
+	return v1beta1.BackupInvokerNotReady
 }
 
 func backendRequirementsSatisfied(driver v1beta1.Snapshotter, conditions []kmapi.Condition) bool {
