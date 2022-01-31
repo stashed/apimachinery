@@ -32,7 +32,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/rest"
-	"kmodules.xyz/client-go/tools/pushgateway"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	appcatalog_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
@@ -64,11 +63,15 @@ var (
 	pushgatewayURL string
 )
 
-func SetPushgatewayURL(customURL string) {
-	if customURL != "" {
-		pushgatewayURL = customURL
+const (
+	PushgatewayLocalURL = "http://localhost:56789"
+)
+
+func SetPushgatewayURL(url string) {
+	if url != "" {
+		pushgatewayURL = url
 	}
-	pushgatewayURL = pushgateway.URL()
+	pushgatewayURL = PushgatewayLocalURL
 }
 
 func GetPushgatewayURL() string {
