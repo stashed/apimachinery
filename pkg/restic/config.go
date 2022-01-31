@@ -150,7 +150,7 @@ func (w *ResticWrapper) GetEnv(key string) string {
 	return ""
 }
 
-func (w *ResticWrapper) GetCertDir() string {
+func (w *ResticWrapper) GetCaPath() string {
 	return w.config.CacertFile
 }
 func (w *ResticWrapper) DumpEnv(path string, dumpedFile string) error {
