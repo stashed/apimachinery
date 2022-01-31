@@ -19431,11 +19431,25 @@ func schema_apimachinery_apis_stash_v1alpha1_RepositoryStatus(ref common.Referen
 							Format:      "int64",
 						},
 					},
+					"references": {
+						SchemaProps: spec.SchemaProps{
+							Description: "References holds a list of resource references that using this Repository",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.TypedObjectReference"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.TypedObjectReference"},
 	}
 }
 
