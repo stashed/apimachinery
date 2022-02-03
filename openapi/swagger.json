@@ -8991,6 +8991,14 @@
           "type": "integer",
           "format": "int64"
         },
+        "references": {
+          "description": "References holds a list of resource references that using this Repository",
+          "type": "array",
+          "items": {
+            "default": {},
+            "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.TypedObjectReference"
+          }
+        },
         "snapshotCount": {
           "description": "SnapshotCount shows number of snapshots stored in the repository",
           "type": "integer",
@@ -9211,6 +9219,10 @@
           "description": "ObservedGeneration is the most recent generation observed for this BackupBatch. It corresponds to the BackupBatch's generation, which is updated on mutation by the API Server.",
           "type": "integer",
           "format": "int64"
+        },
+        "phase": {
+          "description": "Phase indicates phase of this BackupBatch.",
+          "type": "string"
         }
       }
     },
@@ -9466,6 +9478,10 @@
           "description": "ObservedGeneration is the most recent generation observed for this BackupConfiguration. It corresponds to the BackupConfiguration's generation, which is updated on mutation by the API Server.",
           "type": "integer",
           "format": "int64"
+        },
+        "phase": {
+          "description": "Phase indicates phase of this BackupConfiguration.",
+          "type": "string"
         }
       }
     },
@@ -13562,6 +13578,30 @@
         "name"
       ],
       "properties": {
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string",
+          "default": ""
+        },
+        "namespace": {
+          "description": "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+          "type": "string"
+        }
+      }
+    },
+    "xyz.kmodules.client-go.api.v1.TypedObjectReference": {
+      "description": "TypedObjectReference represents an typed namespaced object.",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "apiGroup": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
         "name": {
           "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
           "type": "string",
