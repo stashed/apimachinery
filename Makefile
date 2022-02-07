@@ -53,8 +53,8 @@ RESTIC_VER       := 0.12.1
 ### These variables should not need tweaking.
 ###
 
-SRC_PKGS := apis client crds pkg # directories which hold app source (not vendored)
-SRC_DIRS := $(SRC_PKGS) hack/gencrd hack/stash-crd-installer
+SRC_PKGS := apis client cmd crds pkg # directories which hold app source (not vendored)
+SRC_DIRS := $(SRC_PKGS) hack/gencrd
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
 BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
@@ -274,7 +274,7 @@ bin/.container-$(DOTFILE_IMAGE)-TEST:
 	    -e 's|{ARG_FROM}|$(BUILD_IMAGE)|g'          \
 	    -e 's|{RESTIC_VER}|$(RESTIC_VER)|g'         \
 	    $(DOCKERFILE_TEST) > bin/.dockerfile-TEST-$(OS)_$(ARCH)
-	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(TEST_IMAGE) -f bin/.dockerfile-TEST-$(OS)_$(ARCH) .
+	@docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(TEST_IMAGE) -f bin/.dockerfile-TEST-$(OS)_$(ARCH) .
 	@docker images -q $(TEST_IMAGE) > $@
 	@echo
 
@@ -382,7 +382,7 @@ KO := $(shell go env GOPATH)/bin/ko
 .PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
-	DOCKER_CLI_EXPERIMENTAL=enabled KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./hack/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+	KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
 
 .PHONY: install-ko
 install-ko:

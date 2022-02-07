@@ -1,11 +1,11 @@
 /*
 Copyright AppsCode Inc. and Contributors
 
-Licensed under the AppsCode Free Trial License 1.0.0 (the "License");
+Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    https://github.com/appscode/licenses/raw/1.0.0/AppsCode-Free-Trial-1.0.0.md
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@ package main
 import (
 	"flag"
 	"os"
+	"path/filepath"
 
 	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -28,6 +29,7 @@ import (
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/util/homedir"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -37,13 +39,13 @@ import (
 
 var (
 	masterURL                string
-	kubeConfig               string
+	kubeConfig               = filepath.Join(homedir.HomeDir(), ".kube", "config")
 	enableEnterpriseFeatures bool
 )
 
 func init() {
-	flag.StringVar(&kubeConfig, "kube-config", "", "Path to a kube config file. Only required if out-of-cluster.")
-	flag.StringVar(&masterURL, "master", "", "The address of the Kubernetes API server. Overrides any value in kube config file. Only required if out-of-cluster.")
+	flag.StringVar(&kubeConfig, "kubeconfig", kubeConfig, "Path to a kube config file. Only required if out-of-cluster.")
+	flag.StringVar(&masterURL, "master", masterURL, "The address of the Kubernetes API server. Overrides any value in kube config file. Only required if out-of-cluster.")
 	flag.BoolVar(&enableEnterpriseFeatures, "enterprise", false, "Specify whether enterprise features enabled or not.")
 }
 
