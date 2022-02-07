@@ -19,6 +19,9 @@ GO_PKG   := stash.appscode.dev
 REPO     := $(notdir $(shell pwd))
 BIN      := apimachinery
 
+# Where to push the docker image.
+REGISTRY ?= stashed
+
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS          ?= "crd:generateEmbeddedObjectMeta=true"
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
@@ -50,7 +53,7 @@ RESTIC_VER       := 0.12.1
 ### These variables should not need tweaking.
 ###
 
-SRC_PKGS := apis client crds pkg # directories which hold app source (not vendored)
+SRC_PKGS := apis client cmd crds pkg # directories which hold app source (not vendored)
 SRC_DIRS := $(SRC_PKGS) hack/gencrd
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
@@ -271,7 +274,7 @@ bin/.container-$(DOTFILE_IMAGE)-TEST:
 	    -e 's|{ARG_FROM}|$(BUILD_IMAGE)|g'          \
 	    -e 's|{RESTIC_VER}|$(RESTIC_VER)|g'         \
 	    $(DOCKERFILE_TEST) > bin/.dockerfile-TEST-$(OS)_$(ARCH)
-	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(TEST_IMAGE) -f bin/.dockerfile-TEST-$(OS)_$(ARCH) .
+	@docker buildx build --platform $(OS)/$(ARCH) --load --pull -t $(TEST_IMAGE) -f bin/.dockerfile-TEST-$(OS)_$(ARCH) .
 	@docker images -q $(TEST_IMAGE) > $@
 	@echo
 
@@ -371,3 +374,29 @@ ci: verify check-license lint build unit-tests #cover
 .PHONY: clean
 clean:
 	rm -rf .go bin
+
+.PHONY: push
+push: push-crd-installer
+
+KO := $(shell go env GOPATH)/bin/ko
+.PHONY: push-crd-installer
+push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
+	@echo "Pushing CRD installer image....."
+	KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+
+.PHONY: install-ko
+install-ko:
+	@echo "Installing: github.com/google/ko"
+	go install github.com/google/ko@latest
+
+.PHONY: release
+release: ## Release final production docker image and push into the DockerHub.
+	@if [ "$$APPSCODE_ENV" != "prod" ]; then      \
+		echo "'release' only works in PROD env."; \
+		exit 1;                                   \
+	fi
+	@if [ "$(version_strategy)" != "tag" ]; then                    \
+		echo "apply tag to release binaries and/or docker images."; \
+		exit 1;                                                     \
+	fi
+	@$(MAKE) push --no-print-directory
