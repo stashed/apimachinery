@@ -19,27 +19,21 @@ package main
 import (
 	"flag"
 	"os"
-	"path/filepath"
 
 	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
-	uiv1alpha1 "stash.appscode.dev/apimachinery/apis/ui/v1alpha1"
-	"stash.appscode.dev/apimachinery/crds"
 
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/util/homedir"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	metrics "kmodules.xyz/custom-resources/apis/metrics/v1alpha1"
-	kmodules_crds "kmodules.xyz/custom-resources/crds"
 )
 
 var (
 	masterURL                string
-	kubeConfig               = filepath.Join(homedir.HomeDir(), ".kube", "config")
+	kubeConfig               string
 	enableEnterpriseFeatures bool
 )
 
@@ -74,95 +68,53 @@ func main() {
 func registerCRDs(crdClient crd_cs.Interface) error {
 	var resources []*apiextensions.CustomResourceDefinition
 
-	stashCRDs, err := getStashCRDs()
-	if err != nil {
-		return err
-	}
-	resources = append(resources, stashCRDs...)
-
-	appCatalogCRDs, err := getAppCatalogCRDs()
-	if err != nil {
-		return err
-	}
-	resources = append(resources, appCatalogCRDs...)
+	resources = append(resources, getStashCRDs()...)
+	resources = append(resources, getAppCatalogCRDs()...)
 
 	if enableEnterpriseFeatures {
-		metricCRDs, err := getMetricCRDs()
-		if err != nil {
-			return err
-		}
-		resources = append(resources, metricCRDs...)
+		resources = append(resources, getMetricCRDs()...)
 	}
 	return apiextensions.RegisterCRDs(crdClient, resources)
 }
 
-func getStashCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
+func getStashCRDs() []*apiextensions.CustomResourceDefinition {
 	// community features CRDs
-	gvrs := []schema.GroupVersionResource{
+	var stashCRDs []*apiextensions.CustomResourceDefinition
+
+	stashCRDs = append(stashCRDs,
 		// v1alpha1 resources
-		{Group: stashv1alpha1.SchemeGroupVersion.Group, Version: stashv1alpha1.SchemeGroupVersion.Version, Resource: stashv1alpha1.ResourcePluralRepository},
+		stashv1alpha1.Repository{}.CustomResourceDefinition(),
 
 		// v1beta1 resources
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupConfiguration},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupSession},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralRestoreSession},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralFunction},
-		{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralTask},
-	}
+		stashv1beta1.BackupConfiguration{}.CustomResourceDefinition(),
+		stashv1beta1.BackupSession{}.CustomResourceDefinition(),
+		stashv1beta1.RestoreSession{}.CustomResourceDefinition(),
+		stashv1beta1.Function{}.CustomResourceDefinition(),
+		stashv1beta1.Task{}.CustomResourceDefinition(),
+	)
 
 	// enterprise features CRDs
 	if enableEnterpriseFeatures {
-		gvrs = append(gvrs, []schema.GroupVersionResource{
+		stashCRDs = append(stashCRDs,
 			// v1beta1 resources
-			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBatch},
-			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralBackupBlueprint},
-			{Group: stashv1beta1.SchemeGroupVersion.Group, Version: stashv1beta1.SchemeGroupVersion.Version, Resource: stashv1beta1.ResourcePluralRestoreBatch},
-
-			// UI resources
-			{Group: uiv1alpha1.SchemeGroupVersion.Group, Version: uiv1alpha1.SchemeGroupVersion.Version, Resource: uiv1alpha1.ResourceBackupOverviews},
-		}...)
+			stashv1beta1.BackupBatch{}.CustomResourceDefinition(),
+			stashv1beta1.BackupBlueprint{}.CustomResourceDefinition(),
+			stashv1beta1.RestoreBatch{}.CustomResourceDefinition(),
+		)
 	}
-
-	var stashCRDs []*apiextensions.CustomResourceDefinition
-	for i := range gvrs {
-		crd, err := crds.CustomResourceDefinition(gvrs[i])
-		if err != nil {
-			return nil, err
-		}
-		stashCRDs = append(stashCRDs, crd)
-	}
-	return stashCRDs, nil
+	return stashCRDs
 }
 
-func getAppCatalogCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
-	gvrs := []schema.GroupVersionResource{
+func getAppCatalogCRDs() []*apiextensions.CustomResourceDefinition {
+	return []*apiextensions.CustomResourceDefinition{
 		// v1alpha1 resources
-		{Group: appcatalog.SchemeGroupVersion.Group, Version: appcatalog.SchemeGroupVersion.Version, Resource: appcatalog.ResourceApps},
+		appcatalog.AppBinding{}.CustomResourceDefinition(),
 	}
-	var appCatalogCRDs []*apiextensions.CustomResourceDefinition
-	for i := range gvrs {
-		crd, err := kmodules_crds.CustomResourceDefinition(gvrs[i])
-		if err != nil {
-			return nil, err
-		}
-		appCatalogCRDs = append(appCatalogCRDs, crd)
-	}
-	return appCatalogCRDs, nil
 }
 
-func getMetricCRDs() ([]*apiextensions.CustomResourceDefinition, error) {
-	gvrs := []schema.GroupVersionResource{
+func getMetricCRDs() []*apiextensions.CustomResourceDefinition {
+	return []*apiextensions.CustomResourceDefinition{
 		// v1alpha1 resources
-		{Group: metrics.SchemeGroupVersion.Group, Version: metrics.SchemeGroupVersion.Version, Resource: metrics.ResourceMetricsConfigurations},
+		metrics.MetricsConfiguration{}.CustomResourceDefinition(),
 	}
-
-	var metricCRDs []*apiextensions.CustomResourceDefinition
-	for i := range gvrs {
-		crd, err := kmodules_crds.CustomResourceDefinition(gvrs[i])
-		if err != nil {
-			return nil, err
-		}
-		metricCRDs = append(metricCRDs, crd)
-	}
-	return metricCRDs, nil
 }
