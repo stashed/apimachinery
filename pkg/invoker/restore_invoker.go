@@ -254,7 +254,8 @@ func upsertRestoreTargetStatus(cur, new v1beta1.RestoreMemberStatus) v1beta1.Res
 }
 
 func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestoreTargetPhase {
-	if kmapi.IsConditionFalse(status.Conditions, apis.RestorerEnsured) {
+	if kmapi.IsConditionFalse(status.Conditions, apis.RestorerEnsured) ||
+		kmapi.IsConditionFalse(status.Conditions, apis.MetricsPushed) {
 		return v1beta1.TargetRestoreFailed
 	}
 
@@ -282,7 +283,8 @@ func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.Res
 		}
 	}
 
-	if successfulHostCount+failedHostCount+unknownHostCount < *status.TotalHosts {
+	completedHosts := successfulHostCount + failedHostCount + unknownHostCount
+	if completedHosts < *status.TotalHosts {
 		return v1beta1.TargetRestoreRunning
 	}
 
