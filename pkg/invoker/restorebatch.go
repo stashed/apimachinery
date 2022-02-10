@@ -294,6 +294,7 @@ func (inv *RestoreBatchInvoker) GetStatus() RestoreInvokerStatus {
 
 func (inv *RestoreBatchInvoker) UpdateStatus(status RestoreInvokerStatus) error {
 	startTime := inv.GetObjectMeta().CreationTimestamp
+	totalTargets := len(inv.GetTargetInfo())
 	updatedRestoreBatch, err := v1beta1_util.UpdateRestoreBatchStatus(
 		context.TODO(),
 		inv.stashClient.StashV1beta1(),
@@ -308,7 +309,7 @@ func (inv *RestoreBatchInvoker) UpdateStatus(status RestoreInvokerStatus) error 
 				}
 			}
 
-			in.Phase = calculateRestoreBatchPhase(in)
+			in.Phase = calculateRestoreBatchPhase(in, totalTargets)
 			if IsRestoreCompleted(in.Phase) && in.SessionDuration == "" {
 				duration := time.Since(startTime.Time)
 				in.SessionDuration = duration.Round(time.Second).String()
@@ -337,7 +338,7 @@ func upsertRestoreMemberStatus(cur []v1beta1.RestoreMemberStatus, new v1beta1.Re
 	return cur
 }
 
-func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus) v1beta1.RestorePhase {
+func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets int) v1beta1.RestorePhase {
 	if len(status.Conditions) == 0 || len(status.Members) == 0 ||
 		kmapi.IsConditionFalse(status.Conditions, apis.RepositoryFound) ||
 		kmapi.IsConditionFalse(status.Conditions, apis.BackendSecretFound) {
@@ -362,8 +363,8 @@ func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus) v1beta1.Rest
 			successfulTargetCount++
 		}
 	}
-
-	if successfulTargetCount+failedTargetCount+unknownTargetCount < len(status.Members) {
+	completedTargets := successfulTargetCount + failedTargetCount + unknownTargetCount
+	if completedTargets < len(status.Members) || completedTargets < totalTargets {
 		return v1beta1.RestoreRunning
 	}
 	if failedTargetCount > 0 {

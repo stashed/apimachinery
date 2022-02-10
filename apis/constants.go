@@ -165,6 +165,20 @@ const (
 const (
 	PromJobStashBackup  = "stash-backup"
 	PromJobStashRestore = "stash-restore"
+
+	// RepositoryMetricsPushed whether the Repository metrics for this backup session were pushed or not
+	RepositoryMetricsPushed = "RepositoryMetricsPushed"
+	// SuccessfullyPushedRepositoryMetrics indicates that the condition transitioned to this state because the repository metrics was successfully pushed to the pushgateway
+	SuccessfullyPushedRepositoryMetrics = "SuccessfullyPushedRepositoryMetrics"
+	// FailedToPushRepositoryMetrics indicates that the condition transitioned to this state because the Stash was unable to push the repository metrics to the pushgateway
+	FailedToPushRepositoryMetrics = "FailedToPushRepositoryMetrics"
+
+	// MetricsPushed whether the metrics for this backup session were pushed or not
+	MetricsPushed = "MetricsPushed"
+	// SuccessfullyPushedMetrics indicates that the condition transitioned to this state because the metrics was successfully pushed to the pushgateway
+	SuccessfullyPushedMetrics = "SuccessfullyPushedMetrics"
+	// FailedToPushMetrics indicates that the condition transitioned to this state because the Stash was unable to push the metrics to the pushgateway
+	FailedToPushMetrics = "FailedToPushMetrics"
 )
 
 // ==================== RBAC related constants ==========================
@@ -232,8 +246,6 @@ const (
 	RetentionPolicyApplied = "RetentionPolicyApplied"
 	// RepositoryIntegrityVerified indicates whether the repository integrity check succeeded or not
 	RepositoryIntegrityVerified = "RepositoryIntegrityVerified"
-	// RepositoryMetricsPushed whether the Repository metrics for this backup session were pushed or not
-	RepositoryMetricsPushed = "RepositoryMetricsPushed"
 )
 
 // ================== Condition Types Related Constants ===========================
@@ -318,10 +330,6 @@ const (
 	SuccessfullyVerifiedRepositoryIntegrity = "SuccessfullyVerifiedRepositoryIntegrity"
 	// FailedToVerifyRepositoryIntegrity indicates that the condition transitioned to this state because the repository has failed the integrity check
 	FailedToVerifyRepositoryIntegrity = "FailedToVerifyRepositoryIntegrity"
-	// SuccessfullyPushedRepositoryMetrics indicates that the condition transitioned to this state because the repository metrics was successfully pushed to the pushgateway
-	SuccessfullyPushedRepositoryMetrics = "SuccessfullyPushedRepositoryMetrics"
-	// FailedToPushRepositoryMetrics indicates that the condition transitioned to this state because the Stash was unable to push the repository metrics to the pushgateway
-	FailedToPushRepositoryMetrics = "FailedToPushRepositoryMetrics"
 )
 
 // ==================== Action related constants ============

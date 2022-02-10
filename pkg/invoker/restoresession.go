@@ -122,6 +122,7 @@ func (inv *RestoreSessionInvoker) GetCondition(target *v1beta1.TargetRef, condit
 func (inv *RestoreSessionInvoker) SetCondition(target *v1beta1.TargetRef, newCondition kmapi.Condition) error {
 	status := inv.GetStatus()
 	status.Conditions = kmapi.SetCondition(status.Conditions, newCondition)
+	status.TargetStatus[0].Conditions = status.Conditions
 	return inv.UpdateStatus(status)
 }
 
@@ -295,6 +296,7 @@ func (inv *RestoreSessionInvoker) UpdateStatus(status RestoreInvokerStatus) erro
 			in.Stats = updatedStatus.Stats
 			in.TotalHosts = updatedStatus.TotalHosts
 			in.Phase = calculateRestoreSessionPhase(updatedStatus)
+
 			if IsRestoreCompleted(in.Phase) && in.SessionDuration == "" {
 				duration := time.Since(startTime.Time)
 				in.SessionDuration = duration.Round(time.Second).String()
@@ -321,6 +323,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 	if kmapi.IsConditionFalse(status.Conditions, apis.ValidationPassed) {
 		return v1beta1.RestorePhaseInvalid
 	}
+
 	switch status.Phase {
 	case v1beta1.TargetRestorePending:
 		return v1beta1.RestorePending
@@ -328,7 +331,9 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 		return v1beta1.RestoreSucceeded
 	case v1beta1.TargetRestoreFailed:
 		return v1beta1.RestoreFailed
-	default:
+	case v1beta1.TargetRestorePhaseUnknown:
 		return v1beta1.RestorePhaseUnknown
+	default:
+		return v1beta1.RestoreRunning
 	}
 }

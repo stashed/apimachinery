@@ -391,3 +391,41 @@ func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupS
 		metav1.UpdateOptions{},
 	)
 }
+
+func SetMetricsPushedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
+	return stash_util.UpdateBackupSessionStatus(
+		context.TODO(),
+		stashClient.StashV1beta1(),
+		backupSession.ObjectMeta,
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
+			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
+				Type:    apis.MetricsPushed,
+				Status:  core.ConditionFalse,
+				Reason:  apis.FailedToPushMetrics,
+				Message: fmt.Sprintf("Failed to push metrics. Reason: %v", err.Error()),
+			},
+			)
+			return backupSession.UID, in
+		},
+		metav1.UpdateOptions{},
+	)
+}
+
+func SetMetricsPushedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
+	return stash_util.UpdateBackupSessionStatus(
+		context.TODO(),
+		stashClient.StashV1beta1(),
+		backupSession.ObjectMeta,
+		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
+			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
+				Type:    apis.MetricsPushed,
+				Status:  core.ConditionTrue,
+				Reason:  apis.SuccessfullyPushedMetrics,
+				Message: "Successfully pushed metrics.",
+			},
+			)
+			return backupSession.UID, in
+		},
+		metav1.UpdateOptions{},
+	)
+}
