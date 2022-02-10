@@ -295,7 +295,7 @@ func (inv *RestoreSessionInvoker) UpdateStatus(status RestoreInvokerStatus) erro
 			in.Stats = updatedStatus.Stats
 			in.TotalHosts = updatedStatus.TotalHosts
 			in.Phase = calculateRestoreSessionPhase(updatedStatus)
-			if isRestoreCompleted(in.Phase) && in.SessionDuration == "" {
+			if IsRestoreCompleted(in.Phase) && in.SessionDuration == "" {
 				duration := time.Since(startTime.Time)
 				in.SessionDuration = duration.Round(time.Second).String()
 			}

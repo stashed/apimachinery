@@ -124,3 +124,21 @@ func SetRestoreCompletedConditionToFalse(inv invoker.RestoreInvoker, tref api_v1
 		Message: msg,
 	})
 }
+
+func SetRestorerEnsuredToTrue(inv invoker.RestoreInvoker, tref api_v1beta1.TargetRef, msg string) error {
+	return inv.SetCondition(&tref, kmapi.Condition{
+		Type:    apis.RestorerEnsured,
+		Status:  core.ConditionTrue,
+		Reason:  "SuccessfullyEnsuredRestorerEntity",
+		Message: msg,
+	})
+}
+
+func SetRestorerEnsuredToFalse(inv invoker.RestoreInvoker, tref api_v1beta1.TargetRef, msg string) error {
+	return inv.SetCondition(&tref, kmapi.Condition{
+		Type:    apis.RestorerEnsured,
+		Status:  core.ConditionFalse,
+		Reason:  "FailedToEnsureRestorerEntity",
+		Message: msg,
+	})
+}

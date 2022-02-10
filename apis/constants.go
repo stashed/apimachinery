@@ -215,6 +215,8 @@ const (
 	// This condition is particularly helpful when the restore addon require some additional operations to perform
 	// before marking the RestoreSession Succeeded/Failed.
 	RestoreCompleted = "RestoreCompleted"
+	// RestorerEnsured condition indicates whether the restore job / init-container was created or not.
+	RestorerEnsured = "RestorerEnsured"
 
 	// GlobalPreBackupHookSucceeded indicates whether the global PreBackupHook was executed successfully or not
 	GlobalPreBackupHookSucceeded = "GlobalPreBackupHookSucceeded"

@@ -309,7 +309,7 @@ func (inv *RestoreBatchInvoker) UpdateStatus(status RestoreInvokerStatus) error 
 			}
 
 			in.Phase = calculateRestoreBatchPhase(in)
-			if isRestoreCompleted(in.Phase) && in.SessionDuration == "" {
+			if IsRestoreCompleted(in.Phase) && in.SessionDuration == "" {
 				duration := time.Since(startTime.Time)
 				in.SessionDuration = duration.Round(time.Second).String()
 			}

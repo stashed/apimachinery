@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"strings"
 
+	"stash.appscode.dev/apimachinery/apis"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 
@@ -253,6 +254,9 @@ func upsertRestoreTargetStatus(cur, new v1beta1.RestoreMemberStatus) v1beta1.Res
 }
 
 func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestoreTargetPhase {
+	if kmapi.IsConditionFalse(status.Conditions, apis.RestorerEnsured) {
+		return v1beta1.TargetRestoreFailed
+	}
 
 	allConditionTrue := true
 	for _, c := range status.Conditions {
@@ -292,7 +296,7 @@ func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.Res
 	return v1beta1.TargetRestoreSucceeded
 }
 
-func isRestoreCompleted(phase v1beta1.RestorePhase) bool {
+func IsRestoreCompleted(phase v1beta1.RestorePhase) bool {
 	return phase == v1beta1.RestoreSucceeded ||
 		phase == v1beta1.RestoreFailed ||
 		phase == v1beta1.RestorePhaseUnknown
