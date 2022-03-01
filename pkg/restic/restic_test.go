@@ -62,14 +62,14 @@ func setupTest(tempDir string) (*ResticWrapper, error) {
 		},
 	}
 
-	if err := os.MkdirAll(localRepoDir, 0777); err != nil {
+	if err := os.MkdirAll(localRepoDir, 0o777); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(scratchDir, 0777); err != nil {
+	if err := os.MkdirAll(scratchDir, 0o777); err != nil {
 		return nil, err
 	}
 
-	if err := os.MkdirAll(targetPath, 0777); err != nil {
+	if err := os.MkdirAll(targetPath, 0o777); err != nil {
 		return nil, err
 	}
 	err := ioutil.WriteFile(filepath.Join(targetPath, fileName), []byte(fileContent), os.ModePerm)
@@ -667,7 +667,7 @@ func TestIncludeExcludePattern(t *testing.T) {
 				return
 			}
 			for _, name := range test.sourceFileNames {
-				err = ioutil.WriteFile(filepath.Join(targetPath, name), []byte(fileContent), 0777)
+				err = ioutil.WriteFile(filepath.Join(targetPath, name), []byte(fileContent), 0o777)
 				if err != nil {
 					t.Error(err)
 					return
@@ -844,6 +844,7 @@ func TestApplyRetentionPolicy(t *testing.T) {
 	assert.Equal(t, int64(1), repoStats.SnapshotCount)
 	assert.Equal(t, int64(1), repoStats.SnapshotsRemovedOnLastCleanup)
 }
+
 func TestVerifyRepositoryIntegrity(t *testing.T) {
 	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
 	if err != nil {
@@ -930,13 +931,13 @@ func newParallelBackupOptions() []BackupOptions {
 }
 
 func newParallelRestoreOptions(tempDir string) ([]RestoreOptions, error) {
-	if err := os.MkdirAll(filepath.Join(tempDir, "host-0"), 0777); err != nil {
+	if err := os.MkdirAll(filepath.Join(tempDir, "host-0"), 0o777); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(filepath.Join(tempDir, "host-1"), 0777); err != nil {
+	if err := os.MkdirAll(filepath.Join(tempDir, "host-1"), 0o777); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(filepath.Join(tempDir, "host-2"), 0777); err != nil {
+	if err := os.MkdirAll(filepath.Join(tempDir, "host-2"), 0o777); err != nil {
 		return nil, err
 	}
 
@@ -963,7 +964,6 @@ func newParallelRestoreOptions(tempDir string) ([]RestoreOptions, error) {
 }
 
 func newParallelDumpOptions() []DumpOptions {
-
 	return []DumpOptions{
 		{
 			Host:               "host-0",
