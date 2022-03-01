@@ -69,6 +69,7 @@ func (inv *BackupConfigurationInvoker) GetOwnerRef() *metav1.OwnerReference {
 func (inv *BackupConfigurationInvoker) GetLabels() map[string]string {
 	return inv.backupConfig.OffshootLabels()
 }
+
 func (inv *BackupConfigurationInvoker) AddFinalizer() error {
 	updatedBackupConfig, _, err := v1beta1_util.PatchBackupConfiguration(context.TODO(), inv.stashClient.StashV1beta1(), inv.backupConfig, func(in *v1beta1.BackupConfiguration) *v1beta1.BackupConfiguration {
 		in.ObjectMeta = core_util.AddFinalizer(in.ObjectMeta, v1beta1.StashKey)
