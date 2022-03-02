@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"time"
 
-	"stash.appscode.dev/apimachinery/apis"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 	"stash.appscode.dev/apimachinery/pkg/conditions"
@@ -56,8 +55,8 @@ func ExecutePreBackupActions(opt ActionOptions) error {
 				// execute the pre-backup actions
 				for _, action := range targetStatus.PreBackupActions {
 					switch action {
-					case apis.InitializeBackendRepository:
-						if !kmapi.HasCondition(backupSession.Status.Conditions, apis.BackendRepositoryInitialized) {
+					case v1beta1.InitializeBackendRepository:
+						if !kmapi.HasCondition(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized) {
 							err := initializeBackendRepository(opt.SetupOptions)
 							if err != nil {
 								_, condErr := conditions.SetBackendRepositoryInitializedConditionToFalse(opt.StashClient, backupSession, err)
@@ -85,12 +84,12 @@ func IsRepositoryInitialized(opt ActionOptions) (bool, error) {
 		return false, err
 	}
 	// If the condition is not present, then the repository hasn't been initialized
-	if !kmapi.HasCondition(backupSession.Status.Conditions, apis.BackendRepositoryInitialized) {
+	if !kmapi.HasCondition(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized) {
 		return false, nil
 	}
 	// If the condition is present but it is set to "False", then the repository initialization has failed. Possibly due to invalid backend / storage secret.
-	if !kmapi.IsConditionTrue(backupSession.Status.Conditions, apis.BackendRepositoryInitialized) {
-		_, cnd := kmapi.GetCondition(backupSession.Status.Conditions, apis.BackendRepositoryInitialized)
+	if !kmapi.IsConditionTrue(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized) {
+		_, cnd := kmapi.GetCondition(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized)
 		return false, fmt.Errorf(cnd.Reason)
 	}
 	return true, nil

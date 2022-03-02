@@ -17,129 +17,100 @@ limitations under the License.
 package conditions
 
 import (
-	"context"
 	"fmt"
 
-	"stash.appscode.dev/apimachinery/apis"
-	api_v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
-	stash_util "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/util"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/types"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *api_v1beta1.BackupSession, hookErr error) (*api_v1beta1.BackupSession, error) {
-	return stash_util.UpdateBackupSessionStatus(
-		context.TODO(),
-		stashClient.StashV1beta1(),
-		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
-			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
-				Type:    apis.GlobalPreBackupHookSucceeded,
+func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, hookErr error) (*v1beta1.BackupSession, error) {
+	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+		Conditions: []kmapi.Condition{
+			{
+				Type:    v1beta1.GlobalPreBackupHookSucceeded,
 				Status:  core.ConditionFalse,
-				Reason:  apis.GlobalPreBackupHookExecutionFailed,
+				Reason:  v1beta1.GlobalPreBackupHookExecutionFailed,
 				Message: fmt.Sprintf("Failed to execute global PreBackup Hook. Reason: %v.", hookErr),
 			},
-			)
-			return backupSession.UID, in
 		},
-		metav1.UpdateOptions{},
-	)
+	})
 }
 
-func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *api_v1beta1.BackupSession) (*api_v1beta1.BackupSession, error) {
-	return stash_util.UpdateBackupSessionStatus(
-		context.TODO(),
-		stashClient.StashV1beta1(),
-		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
-			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
-				Type:    apis.GlobalPreBackupHookSucceeded,
+func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
+	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+		Conditions: []kmapi.Condition{
+			{
+				Type:    v1beta1.GlobalPreBackupHookSucceeded,
 				Status:  core.ConditionTrue,
-				Reason:  apis.GlobalPreBackupHookExecutedSuccessfully,
+				Reason:  v1beta1.GlobalPreBackupHookExecutedSuccessfully,
 				Message: "Global PreBackup hook has been executed successfully",
 			},
-			)
-			return backupSession.UID, in
 		},
-		metav1.UpdateOptions{},
-	)
+	})
 }
 
-func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *api_v1beta1.BackupSession, hookErr error) (*api_v1beta1.BackupSession, error) {
-	return stash_util.UpdateBackupSessionStatus(
-		context.TODO(),
-		stashClient.StashV1beta1(),
-		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
-			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
-				Type:    apis.GlobalPostBackupHookSucceeded,
+func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, hookErr error) (*v1beta1.BackupSession, error) {
+	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+		Conditions: []kmapi.Condition{
+			{
+				Type:    v1beta1.GlobalPostBackupHookSucceeded,
 				Status:  core.ConditionFalse,
-				Reason:  apis.GlobalPostBackupHookExecutionFailed,
+				Reason:  v1beta1.GlobalPostBackupHookExecutionFailed,
 				Message: fmt.Sprintf("Failed to execute global PostBackup Hook. Reason: %v.", hookErr),
 			},
-			)
-			return backupSession.UID, in
 		},
-		metav1.UpdateOptions{},
-	)
+	})
 }
 
-func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *api_v1beta1.BackupSession) (*api_v1beta1.BackupSession, error) {
-	return stash_util.UpdateBackupSessionStatus(
-		context.TODO(),
-		stashClient.StashV1beta1(),
-		backupSession.ObjectMeta,
-		func(in *api_v1beta1.BackupSessionStatus) (types.UID, *api_v1beta1.BackupSessionStatus) {
-			in.Conditions = kmapi.SetCondition(in.Conditions, kmapi.Condition{
-				Type:    apis.GlobalPostBackupHookSucceeded,
+func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
+	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+		Conditions: []kmapi.Condition{
+			{
+				Type:    v1beta1.GlobalPostBackupHookSucceeded,
 				Status:  core.ConditionTrue,
-				Reason:  apis.GlobalPostBackupHookExecutedSuccessfully,
+				Reason:  v1beta1.GlobalPostBackupHookExecutedSuccessfully,
 				Message: "Global PostBackup hook has been executed successfully",
 			},
-			)
-			return backupSession.UID, in
 		},
-		metav1.UpdateOptions{},
-	)
+	})
 }
 
 func SetGlobalPreRestoreHookSucceededConditionToFalse(invoker invoker.RestoreInvoker, hookErr error) error {
 	return invoker.SetCondition(nil, kmapi.Condition{
-		Type:    apis.GlobalPreRestoreHookSucceeded,
+		Type:    v1beta1.GlobalPreRestoreHookSucceeded,
 		Status:  core.ConditionFalse,
-		Reason:  apis.GlobalPreRestoreHookExecutionFailed,
+		Reason:  v1beta1.GlobalPreRestoreHookExecutionFailed,
 		Message: fmt.Sprintf("Failed to execute global PreRestore Hook. Reason: %v.", hookErr),
 	})
 }
 
 func SetGlobalPreRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInvoker) error {
 	return invoker.SetCondition(nil, kmapi.Condition{
-		Type:    apis.GlobalPreRestoreHookSucceeded,
+		Type:    v1beta1.GlobalPreRestoreHookSucceeded,
 		Status:  core.ConditionTrue,
-		Reason:  apis.GlobalPreRestoreHookExecutedSuccessfully,
+		Reason:  v1beta1.GlobalPreRestoreHookExecutedSuccessfully,
 		Message: "Global PreRestore hook has been executed successfully",
 	})
 }
 
 func SetGlobalPostRestoreHookSucceededConditionToFalse(invoker invoker.RestoreInvoker, hookErr error) error {
 	return invoker.SetCondition(nil, kmapi.Condition{
-		Type:    apis.GlobalPostRestoreHookSucceeded,
+		Type:    v1beta1.GlobalPostRestoreHookSucceeded,
 		Status:  core.ConditionFalse,
-		Reason:  apis.GlobalPostRestoreHookExecutionFailed,
+		Reason:  v1beta1.GlobalPostRestoreHookExecutionFailed,
 		Message: fmt.Sprintf("Failed to execute global PostRestore Hook. Reason: %v.", hookErr),
 	})
 }
 
 func SetGlobalPostRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInvoker) error {
 	return invoker.SetCondition(nil, kmapi.Condition{
-		Type:    apis.GlobalPostRestoreHookSucceeded,
+		Type:    v1beta1.GlobalPostRestoreHookSucceeded,
 		Status:  core.ConditionTrue,
-		Reason:  apis.GlobalPostRestoreHookExecutedSuccessfully,
+		Reason:  v1beta1.GlobalPostRestoreHookExecutedSuccessfully,
 		Message: "Global PostRestore hook has been executed successfully",
 	})
 }
