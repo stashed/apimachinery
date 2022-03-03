@@ -20,38 +20,11 @@ import (
 	"fmt"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
-	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
-
-func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.BackendRepositoryInitialized,
-				Status:  core.ConditionFalse,
-				Reason:  v1beta1.FailedToInitializeBackendRepository,
-				Message: fmt.Sprintf("Failed to initialize backend repository. Reason: %v", err.Error()),
-			},
-		},
-	})
-}
-
-func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.BackendRepositoryInitialized,
-				Status:  core.ConditionTrue,
-				Reason:  v1beta1.BackendRepositoryFound,
-				Message: "Repository exist in the backend.",
-			},
-		},
-	})
-}
 
 func SetRepositoryFoundConditionToUnknown(i interface{}, err error) error {
 	switch in := i.(type) {
@@ -259,82 +232,4 @@ func SetBackendSecretFoundConditionToTrue(i interface{}, secretName string) erro
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.BackendSecretFound)
 	}
-}
-
-func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RetentionPolicyApplied,
-				Status:  core.ConditionFalse,
-				Reason:  v1beta1.FailedToApplyRetentionPolicy,
-				Message: fmt.Sprintf("Failed to apply retention policy. Reason: %v", err.Error()),
-			},
-		},
-	})
-}
-
-func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RetentionPolicyApplied,
-				Status:  core.ConditionTrue,
-				Reason:  v1beta1.SuccessfullyAppliedRetentionPolicy,
-				Message: "Successfully applied retention policy.",
-			},
-		},
-	})
-}
-
-func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RepositoryIntegrityVerified,
-				Status:  core.ConditionFalse,
-				Reason:  v1beta1.FailedToVerifyRepositoryIntegrity,
-				Message: fmt.Sprintf("Repository integrity verification failed. Reason: %v", err.Error()),
-			},
-		},
-	})
-}
-
-func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RepositoryIntegrityVerified,
-				Status:  core.ConditionTrue,
-				Reason:  v1beta1.SuccessfullyVerifiedRepositoryIntegrity,
-				Message: "Repository integrity verification succeeded.",
-			},
-		},
-	})
-}
-
-func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RepositoryMetricsPushed,
-				Status:  core.ConditionFalse,
-				Reason:  v1beta1.FailedToPushRepositoryMetrics,
-				Message: fmt.Sprintf("Failed to push repository metrics. Reason: %v", err.Error()),
-			},
-		},
-	})
-}
-
-func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:    v1beta1.RepositoryMetricsPushed,
-				Status:  core.ConditionTrue,
-				Reason:  v1beta1.SuccessfullyPushedRepositoryMetrics,
-				Message: "Successfully pushed repository metrics.",
-			},
-		},
-	})
 }

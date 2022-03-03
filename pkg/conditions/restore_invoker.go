@@ -195,3 +195,39 @@ func SetPostRestoreHookExecutionSucceededToTrue(inv invoker.RestoreInvoker) erro
 		Message: "Successfully executed postRestore hook.",
 	})
 }
+
+func SetGlobalPreRestoreHookSucceededConditionToFalse(invoker invoker.RestoreInvoker, hookErr error) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:    v1beta1.GlobalPreRestoreHookSucceeded,
+		Status:  core.ConditionFalse,
+		Reason:  v1beta1.GlobalPreRestoreHookExecutionFailed,
+		Message: fmt.Sprintf("Failed to execute global PreRestore Hook. Reason: %v.", hookErr),
+	})
+}
+
+func SetGlobalPreRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInvoker) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:    v1beta1.GlobalPreRestoreHookSucceeded,
+		Status:  core.ConditionTrue,
+		Reason:  v1beta1.GlobalPreRestoreHookExecutedSuccessfully,
+		Message: "Global PreRestore hook has been executed successfully",
+	})
+}
+
+func SetGlobalPostRestoreHookSucceededConditionToFalse(invoker invoker.RestoreInvoker, hookErr error) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:    v1beta1.GlobalPostRestoreHookSucceeded,
+		Status:  core.ConditionFalse,
+		Reason:  v1beta1.GlobalPostRestoreHookExecutionFailed,
+		Message: fmt.Sprintf("Failed to execute global PostRestore Hook. Reason: %v.", hookErr),
+	})
+}
+
+func SetGlobalPostRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInvoker) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:    v1beta1.GlobalPostRestoreHookSucceeded,
+		Status:  core.ConditionTrue,
+		Reason:  v1beta1.GlobalPostRestoreHookExecutedSuccessfully,
+		Message: "Global PostRestore hook has been executed successfully",
+	})
+}

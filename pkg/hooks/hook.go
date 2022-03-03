@@ -105,35 +105,36 @@ func (e *BackupHookExecutor) Execute() (*v1beta1.BackupSession, error) {
 	if e.alreadyExecuted() {
 		return e.BackupSession, nil
 	}
-
 	if err := hookExecutor.Execute(); err != nil {
 		return e.setBackupHookExecutionSucceededToFalse(err)
 	}
-
 	return e.setBackupHookExecutionSucceededToTrue()
 }
 
 func (e *BackupHookExecutor) alreadyExecuted() bool {
-	if e.HookType == apis.PreBackupHook {
-		return kmapi.HasCondition(e.BackupSession.Status.Conditions, v1beta1.PreBackupHookExecutionSucceeded)
+	for _, t := range e.BackupSession.Status.Targets {
+		if invoker.TargetMatched(e.Target, t.Ref) {
+			if e.HookType == apis.PreBackupHook {
+				return kmapi.HasCondition(t.Conditions, v1beta1.PreBackupHookExecutionSucceeded)
+			}
+			return kmapi.HasCondition(t.Conditions, v1beta1.PostBackupHookExecutionSucceeded)
+		}
 	}
-	return kmapi.HasCondition(e.BackupSession.Status.Conditions, v1beta1.PreBackupHookExecutionSucceeded)
+	return false
 }
 
 func (e *BackupHookExecutor) setBackupHookExecutionSucceededToFalse(err error) (*v1beta1.BackupSession, error) {
 	if e.HookType == apis.PreBackupHook {
-		return conditions.SetPreBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, err)
-	} else {
-		return conditions.SetPostBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, err)
+		return conditions.SetPreBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, e.Target, err)
 	}
+	return conditions.SetPostBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, e.Target, err)
 }
 
 func (e *BackupHookExecutor) setBackupHookExecutionSucceededToTrue() (*v1beta1.BackupSession, error) {
 	if e.HookType == apis.PreBackupHook {
-		return conditions.SetPreBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession)
-	} else {
-		return conditions.SetPostBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession)
+		return conditions.SetPreBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession, e.Target)
 	}
+	return conditions.SetPostBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession, e.Target)
 }
 
 type RestoreHookExecutor struct {
@@ -168,7 +169,7 @@ func (e *RestoreHookExecutor) Execute() error {
 }
 
 func (e *RestoreHookExecutor) alreadyExecuted() (bool, error) {
-	if e.HookType == apis.PreBackupHook {
+	if e.HookType == apis.PreRestoreHook {
 		return e.Invoker.HasCondition(&e.Target, v1beta1.PreRestoreHookExecutionSucceeded)
 	}
 	return e.Invoker.HasCondition(&e.Target, v1beta1.PostRestoreHookExecutionSucceeded)
@@ -177,15 +178,13 @@ func (e *RestoreHookExecutor) alreadyExecuted() (bool, error) {
 func (e *RestoreHookExecutor) setRestoreHookExecutionSucceededToFalse(err error) error {
 	if e.HookType == apis.PreRestoreHook {
 		return conditions.SetPreRestoreHookExecutionSucceededToFalse(e.Invoker, err)
-	} else {
-		return conditions.SetPostRestoreHookExecutionSucceededToFalse(e.Invoker, err)
 	}
+	return conditions.SetPostRestoreHookExecutionSucceededToFalse(e.Invoker, err)
 }
 
 func (e *RestoreHookExecutor) setRestoreHookExecutionSucceededToTrue() error {
 	if e.HookType == apis.PreRestoreHook {
 		return conditions.SetPreRestoreHookExecutionSucceededToTrue(e.Invoker)
-	} else {
-		return conditions.SetPostRestoreHookExecutionSucceededToTrue(e.Invoker)
 	}
+	return conditions.SetPostRestoreHookExecutionSucceededToTrue(e.Invoker)
 }

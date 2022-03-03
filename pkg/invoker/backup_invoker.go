@@ -250,6 +250,11 @@ func checkBackupFailureInTargetStatus(status v1beta1.BackupTargetStatus) (bool, 
 	if failureFound {
 		return true, reason
 	}
+
+	failureFound, reason = checkFailureInConditions(status.Conditions)
+	if failureFound {
+		return true, reason
+	}
 	return false, ""
 }
 

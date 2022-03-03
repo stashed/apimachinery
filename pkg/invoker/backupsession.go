@@ -75,6 +75,10 @@ func upsertBackupMembersStatus(cur []v1beta1.BackupTargetStatus, new v1beta1.Bac
 }
 
 func upsertBackupTargetStatus(cur, new v1beta1.BackupTargetStatus) v1beta1.BackupTargetStatus {
+	if len(new.Conditions) > 0 {
+		cur.Conditions = upsertConditions(cur.Conditions, new.Conditions)
+	}
+
 	if new.TotalHosts != nil {
 		cur.TotalHosts = new.TotalHosts
 	}
@@ -112,6 +116,10 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 		return v1beta1.TargetBackupPending
 	}
 
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupExecutorEnsured) {
+		return v1beta1.TargetBackupFailed
+	}
+
 	failedHostCount := int32(0)
 	successfulHostCount := int32(0)
 	for _, hostStats := range status.Stats {
@@ -122,16 +130,17 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 			successfulHostCount++
 		}
 	}
-
 	completedHosts := successfulHostCount + failedHostCount
-	if completedHosts < *status.TotalHosts {
-		return v1beta1.TargetBackupRunning
-	}
 
-	if failedHostCount > 0 {
-		return v1beta1.TargetBackupFailed
+	if completedHosts == *status.TotalHosts {
+		if failedHostCount > 0 ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreBackupHookExecutionSucceeded) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostBackupHookExecutionSucceeded) {
+			return v1beta1.TargetBackupFailed
+		}
+		return v1beta1.TargetBackupSucceeded
 	}
-	return v1beta1.TargetBackupSucceeded
+	return v1beta1.TargetBackupRunning
 }
 
 func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.BackupSessionPhase {
@@ -163,8 +172,6 @@ func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.Ba
 			kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
 			kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
 			kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryIntegrityVerified) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreBackupHookExecutionSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostBackupHookExecutionSucceeded) ||
 			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
 			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded) {
 			return v1beta1.BackupSessionFailed

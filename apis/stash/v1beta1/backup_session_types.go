@@ -117,6 +117,9 @@ type BackupTargetStatus struct {
 	// PostBackupActions specifies a list of actions that the backup process should execute after taking backup
 	// +optional
 	PostBackupActions []string `json:"postBackupActions,omitempty"`
+	// Conditions shows condition of different operations/steps of the backup process for this target
+	// +optional
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 type HostBackupStats struct {
