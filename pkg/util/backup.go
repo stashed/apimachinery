@@ -48,6 +48,8 @@ func ExecutePreBackupActions(opt ActionOptions) error {
 	if err != nil {
 		return err
 	}
+	session := invoker.NewBackupSessionHandler(opt.StashClient, backupSession)
+
 	for _, targetStatus := range backupSession.Status.Targets {
 		if invoker.TargetMatched(targetStatus.Ref, opt.TargetRef) {
 			// check if it has any pre-backup action assigned to it
@@ -59,13 +61,10 @@ func ExecutePreBackupActions(opt ActionOptions) error {
 						if !kmapi.HasCondition(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized) {
 							err := initializeBackendRepository(opt.SetupOptions)
 							if err != nil {
-								_, condErr := conditions.SetBackendRepositoryInitializedConditionToFalse(opt.StashClient, backupSession, err)
+								condErr := conditions.SetBackendRepositoryInitializedConditionToFalse(session, err)
 								return errors.NewAggregate([]error{err, condErr})
 							}
-							_, condErr := conditions.SetBackendRepositoryInitializedConditionToTrue(opt.StashClient, backupSession)
-							if condErr != nil {
-								return condErr
-							}
+							return conditions.SetBackendRepositoryInitializedConditionToTrue(session)
 						}
 					default:
 						return fmt.Errorf("unknown PreBackupAction: %s", action)

@@ -91,7 +91,7 @@ type BackupHookExecutor struct {
 	HookType      string
 }
 
-func (e *BackupHookExecutor) Execute() (*v1beta1.BackupSession, error) {
+func (e *BackupHookExecutor) Execute() error {
 	hookExecutor := HookExecutor{
 		Config:      e.Config,
 		Hook:        e.Hook,
@@ -103,12 +103,13 @@ func (e *BackupHookExecutor) Execute() (*v1beta1.BackupSession, error) {
 	}
 
 	if e.alreadyExecuted() {
-		return e.BackupSession, nil
+		return nil
 	}
+	session := invoker.NewBackupSessionHandler(e.StashClient, e.BackupSession)
 	if err := hookExecutor.Execute(); err != nil {
-		return e.setBackupHookExecutionSucceededToFalse(err)
+		return e.setBackupHookExecutionSucceededToFalse(session, err)
 	}
-	return e.setBackupHookExecutionSucceededToTrue()
+	return e.setBackupHookExecutionSucceededToTrue(session)
 }
 
 func (e *BackupHookExecutor) alreadyExecuted() bool {
@@ -123,18 +124,18 @@ func (e *BackupHookExecutor) alreadyExecuted() bool {
 	return false
 }
 
-func (e *BackupHookExecutor) setBackupHookExecutionSucceededToFalse(err error) (*v1beta1.BackupSession, error) {
+func (e *BackupHookExecutor) setBackupHookExecutionSucceededToFalse(session *invoker.BackupSessionHandler, err error) error {
 	if e.HookType == apis.PreBackupHook {
-		return conditions.SetPreBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, e.Target, err)
+		return conditions.SetPreBackupHookExecutionSucceededToFalse(session, e.Target, err)
 	}
-	return conditions.SetPostBackupHookExecutionSucceededToFalse(e.StashClient, e.BackupSession, e.Target, err)
+	return conditions.SetPostBackupHookExecutionSucceededToFalse(session, e.Target, err)
 }
 
-func (e *BackupHookExecutor) setBackupHookExecutionSucceededToTrue() (*v1beta1.BackupSession, error) {
+func (e *BackupHookExecutor) setBackupHookExecutionSucceededToTrue(session *invoker.BackupSessionHandler) error {
 	if e.HookType == apis.PreBackupHook {
-		return conditions.SetPreBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession, e.Target)
+		return conditions.SetPreBackupHookExecutionSucceededToTrue(session, e.Target)
 	}
-	return conditions.SetPostBackupHookExecutionSucceededToTrue(e.StashClient, e.BackupSession, e.Target)
+	return conditions.SetPostBackupHookExecutionSucceededToTrue(session, e.Target)
 }
 
 type RestoreHookExecutor struct {

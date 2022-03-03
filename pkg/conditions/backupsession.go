@@ -20,15 +20,14 @@ import (
 	"fmt"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
-	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackendRepositoryInitializedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.BackendRepositoryInitialized,
@@ -40,8 +39,8 @@ func SetBackendRepositoryInitializedConditionToFalse(stashClient cs.Interface, b
 	})
 }
 
-func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackendRepositoryInitializedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.BackendRepositoryInitialized,
@@ -53,8 +52,8 @@ func SetBackendRepositoryInitializedConditionToTrue(stashClient cs.Interface, ba
 	})
 }
 
-func SetBackupExecutorEnsuredToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupExecutorEnsuredToFalse(session *invoker.BackupSessionHandler, target v1beta1.TargetRef, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -71,8 +70,8 @@ func SetBackupExecutorEnsuredToFalse(stashClient cs.Interface, backupSession *v1
 	})
 }
 
-func SetBackupExecutorEnsuredToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupExecutorEnsuredToTrue(session *invoker.BackupSessionHandler, target v1beta1.TargetRef) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -89,8 +88,8 @@ func SetBackupExecutorEnsuredToTrue(stashClient cs.Interface, backupSession *v1b
 	})
 }
 
-func SetPreBackupHookExecutionSucceededToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetPreBackupHookExecutionSucceededToFalse(session *invoker.BackupSessionHandler, target v1beta1.TargetRef, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -107,8 +106,8 @@ func SetPreBackupHookExecutionSucceededToFalse(stashClient cs.Interface, backupS
 	})
 }
 
-func SetPreBackupHookExecutionSucceededToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetPreBackupHookExecutionSucceededToTrue(session *invoker.BackupSessionHandler, target v1beta1.TargetRef) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -125,8 +124,8 @@ func SetPreBackupHookExecutionSucceededToTrue(stashClient cs.Interface, backupSe
 	})
 }
 
-func SetPostBackupHookExecutionSucceededToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetPostBackupHookExecutionSucceededToFalse(session *invoker.BackupSessionHandler, target v1beta1.TargetRef, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -143,8 +142,8 @@ func SetPostBackupHookExecutionSucceededToFalse(stashClient cs.Interface, backup
 	})
 }
 
-func SetPostBackupHookExecutionSucceededToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession, target v1beta1.TargetRef) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetPostBackupHookExecutionSucceededToTrue(session *invoker.BackupSessionHandler, target v1beta1.TargetRef) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Targets: []v1beta1.BackupTargetStatus{
 			{
 				Ref: target,
@@ -161,8 +160,8 @@ func SetPostBackupHookExecutionSucceededToTrue(stashClient cs.Interface, backupS
 	})
 }
 
-func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, hookErr error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetGlobalPreBackupHookSucceededConditionToFalse(session *invoker.BackupSessionHandler, hookErr error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.GlobalPreBackupHookSucceeded,
@@ -174,8 +173,8 @@ func SetGlobalPreBackupHookSucceededConditionToFalse(stashClient cs.Interface, b
 	})
 }
 
-func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetGlobalPreBackupHookSucceededConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.GlobalPreBackupHookSucceeded,
@@ -187,8 +186,8 @@ func SetGlobalPreBackupHookSucceededConditionToTrue(stashClient cs.Interface, ba
 	})
 }
 
-func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, hookErr error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetGlobalPostBackupHookSucceededConditionToFalse(session *invoker.BackupSessionHandler, hookErr error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.GlobalPostBackupHookSucceeded,
@@ -200,8 +199,8 @@ func SetGlobalPostBackupHookSucceededConditionToFalse(stashClient cs.Interface, 
 	})
 }
 
-func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetGlobalPostBackupHookSucceededConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.GlobalPostBackupHookSucceeded,
@@ -213,8 +212,8 @@ func SetGlobalPostBackupHookSucceededConditionToTrue(stashClient cs.Interface, b
 	})
 }
 
-func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRetentionPolicyAppliedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RetentionPolicyApplied,
@@ -226,8 +225,8 @@ func SetRetentionPolicyAppliedConditionToFalse(stashClient cs.Interface, backupS
 	})
 }
 
-func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRetentionPolicyAppliedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RetentionPolicyApplied,
@@ -239,8 +238,8 @@ func SetRetentionPolicyAppliedConditionToTrue(stashClient cs.Interface, backupSe
 	})
 }
 
-func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRepositoryIntegrityVerifiedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RepositoryIntegrityVerified,
@@ -252,8 +251,8 @@ func SetRepositoryIntegrityVerifiedConditionToFalse(stashClient cs.Interface, ba
 	})
 }
 
-func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRepositoryIntegrityVerifiedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RepositoryIntegrityVerified,
@@ -265,8 +264,8 @@ func SetRepositoryIntegrityVerifiedConditionToTrue(stashClient cs.Interface, bac
 	})
 }
 
-func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRepositoryMetricsPushedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RepositoryMetricsPushed,
@@ -278,8 +277,8 @@ func SetRepositoryMetricsPushedConditionToFalse(stashClient cs.Interface, backup
 	})
 }
 
-func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetRepositoryMetricsPushedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.RepositoryMetricsPushed,
@@ -291,8 +290,8 @@ func SetRepositoryMetricsPushedConditionToTrue(stashClient cs.Interface, backupS
 	})
 }
 
-func SetBackupSkippedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession, msg string) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupSkippedConditionToTrue(session *invoker.BackupSessionHandler, msg string) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.BackupSkipped,
@@ -304,8 +303,8 @@ func SetBackupSkippedConditionToTrue(stashClient cs.Interface, backupSession *v1
 	})
 }
 
-func SetBackupMetricsPushedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupMetricsPushedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.MetricsPushed,
@@ -317,8 +316,8 @@ func SetBackupMetricsPushedConditionToFalse(stashClient cs.Interface, backupSess
 	})
 }
 
-func SetBackupMetricsPushedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupMetricsPushedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.MetricsPushed,
@@ -330,8 +329,8 @@ func SetBackupMetricsPushedConditionToTrue(stashClient cs.Interface, backupSessi
 	})
 }
 
-func SetBackupHistoryCleanedConditionToFalse(stashClient cs.Interface, backupSession *v1beta1.BackupSession, err error) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupHistoryCleanedConditionToFalse(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.BackupHistoryCleaned,
@@ -343,8 +342,8 @@ func SetBackupHistoryCleanedConditionToFalse(stashClient cs.Interface, backupSes
 	})
 }
 
-func SetBackupHistoryCleanedConditionToTrue(stashClient cs.Interface, backupSession *v1beta1.BackupSession) (*v1beta1.BackupSession, error) {
-	return invoker.UpdateBackupSessionStatus(stashClient, backupSession.ObjectMeta, &v1beta1.BackupSessionStatus{
+func SetBackupHistoryCleanedConditionToTrue(session *invoker.BackupSessionHandler) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:    v1beta1.BackupHistoryCleaned,

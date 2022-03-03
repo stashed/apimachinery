@@ -30,11 +30,23 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-func UpdateBackupSessionStatus(stashClient cs.Interface, meta metav1.ObjectMeta, status *v1beta1.BackupSessionStatus) (*v1beta1.BackupSession, error) {
-	return stash_util.UpdateBackupSessionStatus(
+type BackupSessionHandler struct {
+	stashClient   cs.Interface
+	backupSession *v1beta1.BackupSession
+}
+
+func NewBackupSessionHandler(stashClient cs.Interface, backupSession *v1beta1.BackupSession) *BackupSessionHandler {
+	return &BackupSessionHandler{
+		stashClient:   stashClient,
+		backupSession: backupSession,
+	}
+}
+
+func (h *BackupSessionHandler) UpdateStatus(status *v1beta1.BackupSessionStatus) error {
+	updatedBackupSession, err := stash_util.UpdateBackupSessionStatus(
 		context.TODO(),
-		stashClient.StashV1beta1(),
-		meta,
+		h.stashClient.StashV1beta1(),
+		h.backupSession.ObjectMeta,
 		func(in *v1beta1.BackupSessionStatus) (types.UID, *v1beta1.BackupSessionStatus) {
 			in.Conditions = upsertConditions(in.Conditions, status.Conditions)
 
@@ -46,12 +58,46 @@ func UpdateBackupSessionStatus(stashClient cs.Interface, meta metav1.ObjectMeta,
 
 			in.Phase = calculateBackupSessionPhase(in)
 			if IsBackupCompleted(in.Phase) {
-				in.SessionDuration = time.Since(meta.CreationTimestamp.Time).Round(time.Second).String()
+				in.SessionDuration = time.Since(h.backupSession.ObjectMeta.CreationTimestamp.Time).Round(time.Second).String()
 			}
-			return meta.UID, in
+			return h.backupSession.ObjectMeta.UID, in
 		},
 		metav1.UpdateOptions{},
 	)
+	if err != nil {
+		return err
+	}
+	h.backupSession = updatedBackupSession
+	return nil
+}
+
+func (h *BackupSessionHandler) GetObjectMeta() metav1.ObjectMeta {
+	return h.backupSession.ObjectMeta
+}
+
+func (h *BackupSessionHandler) GetStatus() v1beta1.BackupSessionStatus {
+	return h.backupSession.Status
+}
+
+func (h *BackupSessionHandler) GetTargetStatus() []v1beta1.BackupTargetStatus {
+	return h.backupSession.Status.Targets
+}
+
+func (h *BackupSessionHandler) GetConditions() []kmapi.Condition {
+	return h.backupSession.Status.Conditions
+}
+
+func (h *BackupSessionHandler) GetInvoker() (BackupInvoker, error) {
+	return NewBackupInvoker(h.stashClient, h.backupSession.Spec.Invoker.Kind, h.backupSession.Spec.Invoker.Name, h.backupSession.Namespace)
+}
+
+func (h *BackupSessionHandler) GetInvokerRef() v1beta1.BackupInvokerRef {
+	return h.backupSession.Spec.Invoker
+}
+
+func (h *BackupSessionHandler) GetBackupSession() *v1beta1.BackupSession {
+	b := h.backupSession.DeepCopy()
+	return b
 }
 
 func IsBackupCompleted(phase v1beta1.BackupSessionPhase) bool {
