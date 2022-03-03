@@ -23,6 +23,7 @@ import (
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
 	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
@@ -38,6 +39,7 @@ func SetRepositoryFoundConditionToUnknown(i interface{}, err error) error {
 				in.GetRepoRef().Name,
 				err.Error(),
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -49,6 +51,7 @@ func SetRepositoryFoundConditionToUnknown(i interface{}, err error) error {
 				in.GetRepoRef().Name,
 				err.Error(),
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.RepositoryFound)
@@ -66,6 +69,7 @@ func SetRepositoryFoundConditionToFalse(i interface{}) error {
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -76,6 +80,7 @@ func SetRepositoryFoundConditionToFalse(i interface{}) error {
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.RepositoryFound)
@@ -93,6 +98,7 @@ func SetRepositoryFoundConditionToTrue(i interface{}) error {
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -103,6 +109,7 @@ func SetRepositoryFoundConditionToTrue(i interface{}) error {
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.RepositoryFound)
@@ -113,17 +120,19 @@ func SetValidationPassedToTrue(i interface{}) error {
 	switch in := i.(type) {
 	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    v1beta1.ValidationPassed,
-			Status:  core.ConditionTrue,
-			Reason:  v1beta1.ResourceValidationPassed,
-			Message: "Successfully validated.",
+			Type:               v1beta1.ValidationPassed,
+			Status:             core.ConditionTrue,
+			Reason:             v1beta1.ResourceValidationPassed,
+			Message:            "Successfully validated.",
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    v1beta1.ValidationPassed,
-			Status:  core.ConditionTrue,
-			Reason:  v1beta1.ResourceValidationPassed,
-			Message: "Successfully validated.",
+			Type:               v1beta1.ValidationPassed,
+			Status:             core.ConditionTrue,
+			Reason:             v1beta1.ResourceValidationPassed,
+			Message:            "Successfully validated.",
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.ValidationPassed)
@@ -134,17 +143,19 @@ func SetValidationPassedToFalse(i interface{}, err error) error {
 	switch in := i.(type) {
 	case invoker.BackupInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    v1beta1.ValidationPassed,
-			Status:  core.ConditionFalse,
-			Reason:  v1beta1.ResourceValidationFailed,
-			Message: err.Error(),
+			Type:               v1beta1.ValidationPassed,
+			Status:             core.ConditionFalse,
+			Reason:             v1beta1.ResourceValidationFailed,
+			Message:            err.Error(),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
-			Type:    v1beta1.ValidationPassed,
-			Status:  core.ConditionFalse,
-			Reason:  v1beta1.ResourceValidationFailed,
-			Message: err.Error(),
+			Type:               v1beta1.ValidationPassed,
+			Status:             core.ConditionFalse,
+			Reason:             v1beta1.ResourceValidationFailed,
+			Message:            err.Error(),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.ValidationPassed)
@@ -163,6 +174,7 @@ func SetBackendSecretFoundConditionToUnknown(i interface{}, secretName string, e
 				secretName,
 				err.Error(),
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -174,6 +186,7 @@ func SetBackendSecretFoundConditionToUnknown(i interface{}, secretName string, e
 				secretName,
 				err.Error(),
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.BackendSecretFound)
@@ -191,6 +204,7 @@ func SetBackendSecretFoundConditionToFalse(i interface{}, secretName string) err
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -201,6 +215,7 @@ func SetBackendSecretFoundConditionToFalse(i interface{}, secretName string) err
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.BackendSecretFound)
@@ -218,6 +233,7 @@ func SetBackendSecretFoundConditionToTrue(i interface{}, secretName string) erro
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	case invoker.RestoreInvoker:
 		return in.SetCondition(nil, kmapi.Condition{
@@ -228,6 +244,7 @@ func SetBackendSecretFoundConditionToTrue(i interface{}, secretName string) erro
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
+			LastTransitionTime: metav1.Now(),
 		})
 	default:
 		return fmt.Errorf("unable to set %s condition. Reason: invoker type unknown", v1beta1.BackendSecretFound)

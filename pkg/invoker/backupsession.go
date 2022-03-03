@@ -190,7 +190,7 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 }
 
 func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.BackupSessionPhase {
-	if len(status.Conditions) == 0 || len(status.Targets) == 0 {
+	if len(status.Targets) == 0 {
 		return v1beta1.BackupSessionPending
 	}
 
