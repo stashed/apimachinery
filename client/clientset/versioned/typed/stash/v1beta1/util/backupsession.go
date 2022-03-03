@@ -24,6 +24,7 @@ import (
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
 
 	jsonpatch "github.com/evanphx/json-patch"
+	"github.com/the-redback/go-oneliners"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -126,14 +127,22 @@ func UpdateBackupSessionStatus(
 	attempt := 0
 	cur, err := c.BackupSessions(meta.Namespace).Get(ctx, meta.Name, metav1.GetOptions{})
 	if err != nil {
+		klog.Infoln(">>>>>>>>>>>>>>>>> err1: ", err)
 		return nil, err
 	}
+	klog.Infoln("===========================Cur BackupSession ======================================")
+	oneliners.PrettyJson(cur)
+	klog.Infoln("===========================Updated BackupSession ======================================")
+	oneliners.PrettyJson(apply(cur))
+	klog.Infoln("=======================================================================================")
 	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
 		attempt++
 		var e2 error
 		result, e2 = c.BackupSessions(meta.Namespace).UpdateStatus(ctx, apply(cur), opts)
+		klog.Infoln(">>>>>>>>>>>>>>>>> err2: ", e2)
 		if kerr.IsConflict(e2) {
 			latest, e3 := c.BackupSessions(meta.Namespace).Get(ctx, meta.Name, metav1.GetOptions{})
+			klog.Infoln(">>>>>>>>>>>>>>>>> err3: ", e3)
 			switch {
 			case e3 == nil:
 				cur = latest

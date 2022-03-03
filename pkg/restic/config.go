@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	DefaultOutputFileName = "output.json"
+	DefaultOutputFileName = "output.go"
 	DefaultScratchDir     = "/tmp"
 	DefaultHost           = "host-0"
 )

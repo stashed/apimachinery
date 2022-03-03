@@ -42,6 +42,9 @@ github.com/emicklei/go-restful/log
 # github.com/evanphx/json-patch v4.11.0+incompatible
 ## explicit
 github.com/evanphx/json-patch
+# github.com/fatih/color v1.10.0
+## explicit; go 1.13
+github.com/fatih/color
 # github.com/fatih/structs v1.1.0
 ## explicit
 github.com/fatih/structs
@@ -111,6 +114,9 @@ github.com/grpc-ecosystem/go-grpc-prometheus
 ## explicit; go 1.12
 github.com/hashicorp/golang-lru
 github.com/hashicorp/golang-lru/simplelru
+# github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
+## explicit
+github.com/hokaccha/go-prettyjson
 # github.com/imdario/mergo v0.3.12 => github.com/imdario/mergo v0.3.5
 ## explicit
 github.com/imdario/mergo
@@ -124,8 +130,10 @@ github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-colorable v0.1.9
 ## explicit; go 1.13
+github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
+github.com/mattn/go-isatty
 # github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369
 ## explicit; go 1.9
 github.com/matttproud/golang_protobuf_extensions/pbutil
@@ -183,6 +191,9 @@ github.com/spf13/pflag
 # github.com/stretchr/testify v1.7.0
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
+# github.com/the-redback/go-oneliners v0.0.0-20190417084731-74f7694e6dae
+## explicit
+github.com/the-redback/go-oneliners
 # github.com/yudai/gojsondiff v1.0.0
 ## explicit
 github.com/yudai/gojsondiff
