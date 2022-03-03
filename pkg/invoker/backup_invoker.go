@@ -266,8 +266,3 @@ func checkBackupFailureInHostStatus(status []v1beta1.HostBackupStats) (bool, str
 	}
 	return false, ""
 }
-
-func hostBackupCompleted(phase v1beta1.HostBackupPhase) bool {
-	return phase == v1beta1.HostBackupSucceeded ||
-		phase == v1beta1.HostBackupFailed
-}

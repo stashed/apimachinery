@@ -107,6 +107,29 @@ func IsBackupCompleted(phase v1beta1.BackupSessionPhase) bool {
 		phase == v1beta1.BackupSessionUnknown
 }
 
+func BackupCompletedForAllTargets(status []v1beta1.BackupTargetStatus) bool {
+	for _, t := range status {
+		if t.TotalHosts == nil || !backupCompletedForAllHosts(t.Stats, *t.TotalHosts) {
+			return false
+		}
+	}
+	return len(status) > 0
+}
+
+func backupCompletedForAllHosts(status []v1beta1.HostBackupStats, totalHosts int32) bool {
+	for _, h := range status {
+		if !hostBackupCompleted(h.Phase) {
+			return false
+		}
+	}
+	return len(status) == int(totalHosts)
+}
+
+func hostBackupCompleted(phase v1beta1.HostBackupPhase) bool {
+	return phase == v1beta1.HostBackupSucceeded ||
+		phase == v1beta1.HostBackupFailed
+}
+
 func upsertBackupMembersStatus(cur []v1beta1.BackupTargetStatus, new v1beta1.BackupTargetStatus) []v1beta1.BackupTargetStatus {
 	// if the member status already exist, then update it
 	for i := range cur {
