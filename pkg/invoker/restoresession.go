@@ -373,6 +373,12 @@ func checkFailureInConditions(conditions []kmapi.Condition) (bool, string) {
 }
 
 func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestorePhase {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) {
+		return v1beta1.RestoreFailed
+	}
+
 	if len(status.Conditions) == 0 {
 		return v1beta1.RestorePending
 	}

@@ -258,14 +258,16 @@ func upsertRestoreTargetStatus(cur, new v1beta1.RestoreMemberStatus) v1beta1.Res
 }
 
 func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestoreTargetPhase {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) {
+		return v1beta1.TargetRestoreFailed
+	}
+
 	if status.TotalHosts == nil ||
 		len(status.Conditions) == 0 ||
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreTargetFound) {
 		return v1beta1.TargetRestorePending
-	}
-
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) {
-		return v1beta1.TargetRestoreFailed
 	}
 
 	failedHostCount := int32(0)
@@ -288,9 +290,7 @@ func calculateRestoreTargetPhase(status v1beta1.RestoreMemberStatus) v1beta1.Res
 			return v1beta1.TargetRestorePhaseUnknown
 		}
 
-		if failedHostCount > 0 ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) {
+		if failedHostCount > 0 {
 			return v1beta1.TargetRestoreFailed
 		}
 		return v1beta1.TargetRestoreSucceeded

@@ -28,7 +28,6 @@ import (
 	"stash.appscode.dev/apimachinery/pkg/restic"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -50,30 +49,33 @@ func ExecutePreBackupActions(opt ActionOptions) error {
 	}
 	session := invoker.NewBackupSessionHandler(opt.StashClient, backupSession)
 
-	for _, targetStatus := range backupSession.Status.Targets {
-		if invoker.TargetMatched(targetStatus.Ref, opt.TargetRef) {
-			// check if it has any pre-backup action assigned to it
-			if len(targetStatus.PreBackupActions) > 0 {
-				// execute the pre-backup actions
-				for _, action := range targetStatus.PreBackupActions {
-					switch action {
-					case v1beta1.InitializeBackendRepository:
-						if !kmapi.HasCondition(backupSession.Status.Conditions, v1beta1.BackendRepositoryInitialized) {
-							err := initializeBackendRepository(opt.SetupOptions)
-							if err != nil {
-								condErr := conditions.SetBackendRepositoryInitializedConditionToFalse(session, err)
-								return errors.NewAggregate([]error{err, condErr})
-							}
-							return conditions.SetBackendRepositoryInitializedConditionToTrue(session)
-						}
-					default:
-						return fmt.Errorf("unknown PreBackupAction: %s", action)
-					}
-				}
-			}
+	for _, targetStatus := range session.GetTargetStatus() {
+		if invoker.TargetMatched(targetStatus.Ref, opt.TargetRef) && len(targetStatus.PreBackupActions) > 0 {
+			return opt.executePreBackupActions(session, targetStatus)
 		}
 	}
 	return nil
+}
+
+func (opt *ActionOptions) executePreBackupActions(session *invoker.BackupSessionHandler, targetStatus v1beta1.BackupTargetStatus) error {
+	for _, action := range targetStatus.PreBackupActions {
+		switch action {
+		case v1beta1.InitializeBackendRepository:
+			if !repoAlreadyInitialized(session) {
+				err := opt.initializeBackendRepository(session)
+				if err != nil {
+					return conditions.SetBackendRepositoryInitializedConditionToFalse(session, err)
+				}
+			}
+		default:
+			return fmt.Errorf("unknown PreBackupAction: %s", action)
+		}
+	}
+	return nil
+}
+
+func repoAlreadyInitialized(session *invoker.BackupSessionHandler) bool {
+	return kmapi.HasCondition(session.GetConditions(), v1beta1.BackendRepositoryInitialized)
 }
 
 // IsRepositoryInitialized check whether the backend restic repository has been initialized or not
@@ -110,14 +112,17 @@ func WaitForBackendRepository(opt ActionOptions) error {
 	})
 }
 
-func initializeBackendRepository(opts restic.SetupOptions) error {
-	w, err := restic.NewResticWrapper(opts)
+func (opts *ActionOptions) initializeBackendRepository(session *invoker.BackupSessionHandler) error {
+	w, err := restic.NewResticWrapper(opts.SetupOptions)
 	if err != nil {
 		return err
 	}
 	// initialize repository if it doesn't exist
 	if !w.RepositoryAlreadyExist() {
-		return w.InitializeRepository()
+		err = w.InitializeRepository()
+		if err != nil {
+			return err
+		}
 	}
-	return nil
+	return conditions.SetBackendRepositoryInitializedConditionToTrue(session)
 }

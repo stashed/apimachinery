@@ -339,11 +339,18 @@ func upsertRestoreMemberStatus(cur []v1beta1.RestoreMemberStatus, new v1beta1.Re
 		}
 	}
 	// the member status does not exist. so, add new entry.
+	new.Phase = calculateRestoreTargetPhase(new)
 	cur = append(cur, new)
 	return cur
 }
 
 func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets int) v1beta1.RestorePhase {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreRestoreHookSucceeded) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostRestoreHookSucceeded) {
+		return v1beta1.RestoreFailed
+	}
+
 	if len(status.Conditions) == 0 || len(status.Members) == 0 {
 		return v1beta1.RestorePending
 	}
@@ -369,10 +376,7 @@ func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets
 			return v1beta1.RestorePhaseUnknown
 		}
 
-		if failedTargetCount > 0 ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreRestoreHookSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostRestoreHookSucceeded) {
+		if failedTargetCount > 0 {
 			return v1beta1.RestoreFailed
 		}
 

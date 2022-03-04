@@ -87,6 +87,15 @@ func (h *BackupSessionHandler) GetConditions() []kmapi.Condition {
 	return h.backupSession.Status.Conditions
 }
 
+func (h *BackupSessionHandler) GetTargetConditions(target v1beta1.TargetRef) []kmapi.Condition {
+	for _, t := range h.backupSession.Status.Targets {
+		if TargetMatched(t.Ref, target) {
+			return t.Conditions
+		}
+	}
+	return nil
+}
+
 func (h *BackupSessionHandler) GetInvoker() (BackupInvoker, error) {
 	return NewBackupInvoker(h.stashClient, h.backupSession.Spec.Invoker.Kind, h.backupSession.Spec.Invoker.Name, h.backupSession.Namespace)
 }
@@ -138,7 +147,9 @@ func upsertBackupMembersStatus(cur []v1beta1.BackupTargetStatus, new v1beta1.Bac
 			return cur
 		}
 	}
+
 	// the member status does not exist. so, add new entry.
+	new.Phase = calculateBackupTargetPhase(new)
 	cur = append(cur, new)
 	return cur
 }
@@ -181,12 +192,14 @@ func upsertBackupHostStatus(cur, new []v1beta1.HostBackupStats) []v1beta1.HostBa
 }
 
 func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.TargetPhase {
-	if status.TotalHosts == nil {
-		return v1beta1.TargetBackupPending
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupExecutorEnsured) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreBackupHookExecutionSucceeded) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostBackupHookExecutionSucceeded) {
+		return v1beta1.TargetBackupFailed
 	}
 
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupExecutorEnsured) {
-		return v1beta1.TargetBackupFailed
+	if status.TotalHosts == nil {
+		return v1beta1.TargetBackupPending
 	}
 
 	failedHostCount := int32(0)
@@ -202,9 +215,7 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 	completedHosts := successfulHostCount + failedHostCount
 
 	if completedHosts == *status.TotalHosts {
-		if failedHostCount > 0 ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreBackupHookExecutionSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostBackupHookExecutionSucceeded) {
+		if failedHostCount > 0 {
 			return v1beta1.TargetBackupFailed
 		}
 		return v1beta1.TargetBackupSucceeded
@@ -213,6 +224,16 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 }
 
 func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.BackupSessionPhase {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RetentionPolicyApplied) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryMetricsPushed) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryIntegrityVerified) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded) {
+		return v1beta1.BackupSessionFailed
+	}
+
 	if len(status.Targets) == 0 {
 		return v1beta1.BackupSessionPending
 	}
@@ -235,14 +256,7 @@ func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.Ba
 	completedTargets := successfulTargetCount + failedTargetCount
 
 	if completedTargets == len(status.Targets) {
-		if failedTargetCount > 0 ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.RetentionPolicyApplied) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryMetricsPushed) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryIntegrityVerified) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded) {
+		if failedTargetCount > 0 {
 			return v1beta1.BackupSessionFailed
 		}
 

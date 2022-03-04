@@ -19,6 +19,7 @@ package hooks
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"sync"
 	"text/template"
@@ -29,7 +30,10 @@ import (
 	"stash.appscode.dev/apimachinery/pkg/conditions"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/rest"
+	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	prober "kmodules.xyz/prober/api/v1"
 	"kmodules.xyz/prober/probe"
@@ -102,26 +106,40 @@ func (e *BackupHookExecutor) Execute() error {
 		}),
 	}
 
-	if e.alreadyExecuted() {
-		return nil
-	}
 	session := invoker.NewBackupSessionHandler(e.StashClient, e.BackupSession)
+	if e.alreadyExecuted(session) {
+		return e.skipHookReExecution(session)
+	}
+
 	if err := hookExecutor.Execute(); err != nil {
-		return e.setBackupHookExecutionSucceededToFalse(session, err)
+		condErr := e.setBackupHookExecutionSucceededToFalse(session, err)
+		return errors.NewAggregate([]error{err, condErr})
 	}
 	return e.setBackupHookExecutionSucceededToTrue(session)
 }
 
-func (e *BackupHookExecutor) alreadyExecuted() bool {
-	for _, t := range e.BackupSession.Status.Targets {
-		if invoker.TargetMatched(e.Target, t.Ref) {
-			if e.HookType == apis.PreBackupHook {
-				return kmapi.HasCondition(t.Conditions, v1beta1.PreBackupHookExecutionSucceeded)
-			}
-			return kmapi.HasCondition(t.Conditions, v1beta1.PostBackupHookExecutionSucceeded)
-		}
+func (e *BackupHookExecutor) alreadyExecuted(session *invoker.BackupSessionHandler) bool {
+	if e.HookType == apis.PreBackupHook {
+		return kmapi.HasCondition(session.GetTargetConditions(e.Target), v1beta1.PreBackupHookExecutionSucceeded)
 	}
-	return false
+	return kmapi.HasCondition(session.GetTargetConditions(e.Target), v1beta1.PostBackupHookExecutionSucceeded)
+}
+
+func (e *BackupHookExecutor) skipHookReExecution(session *invoker.BackupSessionHandler) error {
+	klog.Infof("Skipping executing %s. Reason: It has been executed already....", e.HookType)
+
+	var cond *kmapi.Condition
+	targetConditions := session.GetTargetConditions(e.Target)
+
+	if e.HookType == apis.PreBackupHook {
+		_, cond = kmapi.GetCondition(targetConditions, v1beta1.PreBackupHookExecutionSucceeded)
+	} else {
+		_, cond = kmapi.GetCondition(targetConditions, v1beta1.PostBackupHookExecutionSucceeded)
+	}
+	if cond != nil && cond.Status == corev1.ConditionFalse {
+		return fmt.Errorf("%s hook failed to execute. Reason: ", cond.Reason)
+	}
+	return nil
 }
 
 func (e *BackupHookExecutor) setBackupHookExecutionSucceededToFalse(session *invoker.BackupSessionHandler, err error) error {
@@ -158,14 +176,18 @@ func (e *RestoreHookExecutor) Execute() error {
 		}),
 	}
 
-	if yes, err := e.alreadyExecuted(); yes || err != nil {
+	previouslyExecuted, err := e.alreadyExecuted()
+	if err != nil {
 		return err
+	}
+	if previouslyExecuted {
+		return e.skipHookReExecution()
 	}
 
 	if err := hookExecutor.Execute(); err != nil {
-		return e.setRestoreHookExecutionSucceededToFalse(err)
+		condErr := e.setRestoreHookExecutionSucceededToFalse(err)
+		return errors.NewAggregate([]error{err, condErr})
 	}
-
 	return e.setRestoreHookExecutionSucceededToTrue()
 }
 
@@ -174,6 +196,29 @@ func (e *RestoreHookExecutor) alreadyExecuted() (bool, error) {
 		return e.Invoker.HasCondition(&e.Target, v1beta1.PreRestoreHookExecutionSucceeded)
 	}
 	return e.Invoker.HasCondition(&e.Target, v1beta1.PostRestoreHookExecutionSucceeded)
+}
+
+func (e *RestoreHookExecutor) skipHookReExecution() error {
+	klog.Infof("Skipping executing %s. Reason: It has been executed already....", e.HookType)
+
+	var cond *kmapi.Condition
+	if e.HookType == apis.PreRestoreHook {
+		_, c, err := e.Invoker.GetCondition(&e.Target, v1beta1.PreRestoreHookExecutionSucceeded)
+		if err != nil {
+			return err
+		}
+		cond = c
+	} else {
+		_, c, err := e.Invoker.GetCondition(&e.Target, v1beta1.PostRestoreHookExecutionSucceeded)
+		if err != nil {
+			return err
+		}
+		cond = c
+	}
+	if cond != nil && cond.Status == corev1.ConditionFalse {
+		return fmt.Errorf("%s hook failed to execute. Reason: ", cond.Reason)
+	}
+	return nil
 }
 
 func (e *RestoreHookExecutor) setRestoreHookExecutionSucceededToFalse(err error) error {
