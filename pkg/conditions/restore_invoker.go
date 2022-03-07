@@ -118,7 +118,7 @@ func SetRestoreCompletedConditionToTrue(inv invoker.RestoreInvoker, tref *v1beta
 	return inv.SetCondition(tref, kmapi.Condition{
 		Type:               v1beta1.RestoreCompleted,
 		Status:             core.ConditionTrue,
-		Reason:             "PostRestoreTasksExecuted",
+		Reason:             v1beta1.PostRestoreTasksExecuted,
 		Message:            msg,
 		LastTransitionTime: metav1.Now(),
 	})
@@ -128,7 +128,7 @@ func SetRestoreCompletedConditionToFalse(inv invoker.RestoreInvoker, tref *v1bet
 	return inv.SetCondition(tref, kmapi.Condition{
 		Type:               v1beta1.RestoreCompleted,
 		Status:             core.ConditionFalse,
-		Reason:             "PostRestoreTasksNotExecuted",
+		Reason:             v1beta1.PostRestoreTasksNotExecuted,
 		Message:            msg,
 		LastTransitionTime: metav1.Now(),
 	})

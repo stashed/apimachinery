@@ -222,4 +222,7 @@ const (
 
 	SuccessfullyExecutedPostRestoreHook = "SuccessfullyExecutedPostRestoreHook"
 	FailedToExecutePostRestoreHook      = "FailedToExecutePostRestoreHook"
+
+	PostRestoreTasksExecuted    = "PostRestoreTasksExecuted"
+	PostRestoreTasksNotExecuted = "PostRestoreTasksNotExecuted"
 )

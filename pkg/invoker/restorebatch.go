@@ -411,7 +411,7 @@ func (inv *RestoreBatchInvoker) GetSummary(target v1beta1.TargetRef, session kma
 
 	rb, err := inv.stashClient.StashV1beta1().RestoreBatches(session.Namespace).Get(context.TODO(), session.Name, metav1.GetOptions{})
 	if err != nil {
-		summary.Status.Phase = string(v1beta1.RestoreFailed)
+		summary.Status.Phase = string(v1beta1.RestorePhaseUnknown)
 		summary.Status.Error = fmt.Sprintf("Unable to summarize target restore state. Reason: %s", err.Error())
 		return summary
 	}

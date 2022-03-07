@@ -206,7 +206,7 @@ func getTargetBackupSummary(stashClient cs.Interface, target v1beta1.TargetRef, 
 
 	backupSession, err := stashClient.StashV1beta1().BackupSessions(session.Namespace).Get(context.TODO(), session.Name, metav1.GetOptions{})
 	if err != nil {
-		summary.Status.Phase = string(v1beta1.BackupSessionFailed)
+		summary.Status.Phase = string(v1beta1.BackupSessionUnknown)
 		summary.Status.Error = fmt.Sprintf("Unable to summarize target backup state. Reason: %s", err.Error())
 		return summary
 	}
