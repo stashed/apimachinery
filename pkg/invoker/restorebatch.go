@@ -351,7 +351,7 @@ func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets
 		return v1beta1.RestoreFailed
 	}
 
-	if len(status.Conditions) == 0 || len(status.Members) == 0 {
+	if len(status.Conditions) == 0 || len(status.Members) == 0 || isAllTargetRestorePending(status.Members) {
 		return v1beta1.RestorePending
 	}
 

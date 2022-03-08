@@ -379,7 +379,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 		return v1beta1.RestoreFailed
 	}
 
-	if len(status.Conditions) == 0 {
+	if len(status.Conditions) == 0 || isAllTargetRestorePending([]v1beta1.RestoreMemberStatus{status}) {
 		return v1beta1.RestorePending
 	}
 
@@ -434,4 +434,13 @@ func hostRestoreCompleted(phase v1beta1.HostRestorePhase) bool {
 	return phase == v1beta1.HostRestoreSucceeded ||
 		phase == v1beta1.HostRestoreFailed ||
 		phase == v1beta1.HostRestoreUnknown
+}
+
+func isAllTargetRestorePending(status []v1beta1.RestoreMemberStatus) bool {
+	for _, m := range status {
+		if m.Phase != v1beta1.TargetRestorePending {
+			return false
+		}
+	}
+	return true
 }

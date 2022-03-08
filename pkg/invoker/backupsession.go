@@ -234,12 +234,12 @@ func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.Ba
 		return v1beta1.BackupSessionFailed
 	}
 
-	if len(status.Targets) == 0 {
-		return v1beta1.BackupSessionPending
-	}
-
 	if kmapi.IsConditionTrue(status.Conditions, v1beta1.BackupSkipped) {
 		return v1beta1.BackupSessionSkipped
+	}
+
+	if len(status.Targets) == 0 || isAllTargetBackupPending(status.Targets) {
+		return v1beta1.BackupSessionPending
 	}
 
 	failedTargetCount := 0
@@ -287,4 +287,13 @@ func upsertArray(cur, new []string) []string {
 		cur = append(cur, new[i])
 	}
 	return cur
+}
+
+func isAllTargetBackupPending(status []v1beta1.BackupTargetStatus) bool {
+	for _, t := range status {
+		if t.Phase != v1beta1.TargetBackupPending {
+			return false
+		}
+	}
+	return true
 }
