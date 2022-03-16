@@ -45,8 +45,6 @@ github.com/evanphx/json-patch
 # github.com/fatih/structs v1.1.0
 ## explicit
 github.com/fatih/structs
-# github.com/fsnotify/fsnotify v1.5.1
-## explicit; go 1.13
 # github.com/gabriel-vasile/mimetype v1.2.0
 ## explicit; go 1.12
 github.com/gabriel-vasile/mimetype
@@ -122,10 +120,6 @@ github.com/json-iterator/go
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
-# github.com/mattn/go-colorable v0.1.9
-## explicit; go 1.13
-# github.com/mattn/go-isatty v0.0.14
-## explicit; go 1.12
 # github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369
 ## explicit; go 1.9
 github.com/matttproud/golang_protobuf_extensions/pbutil
@@ -289,8 +283,8 @@ gomodules.xyz/pointer
 # gomodules.xyz/runtime v0.2.0
 ## explicit; go 1.15
 gomodules.xyz/runtime
-# gomodules.xyz/x v0.0.8
-## explicit; go 1.12
+# gomodules.xyz/x v0.0.10
+## explicit; go 1.17
 gomodules.xyz/x/arrays
 # google.golang.org/appengine v1.6.7
 ## explicit; go 1.11
