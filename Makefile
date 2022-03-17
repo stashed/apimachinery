@@ -66,7 +66,7 @@ ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 BASEIMAGE_PROD   ?= gcr.io/distroless/static-debian11
 BASEIMAGE_DBG    ?= debian:bullseye
 
-GO_VERSION       ?= 1.17
+GO_VERSION       ?= 1.18
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
 TEST_IMAGE       ?= appscode/golang-dev:$(GO_VERSION)-stash
 
@@ -366,7 +366,7 @@ check-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib libbuild" --check -v
+		ltag -t "./hack/license" --excludes "vendor contrib libbuild bin" --check -v
 
 .PHONY: ci
 ci: verify check-license lint build unit-tests #cover
@@ -378,16 +378,10 @@ clean:
 .PHONY: push
 push: push-crd-installer
 
-KO := $(shell go env GOPATH)/bin/ko
 .PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
 	KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
-
-.PHONY: install-ko
-install-ko:
-	@echo "Installing: github.com/google/ko"
-	go install github.com/google/ko@latest
 
 .PHONY: release
 release: ## Release final production docker image and push into the DockerHub.
@@ -400,3 +394,22 @@ release: ## Release final production docker image and push into the DockerHub.
 		exit 1;                                                     \
 	fi
 	@$(MAKE) push --no-print-directory
+
+KO := $(shell pwd)/bin/ko
+.PHONY: install-ko
+install-ko: ## Download ko locally if necessary.
+	$(call go-get-tool,$(KO),github.com/google/ko@v0.11.0)
+
+# go-get-tool will 'go get' any package $2 and install it to $1.
+PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+define go-get-tool
+@[ -f $(1) ] || { \
+set -e ;\
+TMP_DIR=$$(mktemp -d) ;\
+cd $$TMP_DIR ;\
+go mod init tmp ;\
+echo "Installing $(2)" ;\
+GOBIN=$(PROJECT_DIR)/bin go install $(2) ;\
+rm -rf $$TMP_DIR ;\
+}
+endef
