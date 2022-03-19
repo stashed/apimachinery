@@ -8,13 +8,13 @@ require (
 	github.com/go-openapi/spec v0.19.5
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/gofuzz v1.1.0
-	github.com/json-iterator/go v1.1.11
+	github.com/json-iterator/go v1.1.12
 	github.com/prometheus/client_golang v1.11.0
 	github.com/stretchr/testify v1.7.0
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
-	gomodules.xyz/x v0.0.10
+	gomodules.xyz/x v0.0.13
 	k8s.io/api v0.21.1
 	k8s.io/apiextensions-apiserver v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -22,19 +22,14 @@ require (
 	k8s.io/klog/v2 v2.9.0
 	k8s.io/kube-openapi v0.0.0-20210421082810-95288971da7e
 	k8s.io/kubernetes v1.21.1
-	kmodules.xyz/client-go v0.0.0-20220203031013-1de48437aaf3
-	kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4
-	kmodules.xyz/custom-resources v0.0.0-20220208103158-61b298634e43
-	kmodules.xyz/objectstore-api v0.0.0-20211207131029-3271069de43e
-	kmodules.xyz/offshoot-api v0.0.0-20211207130839-cc7187e020cf
-	kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
+	kmodules.xyz/client-go v0.0.0-20220308080632-2543b61b64fd
+	kmodules.xyz/crd-schema-fuzz v0.0.0-20211025154117-6edb24ef11bc
+	kmodules.xyz/custom-resources v0.0.0-20220317043135-5c76c52c975d
+	kmodules.xyz/objectstore-api v0.0.0-20220317043839-8f754cdffcf0
+	kmodules.xyz/offshoot-api v0.0.0-20220317044008-01567138fc2f
+	kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad
 	sigs.k8s.io/controller-runtime v0.9.0
 	sigs.k8s.io/yaml v1.2.0
-)
-
-require (
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
-	github.com/spf13/afero v1.6.0 // indirect
 )
 
 require (
@@ -69,7 +64,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/moby/spdystream v0.2.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
