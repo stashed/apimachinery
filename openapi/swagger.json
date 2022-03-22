@@ -9305,6 +9305,10 @@
           "description": "InterimVolumeTemplate specifies a template for a volume to hold targeted data temporarily before uploading to backend or inserting into target. It is only usable for job model. Don't specify it in sidecar model.",
           "$ref": "#/definitions/xyz.kmodules.offshoot-api.api.v1.PersistentVolumeClaim"
         },
+        "repoNamespace": {
+          "description": "RepoNamespace indicates the Repository Namespace for respective workload",
+          "type": "string"
+        },
         "retentionPolicy": {
           "description": "RetentionPolicy indicates the policy to follow to clean old backup snapshots",
           "default": {},

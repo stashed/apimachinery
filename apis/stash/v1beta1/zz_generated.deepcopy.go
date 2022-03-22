@@ -220,6 +220,11 @@ func (in *BackupBlueprintList) DeepCopyObject() runtime.Object {
 func (in *BackupBlueprintSpec) DeepCopyInto(out *BackupBlueprintSpec) {
 	*out = *in
 	in.RepositorySpec.DeepCopyInto(&out.RepositorySpec)
+	if in.RepoNamespace != nil {
+		in, out := &in.RepoNamespace, &out.RepoNamespace
+		*out = new(string)
+		**out = **in
+	}
 	in.Task.DeepCopyInto(&out.Task)
 	in.RetentionPolicy.DeepCopyInto(&out.RetentionPolicy)
 	in.RuntimeSettings.DeepCopyInto(&out.RuntimeSettings)

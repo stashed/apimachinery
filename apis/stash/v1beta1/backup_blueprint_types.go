@@ -48,7 +48,10 @@ type BackupBlueprint struct {
 type BackupBlueprintSpec struct {
 	// RepositorySpec is used to create Repository crd for respective workload
 	v1alpha1.RepositorySpec `json:",inline"`
-	Schedule                string `json:"schedule,omitempty"`
+	// RepoNamespace indicates the Repository Namespace for respective workload
+	// +optional
+	RepoNamespace *string `json:"repoNamespace,omitempty"`
+	Schedule      string  `json:"schedule,omitempty"`
 	// Task specify the Task crd that specifies steps for backup process
 	// +optional
 	Task TaskRef `json:"task,omitempty"`

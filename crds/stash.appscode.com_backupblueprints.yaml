@@ -1881,6 +1881,10 @@ spec:
                         type: string
                     type: object
                 type: object
+              repoNamespace:
+                description: RepoNamespace indicates the Repository Namespace for
+                  respective workload
+                type: string
               retentionPolicy:
                 description: RetentionPolicy indicates the policy to follow to clean
                   old backup snapshots

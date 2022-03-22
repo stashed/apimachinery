@@ -19646,6 +19646,13 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.UsagePolicy"),
 						},
 					},
+					"repoNamespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RepoNamespace indicates the Repository Namespace for respective workload",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"schedule": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
