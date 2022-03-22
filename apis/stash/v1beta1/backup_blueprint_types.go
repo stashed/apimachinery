@@ -50,8 +50,8 @@ type BackupBlueprintSpec struct {
 	v1alpha1.RepositorySpec `json:",inline"`
 	// RepoNamespace indicates the Repository Namespace for respective workload
 	// +optional
-	RepoNamespace *string `json:"repoNamespace,omitempty"`
-	Schedule      string  `json:"schedule,omitempty"`
+	RepoNamespace string `json:"repoNamespace,omitempty"`
+	Schedule      string `json:"schedule,omitempty"`
 	// Task specify the Task crd that specifies steps for backup process
 	// +optional
 	Task TaskRef `json:"task,omitempty"`
