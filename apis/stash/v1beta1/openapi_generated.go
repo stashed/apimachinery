@@ -19648,15 +19648,16 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 					},
 					"repoNamespace": {
 						SchemaProps: spec.SchemaProps{
-							Description: "RepoNamespace indicates the Repository Namespace for respective workload",
+							Description: "RepoNamespace specifies the namespace where the Repository will be created for the respective target",
 							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
 					"schedule": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Schedule specifies the schedule for invoking backup sessions",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"task": {

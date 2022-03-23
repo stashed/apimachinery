@@ -1882,8 +1882,8 @@ spec:
                     type: object
                 type: object
               repoNamespace:
-                description: RepoNamespace indicates the Repository Namespace for
-                  respective workload
+                description: RepoNamespace specifies the namespace where the Repository
+                  will be created for the respective target
                 type: string
               retentionPolicy:
                 description: RetentionPolicy indicates the policy to follow to clean
@@ -3961,6 +3961,7 @@ spec:
                     type: object
                 type: object
               schedule:
+                description: Schedule specifies the schedule for invoking backup sessions
                 type: string
               task:
                 description: Task specify the Task crd that specifies steps for backup
