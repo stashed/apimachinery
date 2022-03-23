@@ -19646,10 +19646,18 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.UsagePolicy"),
 						},
 					},
+					"repoNamespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RepoNamespace specifies the namespace where the Repository will be created for the respective target",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"schedule": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Schedule specifies the default schedule for backup. You can overwrite this schedule for a particular target using 'stash.appscode.com/schedule' annotation.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"task": {
