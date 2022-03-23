@@ -14042,6 +14042,14 @@
             "default": ""
           }
         },
+        "podAnnotations": {
+          "description": "PodAnnotations are the annotations that will be attached with the respective Pod",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "default": ""
+          }
+        },
         "priority": {
           "description": "The priority value. Various system components use this field to find the priority of the pod. When Priority Admission Controller is enabled, it prevents users from setting this field. The admission controller populates this field from PriorityClassName. The higher the value, the higher the priority.",
           "type": "integer",
@@ -14070,6 +14078,14 @@
         "securityContext": {
           "description": "Security options the pod should run with. More info: https://kubernetes.io/docs/concepts/policy/security-context/ More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/",
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
+        },
+        "serviceAccountAnnotations": {
+          "description": "ServiceAccountAnnotations are the annotations that will be attached with the respective ServiceAccount",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "default": ""
+          }
         },
         "serviceAccountName": {
           "description": "ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/",

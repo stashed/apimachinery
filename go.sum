@@ -1084,8 +1084,8 @@ kmodules.xyz/custom-resources v0.0.0-20220317043135-5c76c52c975d/go.mod h1:cDD2g
 kmodules.xyz/objectstore-api v0.0.0-20220317043839-8f754cdffcf0 h1:SznGzgK5Xu34cpdr24iJaW4AzZHZeMJLHV41AkfDmmA=
 kmodules.xyz/objectstore-api v0.0.0-20220317043839-8f754cdffcf0/go.mod h1:xbaGWFbesdDp4I/k/w9+Xv8c7aiCzKlgVjmemxxXOgw=
 kmodules.xyz/offshoot-api v0.0.0-20210829122105-6f4d481b0c61/go.mod h1:3LECbAL3FgbyK80NP3V3Pmiuo/a3hFWg/PR6SPFhTns=
-kmodules.xyz/offshoot-api v0.0.0-20220317044008-01567138fc2f h1:AD6ptk7qRZ8N6DY4Y2lCnqvfu3X/20YdQArTxN5g3sA=
-kmodules.xyz/offshoot-api v0.0.0-20220317044008-01567138fc2f/go.mod h1:MhgruKArKzAxhZsBc8ZToiD/vzdtWYrnTu5hSkkYGfk=
+kmodules.xyz/offshoot-api v0.0.0-20220322115116-2caf4d4bbaf5 h1:VX7g1Fg+sCU/Z8OIZZaU62UD7djp3SlI9TrNDhushJ8=
+kmodules.xyz/offshoot-api v0.0.0-20220322115116-2caf4d4bbaf5/go.mod h1:9i9RrFY0BtU9jSm70nxhWlLdl9TSZ8pxTnfyPUicq90=
 kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad h1:bMfimFOEgmaKCN/gnSxLIRvQbWg4dqBgcWrMnHWQgyc=
 kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad/go.mod h1:QC3O1p+sU/8NnpLKI0VCAO3IQwPlwuimf9l6+Qp3Vt8=
 kmodules.xyz/resource-metrics v0.0.8/go.mod h1:M7rWuo2qh3BpHhogiEVPnvGY9Xx4Pfygqn1Rex8YbgM=
