@@ -3961,7 +3961,9 @@ spec:
                     type: object
                 type: object
               schedule:
-                description: Schedule specifies the schedule for invoking backup sessions
+                description: Schedule specifies the default schedule for backup. You
+                  can overwrite this schedule for a particular target using 'stash.appscode.com/schedule'
+                  annotation.
                 type: string
               task:
                 description: Task specify the Task crd that specifies steps for backup

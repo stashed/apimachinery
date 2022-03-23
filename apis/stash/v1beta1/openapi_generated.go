@@ -19655,7 +19655,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 					},
 					"schedule": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Schedule specifies the schedule for invoking backup sessions",
+							Description: "Schedule specifies the default schedule for backup. You can overwrite this schedule for a particular target using 'stash.appscode.com/schedule' annotation.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
