@@ -154,7 +154,7 @@ func (inv *RestoreBatchInvoker) GetTargetInfo() []RestoreTargetInfo {
 	for _, member := range inv.restoreBatch.Spec.Members {
 		targetInfo = append(targetInfo, RestoreTargetInfo{
 			Task:                  member.Task,
-			Target:                member.Target,
+			Target:                inv.getRestoreMemberTarget(member.Target),
 			RuntimeSettings:       member.RuntimeSettings,
 			TempDir:               member.TempDir,
 			InterimVolumeTemplate: member.InterimVolumeTemplate,
@@ -162,6 +162,13 @@ func (inv *RestoreBatchInvoker) GetTargetInfo() []RestoreTargetInfo {
 		})
 	}
 	return targetInfo
+}
+
+func (inv *RestoreBatchInvoker) getRestoreMemberTarget(target *v1beta1.RestoreTarget) *v1beta1.RestoreTarget {
+	if target.Ref.Namespace == "" {
+		target.Ref.Namespace = inv.restoreBatch.Namespace
+	}
+	return target
 }
 
 func (inv *RestoreBatchInvoker) GetDriver() v1beta1.Snapshotter {
