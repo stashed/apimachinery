@@ -153,7 +153,7 @@ func (inv *BackupBatchInvoker) GetTargetInfo() []BackupTargetInfo {
 	for _, member := range inv.backupBatch.Spec.Members {
 		targetInfo = append(targetInfo, BackupTargetInfo{
 			Task:                  member.Task,
-			Target:                inv.getBackupMemberTarget(member.Target),
+			Target:                getBackupTarget(member.Target, inv.backupBatch.Namespace),
 			RuntimeSettings:       member.RuntimeSettings,
 			TempDir:               member.TempDir,
 			InterimVolumeTemplate: member.InterimVolumeTemplate,
@@ -163,9 +163,9 @@ func (inv *BackupBatchInvoker) GetTargetInfo() []BackupTargetInfo {
 	return targetInfo
 }
 
-func (inv *BackupBatchInvoker) getBackupMemberTarget(target *v1beta1.BackupTarget) *v1beta1.BackupTarget {
-	if target.Ref.Namespace == "" {
-		target.Ref.Namespace = inv.backupBatch.Namespace
+func getBackupTarget(target *v1beta1.BackupTarget, invNamspace string) *v1beta1.BackupTarget {
+	if target != nil && target.Ref.Namespace == "" {
+		target.Ref.Namespace = invNamspace
 	}
 	return target
 }

@@ -137,21 +137,13 @@ func (inv *BackupConfigurationInvoker) GetTargetInfo() []BackupTargetInfo {
 	return []BackupTargetInfo{
 		{
 			Task:                  inv.backupConfig.Spec.Task,
-			Target:                inv.getBackupTarget(),
+			Target:                getBackupTarget(inv.backupConfig.Spec.Target, inv.backupConfig.Namespace),
 			RuntimeSettings:       inv.backupConfig.Spec.RuntimeSettings,
 			TempDir:               inv.backupConfig.Spec.TempDir,
 			InterimVolumeTemplate: inv.backupConfig.Spec.InterimVolumeTemplate,
 			Hooks:                 inv.backupConfig.Spec.Hooks,
 		},
 	}
-}
-
-func (inv *BackupConfigurationInvoker) getBackupTarget() *v1beta1.BackupTarget {
-	if inv.backupConfig.Spec.Target.Ref.Namespace == "" {
-		inv.backupConfig.Spec.Target.Ref.Namespace = inv.backupConfig.Namespace
-	}
-
-	return inv.backupConfig.Spec.Target
 }
 
 func (inv *BackupConfigurationInvoker) GetDriver() v1beta1.Snapshotter {

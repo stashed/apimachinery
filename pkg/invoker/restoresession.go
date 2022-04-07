@@ -139,21 +139,13 @@ func (inv *RestoreSessionInvoker) GetTargetInfo() []RestoreTargetInfo {
 	return []RestoreTargetInfo{
 		{
 			Task:                  inv.restoreSession.Spec.Task,
-			Target:                inv.getRestoreTarget(),
+			Target:                getRestoreTarget(inv.restoreSession.Spec.Target, inv.restoreSession.Namespace),
 			RuntimeSettings:       inv.restoreSession.Spec.RuntimeSettings,
 			TempDir:               inv.restoreSession.Spec.TempDir,
 			InterimVolumeTemplate: inv.restoreSession.Spec.InterimVolumeTemplate,
 			Hooks:                 inv.restoreSession.Spec.Hooks,
 		},
 	}
-}
-
-func (inv *RestoreSessionInvoker) getRestoreTarget() *v1beta1.RestoreTarget {
-	if inv.restoreSession.Spec.Target.Ref.Namespace == "" {
-		inv.restoreSession.Spec.Target.Ref.Namespace = inv.restoreSession.Namespace
-	}
-
-	return inv.restoreSession.Spec.Target
 }
 
 func (inv *RestoreSessionInvoker) GetDriver() v1beta1.Snapshotter {

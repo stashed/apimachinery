@@ -154,7 +154,7 @@ func (inv *RestoreBatchInvoker) GetTargetInfo() []RestoreTargetInfo {
 	for _, member := range inv.restoreBatch.Spec.Members {
 		targetInfo = append(targetInfo, RestoreTargetInfo{
 			Task:                  member.Task,
-			Target:                inv.getRestoreMemberTarget(member.Target),
+			Target:                getRestoreTarget(member.Target, inv.restoreBatch.Namespace),
 			RuntimeSettings:       member.RuntimeSettings,
 			TempDir:               member.TempDir,
 			InterimVolumeTemplate: member.InterimVolumeTemplate,
@@ -164,9 +164,9 @@ func (inv *RestoreBatchInvoker) GetTargetInfo() []RestoreTargetInfo {
 	return targetInfo
 }
 
-func (inv *RestoreBatchInvoker) getRestoreMemberTarget(target *v1beta1.RestoreTarget) *v1beta1.RestoreTarget {
-	if target.Ref.Namespace == "" {
-		target.Ref.Namespace = inv.restoreBatch.Namespace
+func getRestoreTarget(target *v1beta1.RestoreTarget, invNamespace string) *v1beta1.RestoreTarget {
+	if target != nil && target.Ref.Namespace == "" {
+		target.Ref.Namespace = invNamespace
 	}
 	return target
 }
