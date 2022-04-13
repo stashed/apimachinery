@@ -237,12 +237,3 @@ func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, sess
 	}
 	return summary
 }
-
-func withDefaultTarget(target *v1beta1.BackupTarget) *v1beta1.BackupTarget {
-	if target != nil {
-		return target
-	}
-	return &v1beta1.BackupTarget{
-		Ref: v1beta1.EmptyTargetRef(),
-	}
-}
