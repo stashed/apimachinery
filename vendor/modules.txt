@@ -919,7 +919,7 @@ kmodules.xyz/custom-resources/crds
 # kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778
 ## explicit; go 1.15
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20220329041708-c076b2bcb0f8
+# kmodules.xyz/offshoot-api v0.0.0-20220419215722-c7fc995091d3
 ## explicit; go 1.15
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad

@@ -26,7 +26,7 @@ require (
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20211025154117-6edb24ef11bc
 	kmodules.xyz/custom-resources v0.0.0-20220317220154-7beb809b1f5e
 	kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778
-	kmodules.xyz/offshoot-api v0.0.0-20220329041708-c076b2bcb0f8
+	kmodules.xyz/offshoot-api v0.0.0-20220419215722-c7fc995091d3
 	kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad
 	sigs.k8s.io/controller-runtime v0.9.0
 	sigs.k8s.io/yaml v1.3.0
