@@ -9301,12 +9301,16 @@
           "type": "integer",
           "format": "int32"
         },
+        "backupNamespace": {
+          "description": "BackupNamespace specifies the namespace where the backup resources (i.e. BackupConfiguration, BackupSession, Job, Repository etc.) will be created. If you don't provide this field, then the backup resources will be created in the target namespace.",
+          "type": "string"
+        },
         "interimVolumeTemplate": {
           "description": "InterimVolumeTemplate specifies a template for a volume to hold targeted data temporarily before uploading to backend or inserting into target. It is only usable for job model. Don't specify it in sidecar model.",
           "$ref": "#/definitions/xyz.kmodules.offshoot-api.api.v1.PersistentVolumeClaim"
         },
         "repoNamespace": {
-          "description": "RepoNamespace specifies the namespace where the Repository will be created for the respective target",
+          "description": "RepoNamespace lets you specify the namespace for the Repositories. If this field is not specified, Stash will create the Repository in the namespace pointed by the backupNamespace field. If neither of the backupNamespace and repoNamespace is specified, Stash will create the Repository in the target namespace.",
           "type": "string"
         },
         "retentionPolicy": {

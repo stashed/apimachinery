@@ -1577,6 +1577,12 @@ spec:
                   purpose. Default: 1'
                 format: int32
                 type: integer
+              backupNamespace:
+                description: BackupNamespace specifies the namespace where the backup
+                  resources (i.e. BackupConfiguration, BackupSession, Job, Repository
+                  etc.) will be created. If you don't provide this field, then the
+                  backup resources will be created in the target namespace.
+                type: string
               interimVolumeTemplate:
                 description: InterimVolumeTemplate specifies a template for a volume
                   to hold targeted data temporarily before uploading to backend or
@@ -1882,8 +1888,11 @@ spec:
                     type: object
                 type: object
               repoNamespace:
-                description: RepoNamespace specifies the namespace where the Repository
-                  will be created for the respective target
+                description: RepoNamespace lets you specify the namespace for the
+                  Repositories. If this field is not specified, Stash will create
+                  the Repository in the namespace pointed by the backupNamespace field.
+                  If neither of the backupNamespace and repoNamespace is specified,
+                  Stash will create the Repository in the target namespace.
                 type: string
               retentionPolicy:
                 description: RetentionPolicy indicates the policy to follow to clean
