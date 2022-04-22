@@ -19696,9 +19696,16 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1alpha1.UsagePolicy"),
 						},
 					},
+					"backupNamespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "BackupNamespace specifies the namespace where the backup resources (i.e. BackupConfiguration, BackupSession, Job, Repository etc.) will be created. If you don't provide this field, then the backup resources will be created in the target namespace.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"repoNamespace": {
 						SchemaProps: spec.SchemaProps{
-							Description: "RepoNamespace specifies the namespace where the Repository will be created for the respective target",
+							Description: "RepoNamespace lets you specify the namespace for the Repositories. If this field is not specified, Stash will create the Repository in the namespace pointed by the backupNamespace field. If neither of the backupNamespace and repoNamespace is specified, Stash will create the Repository in the target namespace.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
