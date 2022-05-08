@@ -289,7 +289,7 @@ gomodules.xyz/pointer
 # gomodules.xyz/runtime v0.2.0
 ## explicit; go 1.15
 gomodules.xyz/runtime
-# gomodules.xyz/x v0.0.13
+# gomodules.xyz/x v0.0.14
 ## explicit; go 1.17
 gomodules.xyz/x/arrays
 # google.golang.org/appengine v1.6.7
@@ -889,7 +889,7 @@ k8s.io/utils/net
 k8s.io/utils/path
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20220404224906-af7b092cfac5
+# kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
 ## explicit; go 1.17
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -902,7 +902,7 @@ kmodules.xyz/client-go/tools/exec
 # kmodules.xyz/crd-schema-fuzz v0.0.0-20211025154117-6edb24ef11bc
 ## explicit; go 1.15
 kmodules.xyz/crd-schema-fuzz
-# kmodules.xyz/custom-resources v0.0.0-20220317220154-7beb809b1f5e
+# kmodules.xyz/custom-resources v0.0.0-20220422215041-237eae1d7ddd
 ## explicit; go 1.17
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -919,7 +919,7 @@ kmodules.xyz/custom-resources/crds
 # kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778
 ## explicit; go 1.15
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20220419215722-c7fc995091d3
+# kmodules.xyz/offshoot-api v0.0.0-20220420055916-fefb02c26514
 ## explicit; go 1.15
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad

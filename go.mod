@@ -14,7 +14,7 @@ require (
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
-	gomodules.xyz/x v0.0.13
+	gomodules.xyz/x v0.0.14
 	k8s.io/api v0.21.1
 	k8s.io/apiextensions-apiserver v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -22,11 +22,11 @@ require (
 	k8s.io/klog/v2 v2.9.0
 	k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65
 	k8s.io/kubernetes v1.21.1
-	kmodules.xyz/client-go v0.0.0-20220404224906-af7b092cfac5
+	kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
 	kmodules.xyz/crd-schema-fuzz v0.0.0-20211025154117-6edb24ef11bc
-	kmodules.xyz/custom-resources v0.0.0-20220317220154-7beb809b1f5e
+	kmodules.xyz/custom-resources v0.0.0-20220422215041-237eae1d7ddd
 	kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778
-	kmodules.xyz/offshoot-api v0.0.0-20220419215722-c7fc995091d3
+	kmodules.xyz/offshoot-api v0.0.0-20220420055916-fefb02c26514
 	kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad
 	sigs.k8s.io/controller-runtime v0.9.0
 	sigs.k8s.io/yaml v1.3.0
