@@ -3814,6 +3814,11 @@ spec:
                           pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                           x-kubernetes-int-or-string: true
                       type: object
+                    timeOut:
+                      description: TimeLimit specifies the maximum duration of restore
+                        process
+                      format: int64
+                      type: integer
                   type: object
                 type: array
               repository:

@@ -22,6 +22,8 @@ limitations under the License.
 package v1beta1
 
 import (
+	time "time"
+
 	corev1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	v1 "kmodules.xyz/client-go/api/v1"
@@ -317,6 +319,11 @@ func (in *BackupConfigurationSpec) DeepCopyInto(out *BackupConfigurationSpec) {
 	if in.BackupHistoryLimit != nil {
 		in, out := &in.BackupHistoryLimit, &out.BackupHistoryLimit
 		*out = new(int32)
+		**out = **in
+	}
+	if in.TimeLimit != nil {
+		in, out := &in.TimeLimit, &out.TimeLimit
+		*out = new(time.Duration)
 		**out = **in
 	}
 	return
@@ -1261,6 +1268,11 @@ func (in *RestoreTargetSpec) DeepCopyInto(out *RestoreTargetSpec) {
 		in, out := &in.Hooks, &out.Hooks
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.TimeLimit != nil {
+		in, out := &in.TimeLimit, &out.TimeLimit
+		*out = new(time.Duration)
+		**out = **in
 	}
 	return
 }

@@ -17,6 +17,8 @@ limitations under the License.
 package v1beta1
 
 import (
+	"time"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -86,6 +88,9 @@ type RestoreTargetSpec struct {
 	// Actions that Stash should take in response to restore sessions.
 	// +optional
 	Hooks *RestoreHooks `json:"hooks,omitempty"`
+	// TimeLimit specifies the maximum duration of restore process
+	// +optional
+	TimeLimit *time.Duration `json:"timeOut"`
 }
 
 // Hooks describes actions that Stash should take in response to restore sessions. For the PostRestore

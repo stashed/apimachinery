@@ -17,6 +17,8 @@ limitations under the License.
 package v1beta1
 
 import (
+	"time"
+
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 
 	core "k8s.io/api/core/v1"
@@ -100,6 +102,9 @@ type BackupConfigurationSpec struct {
 	// Default: 1
 	// +optional
 	BackupHistoryLimit *int32 `json:"backupHistoryLimit,omitempty"`
+	// TimeLimit specifies the maximum duration of backup
+	// +optional
+	TimeLimit *time.Duration `json:"timeOut"`
 }
 
 // Hooks describes actions that Stash should take in response to backup sessions. For the PostBackup
