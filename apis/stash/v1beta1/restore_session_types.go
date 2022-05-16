@@ -198,6 +198,9 @@ const (
 
 	// PostRestoreHookExecutionSucceeded indicates whether the postRestore hook was executed successfully or not
 	PostRestoreHookExecutionSucceeded = "PostRestoreHookExecutionSucceeded"
+
+	// RestoreTimeOutPeriodNotExceeded indicates whether the backup was timed out or not
+	RestoreTimeOutPeriodNotExceeded = "RestoreTimeOutPeriodNotExceeded"
 )
 
 // ======================== Condition Reasons ===================
@@ -230,4 +233,7 @@ const (
 
 	PostRestoreTasksExecuted    = "PostRestoreTasksExecuted"
 	PostRestoreTasksNotExecuted = "PostRestoreTasksNotExecuted"
+
+	RestoreTimeOutNotOccurred = "RestoreTimeOutNotOccurred"
+	RestoreTimeOutOccurred    = "RestoreTimeOutOccurred"
 )

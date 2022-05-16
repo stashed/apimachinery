@@ -252,3 +252,23 @@ func SetGlobalPostRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInv
 		LastTransitionTime: metav1.Now(),
 	})
 }
+
+func SetRestoreTimeOutPeriodNotExceededConditionToTrue(invoker invoker.RestoreInvoker) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:               v1beta1.RestoreTimeOutPeriodNotExceeded,
+		Status:             core.ConditionTrue,
+		Reason:             v1beta1.RestoreTimeOutNotOccurred,
+		Message:            "Restore timeout not occurred.",
+		LastTransitionTime: metav1.Now(),
+	})
+}
+
+func SetRestoreTimeOutPeriodNotExceededConditionToFalse(invoker invoker.RestoreInvoker) error {
+	return invoker.SetCondition(nil, kmapi.Condition{
+		Type:               v1beta1.RestoreTimeOutPeriodNotExceeded,
+		Status:             core.ConditionFalse,
+		Reason:             v1beta1.RestoreTimeOutOccurred,
+		Message:            "Restore timeout occurred.",
+		LastTransitionTime: metav1.Now(),
+	})
+}

@@ -214,6 +214,9 @@ const (
 
 	// PostBackupHookExecutionSucceeded indicates whether the postBackup hook was executed successfully or not
 	PostBackupHookExecutionSucceeded = "PostBackupHookExecutionSucceeded"
+
+	// BackupTimeOutPeriodNotExceeded indicates whether the backup was timed out or not
+	BackupTimeOutPeriodNotExceeded = "BackupTimeOutPeriodNotExceeded"
 )
 
 // =========================== Condition Reasons =======================
@@ -252,4 +255,7 @@ const (
 
 	SuccessfullyExecutedPostBackupHook = "SuccessfullyExecutedPostBackupHook"
 	FailedToExecutePostBackupHook      = "FailedToExecutePostBackupHook"
+
+	BackupTimeOutNotOccurred = "BackupTimeOutNotOccurred"
+	BackupTimeOutOccurred    = "BackupTimeOutOccurred"
 )
