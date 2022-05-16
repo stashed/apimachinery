@@ -179,6 +179,11 @@ func (inv *RestoreBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
+func (inv *RestoreBatchInvoker) GetTimeLimit() time.Duration {
+	duration := inv.restoreBatch.Spec.TimeLimit
+	return *duration
+}
+
 func (inv *RestoreBatchInvoker) GetRepoRef() kmapi.ObjectReference {
 	var repo kmapi.ObjectReference
 	repo.Name = inv.restoreBatch.Spec.Repository.Name

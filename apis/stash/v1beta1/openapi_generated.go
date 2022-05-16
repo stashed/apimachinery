@@ -19518,6 +19518,13 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 							Format:      "",
 						},
 					},
+					"timeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TimeLimit specifies the maximum duration of backup",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
 				},
 				Required: []string{"retentionPolicy"},
 			},
@@ -21109,6 +21116,13 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchSpec(ref common.Referenc
 						SchemaProps: spec.SchemaProps{
 							Description: "Hooks specifies the actions that Stash should take before or after restore. Cannot be updated.",
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
+						},
+					},
+					"timeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TimeLimit specifies the maximum duration of backup",
+							Type:        []string{"integer"},
+							Format:      "int64",
 						},
 					},
 				},

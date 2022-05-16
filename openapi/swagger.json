@@ -9193,6 +9193,11 @@
         "schedule": {
           "description": "Schedule specifies the schedule for invoking backup sessions",
           "type": "string"
+        },
+        "timeLimit": {
+          "description": "TimeLimit specifies the maximum duration of backup",
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -10139,6 +10144,11 @@
           "description": "Repository refer to the Repository crd that holds backend information",
           "default": {},
           "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.ObjectReference"
+        },
+        "timeLimit": {
+          "description": "TimeLimit specifies the maximum duration of backup",
+          "type": "integer",
+          "format": "int64"
         }
       }
     },

@@ -37,6 +37,7 @@ type BackupInvoker interface {
 	BackupTargetHandler
 	RepositoryGetter
 	DriverHandler
+	TimeLimitHandler
 	ObjectFormatter
 	BackupInvokerStatusHandler
 	Summarizer

@@ -17,6 +17,8 @@ limitations under the License.
 package v1beta1
 
 import (
+	"time"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -66,6 +68,9 @@ type RestoreBatchSpec struct {
 	// Cannot be updated.
 	// +optional
 	Hooks *RestoreHooks `json:"hooks,omitempty"`
+	// TimeLimit specifies the maximum duration of backup
+	// +optional
+	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
 }
 
 type RestoreBatchStatus struct {

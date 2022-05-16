@@ -44,6 +44,7 @@ type RestoreInvoker interface {
 	RestoreTargetHandler
 	RepositoryGetter
 	DriverHandler
+	TimeLimitHandler
 	Eventer
 	KubeDBIntegrator
 	ObjectFormatter

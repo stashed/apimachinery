@@ -22,12 +22,13 @@ import (
 	"context"
 	"time"
 
+	v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+	scheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
+
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-	v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
-	scheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
 )
 
 // BackupBatchesGetter has a method to return a BackupBatchInterface.

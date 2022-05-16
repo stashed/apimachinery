@@ -115,6 +115,11 @@ func (in *BackupBatchSpec) DeepCopyInto(out *BackupBatchSpec) {
 		*out = new(BackupHooks)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.TimeLimit != nil {
+		in, out := &in.TimeLimit, &out.TimeLimit
+		*out = new(time.Duration)
+		**out = **in
+	}
 	return
 }
 
@@ -977,6 +982,11 @@ func (in *RestoreBatchSpec) DeepCopyInto(out *RestoreBatchSpec) {
 		in, out := &in.Hooks, &out.Hooks
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.TimeLimit != nil {
+		in, out := &in.TimeLimit, &out.TimeLimit
+		*out = new(time.Duration)
+		**out = **in
 	}
 	return
 }

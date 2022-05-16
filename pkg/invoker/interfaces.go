@@ -17,6 +17,8 @@ limitations under the License.
 package invoker
 
 import (
+	"time"
+
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
@@ -50,6 +52,10 @@ type RepositoryGetter interface {
 
 type DriverHandler interface {
 	GetDriver() v1beta1.Snapshotter
+}
+
+type TimeLimitHandler interface {
+	GetTimeLimit() time.Duration
 }
 
 type Eventer interface {

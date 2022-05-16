@@ -3834,6 +3834,10 @@ spec:
                 required:
                 - name
                 type: object
+              timeLimit:
+                description: TimeLimit specifies the maximum duration of backup
+                format: int64
+                type: integer
             type: object
           status:
             properties:

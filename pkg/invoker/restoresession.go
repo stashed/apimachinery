@@ -156,6 +156,11 @@ func (inv *RestoreSessionInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
+func (inv *RestoreSessionInvoker) GetTimeLimit() time.Duration {
+	duration := inv.restoreSession.Spec.TimeLimit
+	return *duration
+}
+
 func (inv *RestoreSessionInvoker) GetRepoRef() kmapi.ObjectReference {
 	var repo kmapi.ObjectReference
 	repo.Name = inv.restoreSession.Spec.Repository.Name

@@ -17,6 +17,8 @@ limitations under the License.
 package v1beta1
 
 import (
+	"time"
+
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -87,6 +89,9 @@ type BackupBatchSpec struct {
 	// +kubebuilder:default=Parallel
 	// +optional
 	ExecutionOrder ExecutionOrder `json:"executionOrder,omitempty"`
+	// TimeLimit specifies the maximum duration of backup
+	// +optional
+	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
 }
 
 type BackupBatchStatus struct {

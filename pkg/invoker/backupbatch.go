@@ -18,6 +18,7 @@ package invoker
 
 import (
 	"context"
+	"time"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -181,6 +182,11 @@ func (inv *BackupBatchInvoker) GetDriver() v1beta1.Snapshotter {
 		driver = v1beta1.ResticSnapshotter
 	}
 	return driver
+}
+
+func (inv *BackupBatchInvoker) GetTimeLimit() time.Duration {
+	duration := inv.backupBatch.Spec.TimeLimit
+	return *duration
 }
 
 func (inv *BackupBatchInvoker) GetRepoRef() kmapi.ObjectReference {
