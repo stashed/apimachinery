@@ -156,8 +156,8 @@ func (inv *RestoreSessionInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *RestoreSessionInvoker) GetTimeLimit() time.Duration {
-	duration := inv.restoreSession.Spec.TimeLimit
+func (inv *RestoreSessionInvoker) GetTimeOut() time.Duration {
+	duration := inv.restoreSession.Spec.TimeOut
 	return *duration
 }
 

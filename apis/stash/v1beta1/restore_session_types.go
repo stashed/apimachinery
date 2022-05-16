@@ -88,9 +88,9 @@ type RestoreTargetSpec struct {
 	// Actions that Stash should take in response to restore sessions.
 	// +optional
 	Hooks *RestoreHooks `json:"hooks,omitempty"`
-	// TimeLimit specifies the maximum duration of restore process
+	// TimeOut specifies the maximum duration of restore process
 	// +optional
-	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
+	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
 
 // Hooks describes actions that Stash should take in response to restore sessions. For the PostRestore

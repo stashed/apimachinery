@@ -3024,8 +3024,8 @@ spec:
                     pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                     x-kubernetes-int-or-string: true
                 type: object
-              timeLimit:
-                description: TimeLimit specifies the maximum duration of backup
+              timeOut:
+                description: TimeOut specifies the maximum duration of backup
                 format: int64
                 type: integer
             required:

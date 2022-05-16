@@ -184,8 +184,8 @@ func (inv *BackupBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupBatchInvoker) GetTimeLimit() time.Duration {
-	duration := inv.backupBatch.Spec.TimeLimit
+func (inv *BackupBatchInvoker) GetTimeOut() time.Duration {
+	duration := inv.backupBatch.Spec.TimeOut
 	return *duration
 }
 

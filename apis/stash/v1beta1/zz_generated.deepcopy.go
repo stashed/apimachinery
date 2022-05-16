@@ -115,8 +115,8 @@ func (in *BackupBatchSpec) DeepCopyInto(out *BackupBatchSpec) {
 		*out = new(BackupHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.TimeLimit != nil {
-		in, out := &in.TimeLimit, &out.TimeLimit
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
 		*out = new(time.Duration)
 		**out = **in
 	}
@@ -326,8 +326,8 @@ func (in *BackupConfigurationSpec) DeepCopyInto(out *BackupConfigurationSpec) {
 		*out = new(int32)
 		**out = **in
 	}
-	if in.TimeLimit != nil {
-		in, out := &in.TimeLimit, &out.TimeLimit
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
 		*out = new(time.Duration)
 		**out = **in
 	}
@@ -983,8 +983,8 @@ func (in *RestoreBatchSpec) DeepCopyInto(out *RestoreBatchSpec) {
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.TimeLimit != nil {
-		in, out := &in.TimeLimit, &out.TimeLimit
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
 		*out = new(time.Duration)
 		**out = **in
 	}
@@ -1279,8 +1279,8 @@ func (in *RestoreTargetSpec) DeepCopyInto(out *RestoreTargetSpec) {
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.TimeLimit != nil {
-		in, out := &in.TimeLimit, &out.TimeLimit
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
 		*out = new(time.Duration)
 		**out = **in
 	}

@@ -19,10 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	rest "k8s.io/client-go/rest"
 	v1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
 	"stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
-
-	rest "k8s.io/client-go/rest"
 )
 
 type RepositoriesV1alpha1Interface interface {

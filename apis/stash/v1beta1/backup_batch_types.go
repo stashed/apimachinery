@@ -89,9 +89,9 @@ type BackupBatchSpec struct {
 	// +kubebuilder:default=Parallel
 	// +optional
 	ExecutionOrder ExecutionOrder `json:"executionOrder,omitempty"`
-	// TimeLimit specifies the maximum duration of backup
+	// TimeOut specifies the maximum duration of backup
 	// +optional
-	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
+	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
 
 type BackupBatchStatus struct {

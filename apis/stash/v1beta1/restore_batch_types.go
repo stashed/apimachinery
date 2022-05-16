@@ -68,9 +68,9 @@ type RestoreBatchSpec struct {
 	// Cannot be updated.
 	// +optional
 	Hooks *RestoreHooks `json:"hooks,omitempty"`
-	// TimeLimit specifies the maximum duration of backup
+	// TimeOut specifies the maximum duration of backup
 	// +optional
-	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
+	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
 
 type RestoreBatchStatus struct {

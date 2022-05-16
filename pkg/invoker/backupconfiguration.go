@@ -155,8 +155,8 @@ func (inv *BackupConfigurationInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupConfigurationInvoker) GetTimeLimit() time.Duration {
-	duration := inv.backupConfig.Spec.TimeLimit
+func (inv *BackupConfigurationInvoker) GetTimeOut() time.Duration {
+	duration := inv.backupConfig.Spec.TimeOut
 	return *duration
 }
 

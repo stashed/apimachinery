@@ -19518,9 +19518,9 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 							Format:      "",
 						},
 					},
-					"timeLimit": {
+					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeLimit specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of backup",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -19954,9 +19954,9 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationSpec(ref common.R
 							Format:      "int32",
 						},
 					},
-					"timeLimit": {
+					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeLimit specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of backup",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21118,9 +21118,9 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchSpec(ref common.Referenc
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
 						},
 					},
-					"timeLimit": {
+					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeLimit specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of backup",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21418,9 +21418,9 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionSpec(ref common.Refere
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
 						},
 					},
-					"timeLimit": {
+					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeLimit specifies the maximum duration of restore process",
+							Description: "TimeOut specifies the maximum duration of restore process",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21661,9 +21661,9 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreTargetSpec(ref common.Referen
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
 						},
 					},
-					"timeLimit": {
+					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeLimit specifies the maximum duration of restore process",
+							Description: "TimeOut specifies the maximum duration of restore process",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},

@@ -5659,8 +5659,8 @@ spec:
               schedule:
                 description: Schedule specifies the schedule for invoking backup sessions
                 type: string
-              timeLimit:
-                description: TimeLimit specifies the maximum duration of backup
+              timeOut:
+                description: TimeOut specifies the maximum duration of backup
                 format: int64
                 type: integer
             required:
