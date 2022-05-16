@@ -9470,7 +9470,7 @@
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
-        "timeOut": {
+        "timeLimit": {
           "description": "TimeLimit specifies the maximum duration of backup",
           "type": "integer",
           "format": "int64"
@@ -10333,7 +10333,7 @@
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
-        "timeOut": {
+        "timeLimit": {
           "description": "TimeLimit specifies the maximum duration of restore process",
           "type": "integer",
           "format": "int64"
@@ -10455,7 +10455,7 @@
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
-        "timeOut": {
+        "timeLimit": {
           "description": "TimeLimit specifies the maximum duration of restore process",
           "type": "integer",
           "format": "int64"

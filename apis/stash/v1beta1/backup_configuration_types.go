@@ -104,7 +104,7 @@ type BackupConfigurationSpec struct {
 	BackupHistoryLimit *int32 `json:"backupHistoryLimit,omitempty"`
 	// TimeLimit specifies the maximum duration of backup
 	// +optional
-	TimeLimit *time.Duration `json:"timeOut"`
+	TimeLimit *time.Duration `json:"timeLimit,omitempty"`
 }
 
 // Hooks describes actions that Stash should take in response to backup sessions. For the PostBackup
