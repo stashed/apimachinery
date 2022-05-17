@@ -434,16 +434,22 @@ func (metricOpt *MetricsOptions) SendBackupSessionMetrics(inv invoker.BackupInvo
 	}
 	// create metrics
 	metrics := newBackupSessionMetrics(labels)
+	legacyMetrics := legacyBackupSessionMetrics(labels)
 
 	if status.Phase == api_v1beta1.BackupSessionSucceeded {
-		err := sendBackupSessionSucceededMetric(metrics, registry, status)
+		err := setBackupSessionSucceededMetrics(metrics, registry, status)
+		if err != nil {
+			return err
+		}
+
+		err = setBackupSessionSucceededMetrics(legacyMetrics, registry, status)
 		if err != nil {
 			return err
 		}
 	} else {
 		// mark entire backup session as failed
-		metrics.BackupSessionMetrics.SessionSuccess.Set(0)
-		registry.MustRegister(metrics.BackupSessionMetrics.SessionSuccess)
+		setBackupSessionFailedMetrics(metrics, registry)
+		setBackupSessionFailedMetrics(legacyMetrics, registry)
 	}
 
 	// send metrics to the pushgateway
@@ -469,32 +475,18 @@ func (metricOpt *MetricsOptions) SendBackupTargetMetrics(config *rest.Config, i 
 
 	// create metrics
 	metrics := newBackupTargetMetrics(labels)
+	legacyMetrics := legacyBackupTargetMetrics(labels)
 
 	// only send the metric for the target specified by targetRef
 	for _, targetStatus := range status.Targets {
 		if invoker.TargetMatched(targetStatus.Ref, targetRef) {
 			if targetStatus.Phase == api_v1beta1.TargetBackupSucceeded {
-				// mark target backup as succeeded
-				metrics.BackupTargetMetrics.TargetBackupSucceeded.Set(1)
-
-				// set last successful backup time for this target to current time
-				metrics.BackupTargetMetrics.LastSuccessTime.SetToCurrentTime()
-
-				// set total number of target that was backed up in this backup session
-				if targetStatus.TotalHosts != nil {
-					metrics.BackupTargetMetrics.HostCount.Set(float64(*targetStatus.TotalHosts))
-				}
-
-				// register metrics to the registry
-				registry.MustRegister(
-					metrics.BackupTargetMetrics.TargetBackupSucceeded,
-					metrics.BackupTargetMetrics.LastSuccessTime,
-					metrics.BackupTargetMetrics.HostCount,
-				)
+				setBackupTargetSucceededMetrics(metrics, targetStatus, registry)
+				setBackupTargetSucceededMetrics(legacyMetrics, targetStatus, registry)
 			} else {
 				// mark target backup as failed
-				metrics.BackupTargetMetrics.TargetBackupSucceeded.Set(0)
-				registry.MustRegister(metrics.BackupTargetMetrics.TargetBackupSucceeded)
+				setBackupTargetFailedMetrics(metrics, registry)
+				setBackupTargetFailedMetrics(legacyMetrics, registry)
 			}
 
 			// send metrics to the pushgateway
@@ -532,34 +524,21 @@ func (metricOpt *MetricsOptions) SendBackupHostMetrics(config *rest.Config, i in
 			MetricLabelHostname: hostStats.Hostname,
 		}
 		metrics := newBackupHostMetrics(upsertLabel(labels, hostLabel))
+		legacyMetrics := legacyBackupHostMetrics(upsertLabel(labels, hostLabel))
 
 		if hostStats.Error == "" {
 			// set metrics values from backupOutput
-			err := metrics.setValues(hostStats)
+			err = setBackupHostSucceededMetrics(metrics, hostStats, registry)
 			if err != nil {
 				return err
 			}
-			metrics.BackupHostMetrics.BackupSuccess.Set(1)
-
-			registry.MustRegister(
-				// register backup session metrics
-				metrics.BackupHostMetrics.BackupSuccess,
-				metrics.BackupHostMetrics.BackupDuration,
-				metrics.BackupHostMetrics.FileMetrics.TotalFiles,
-				metrics.BackupHostMetrics.FileMetrics.NewFiles,
-				metrics.BackupHostMetrics.FileMetrics.ModifiedFiles,
-				metrics.BackupHostMetrics.FileMetrics.UnmodifiedFiles,
-				metrics.BackupHostMetrics.DataSize,
-				metrics.BackupHostMetrics.DataUploaded,
-				metrics.BackupHostMetrics.DataProcessingTime,
-			)
+			err = setBackupHostSucceededMetrics(legacyMetrics, hostStats, registry)
+			if err != nil {
+				return err
+			}
 		} else {
-			metrics.BackupHostMetrics.BackupSuccess.Set(0)
-
-			registry.MustRegister(
-				// register backup session metrics
-				metrics.BackupHostMetrics.BackupSuccess,
-			)
+			setBackupHostFailedMetrics(metrics, registry)
+			setBackupHostFailedMetrics(legacyMetrics, registry)
 		}
 	}
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
@@ -639,7 +618,7 @@ func (backupMetrics *BackupMetrics) setValues(hostOutput api_v1beta1.HostBackupS
 	return nil
 }
 
-func sendBackupSessionSucceededMetric(metrics *BackupMetrics, registry *prometheus.Registry, status api_v1beta1.BackupSessionStatus) error {
+func setBackupSessionSucceededMetrics(metrics *BackupMetrics, registry *prometheus.Registry, status api_v1beta1.BackupSessionStatus) error {
 	// mark entire backup session as succeeded
 	metrics.BackupSessionMetrics.SessionSuccess.Set(1)
 
@@ -664,4 +643,64 @@ func sendBackupSessionSucceededMetric(metrics *BackupMetrics, registry *promethe
 		metrics.BackupSessionMetrics.LastSuccessTime,
 	)
 	return nil
+}
+
+func setBackupSessionFailedMetrics(metrics *BackupMetrics, registry *prometheus.Registry) {
+	metrics.BackupSessionMetrics.SessionSuccess.Set(0)
+	registry.MustRegister(metrics.BackupSessionMetrics.SessionSuccess)
+}
+
+func setBackupTargetSucceededMetrics(metrics *BackupMetrics, targetStatus api_v1beta1.BackupTargetStatus, registry *prometheus.Registry) {
+	// mark target backup as succeeded
+	metrics.BackupTargetMetrics.TargetBackupSucceeded.Set(1)
+
+	// set last successful backup time for this target to current time
+	metrics.BackupTargetMetrics.LastSuccessTime.SetToCurrentTime()
+
+	// set total number of target that was backed up in this backup session
+	if targetStatus.TotalHosts != nil {
+		metrics.BackupTargetMetrics.HostCount.Set(float64(*targetStatus.TotalHosts))
+	}
+
+	// register metrics to the registry
+	registry.MustRegister(
+		metrics.BackupTargetMetrics.TargetBackupSucceeded,
+		metrics.BackupTargetMetrics.LastSuccessTime,
+		metrics.BackupTargetMetrics.HostCount,
+	)
+}
+
+func setBackupTargetFailedMetrics(metrics *BackupMetrics, registry *prometheus.Registry) {
+	metrics.BackupTargetMetrics.TargetBackupSucceeded.Set(0)
+	registry.MustRegister(metrics.BackupTargetMetrics.TargetBackupSucceeded)
+}
+
+func setBackupHostSucceededMetrics(metrics *BackupMetrics, hostStats api_v1beta1.HostBackupStats, registry *prometheus.Registry) error {
+	err := metrics.setValues(hostStats)
+	if err != nil {
+		return err
+	}
+	metrics.BackupHostMetrics.BackupSuccess.Set(1)
+
+	registry.MustRegister(
+		// register backup session metrics
+		metrics.BackupHostMetrics.BackupSuccess,
+		metrics.BackupHostMetrics.BackupDuration,
+		metrics.BackupHostMetrics.FileMetrics.TotalFiles,
+		metrics.BackupHostMetrics.FileMetrics.NewFiles,
+		metrics.BackupHostMetrics.FileMetrics.ModifiedFiles,
+		metrics.BackupHostMetrics.FileMetrics.UnmodifiedFiles,
+		metrics.BackupHostMetrics.DataSize,
+		metrics.BackupHostMetrics.DataUploaded,
+		metrics.BackupHostMetrics.DataProcessingTime,
+	)
+	return nil
+}
+
+func setBackupHostFailedMetrics(metrics *BackupMetrics, registry *prometheus.Registry) {
+	metrics.BackupHostMetrics.BackupSuccess.Set(0)
+
+	registry.MustRegister(
+		metrics.BackupHostMetrics.BackupSuccess,
+	)
 }

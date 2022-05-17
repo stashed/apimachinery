@@ -44,6 +44,47 @@ func newRepositoryMetrics(labels prometheus.Labels) *RepositoryMetrics {
 	return &RepositoryMetrics{
 		RepoIntegrity: prometheus.NewGauge(
 			prometheus.GaugeOpts{
+				Namespace:   "stash_appscode_com",
+				Subsystem:   "repository",
+				Name:        "integrity",
+				Help:        "Result of repository integrity check after last backup",
+				ConstLabels: labels,
+			},
+		),
+		RepoSize: prometheus.NewGauge(
+			prometheus.GaugeOpts{
+				Namespace:   "stash_appscode_com",
+				Subsystem:   "repository",
+				Name:        "size_bytes",
+				Help:        "Indicates size of repository after last backup (in bytes)",
+				ConstLabels: labels,
+			},
+		),
+		SnapshotCount: prometheus.NewGauge(
+			prometheus.GaugeOpts{
+				Namespace:   "stash_appscode_com",
+				Subsystem:   "repository",
+				Name:        "snapshot_count",
+				Help:        "Indicates number of snapshots stored in the repository",
+				ConstLabels: labels,
+			},
+		),
+		SnapshotsRemovedOnLastCleanup: prometheus.NewGauge(
+			prometheus.GaugeOpts{
+				Namespace:   "stash_appscode_com",
+				Subsystem:   "repository",
+				Name:        "snapshot_cleaned",
+				Help:        "Indicates number of old snapshots cleaned up according to retention policy on last backup session",
+				ConstLabels: labels,
+			},
+		),
+	}
+}
+
+func legacyRepositoryMetrics(labels prometheus.Labels) *RepositoryMetrics {
+	return &RepositoryMetrics{
+		RepoIntegrity: prometheus.NewGauge(
+			prometheus.GaugeOpts{
 				Namespace:   "stash",
 				Subsystem:   "repository",
 				Name:        "integrity",
@@ -99,17 +140,18 @@ func (metricOpt *MetricsOptions) SendRepositoryMetrics(config *rest.Config, i in
 
 	// create repository metrics
 	repoMetrics := newRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
-	err = repoMetrics.setValues(repoStats)
+	repoLegacyMetrics := legacyRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
+
+	err = setRepoMetrics(repoMetrics, registry, repoStats)
 	if err != nil {
 		return err
 	}
-	// register repository metrics
-	registry.MustRegister(
-		repoMetrics.RepoIntegrity,
-		repoMetrics.RepoSize,
-		repoMetrics.SnapshotCount,
-		repoMetrics.SnapshotsRemovedOnLastCleanup,
-	)
+
+	err = setRepoMetrics(repoLegacyMetrics, registry, repoStats)
+	if err != nil {
+		return err
+	}
+
 	// send metrics to the pushgateway
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
 }
@@ -166,6 +208,22 @@ func (repoMetrics *RepositoryMetrics) setValues(repoStats restic.RepositoryStats
 	repoMetrics.RepoSize.Set(repoSize)
 	repoMetrics.SnapshotCount.Set(float64(repoStats.SnapshotCount))
 	repoMetrics.SnapshotsRemovedOnLastCleanup.Set(float64(repoStats.SnapshotsRemovedOnLastCleanup))
+
+	return nil
+}
+
+func setRepoMetrics(repoMetrics *RepositoryMetrics, registry *prometheus.Registry, repoStats restic.RepositoryStats) error {
+	err := repoMetrics.setValues(repoStats)
+	if err != nil {
+		return err
+	}
+	// register repository metrics
+	registry.MustRegister(
+		repoMetrics.RepoIntegrity,
+		repoMetrics.RepoSize,
+		repoMetrics.SnapshotCount,
+		repoMetrics.SnapshotsRemovedOnLastCleanup,
+	)
 
 	return nil
 }

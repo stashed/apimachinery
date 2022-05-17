@@ -69,6 +69,40 @@ func newRestoreSessionMetrics(labels prometheus.Labels) *RestoreMetrics {
 		RestoreSessionMetrics: &RestoreSessionMetrics{
 			SessionSuccess: prometheus.NewGauge(
 				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "session_success",
+					Help:        "Indicates whether the entire restore session was succeeded or not",
+					ConstLabels: labels,
+				},
+			),
+			SessionDuration: prometheus.NewGauge(
+				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "session_duration_seconds",
+					Help:        "Indicates the total time taken to complete the entire restore session",
+					ConstLabels: labels,
+				},
+			),
+			TargetCount: prometheus.NewGauge(
+				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "target_count_total",
+					Help:        "Indicates the total number of targets that was restored in this restore session",
+					ConstLabels: labels,
+				},
+			),
+		},
+	}
+}
+
+func legacyRestoreSessionMetrics(labels prometheus.Labels) *RestoreMetrics {
+	return &RestoreMetrics{
+		RestoreSessionMetrics: &RestoreSessionMetrics{
+			SessionSuccess: prometheus.NewGauge(
+				prometheus.GaugeOpts{
 					Namespace:   "stash",
 					Subsystem:   "restore",
 					Name:        "session_success",
@@ -103,6 +137,31 @@ func newRestoreTargetMetrics(labels prometheus.Labels) *RestoreMetrics {
 		RestoreTargetMetrics: &RestoreTargetMetrics{
 			TargetRestoreSucceeded: prometheus.NewGauge(
 				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "target_success",
+					Help:        "Indicates whether the restore for a target has succeeded or not",
+					ConstLabels: labels,
+				},
+			),
+			HostCount: prometheus.NewGauge(
+				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "target_host_count_total",
+					Help:        "Indicates the total number of hosts that was restored for this restore target",
+					ConstLabels: labels,
+				},
+			),
+		},
+	}
+}
+
+func legacyRestoreTargetMetrics(labels prometheus.Labels) *RestoreMetrics {
+	return &RestoreMetrics{
+		RestoreTargetMetrics: &RestoreTargetMetrics{
+			TargetRestoreSucceeded: prometheus.NewGauge(
+				prometheus.GaugeOpts{
 					Namespace:   "stash",
 					Subsystem:   "restore",
 					Name:        "target_success",
@@ -124,6 +183,31 @@ func newRestoreTargetMetrics(labels prometheus.Labels) *RestoreMetrics {
 }
 
 func newRestoreHostMetrics(labels prometheus.Labels) *RestoreMetrics {
+	return &RestoreMetrics{
+		RestoreHostMetrics: &RestoreHostMetrics{
+			RestoreSuccess: prometheus.NewGauge(
+				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "host_restore_success",
+					Help:        "Indicates whether the restore process was succeeded for a host",
+					ConstLabels: labels,
+				},
+			),
+			RestoreDuration: prometheus.NewGauge(
+				prometheus.GaugeOpts{
+					Namespace:   "stash_appscode_com",
+					Subsystem:   "restoresession",
+					Name:        "host_restore_duration_seconds",
+					Help:        "Indicates the total time taken to complete the restore process for a host",
+					ConstLabels: labels,
+				},
+			),
+		},
+	}
+}
+
+func legacyRestoreHostMetrics(labels prometheus.Labels) *RestoreMetrics {
 	return &RestoreMetrics{
 		RestoreHostMetrics: &RestoreHostMetrics{
 			RestoreSuccess: prometheus.NewGauge(
@@ -160,31 +244,22 @@ func (metricOpt *MetricsOptions) SendRestoreSessionMetrics(inv invoker.RestoreIn
 	}
 	// create metrics
 	metrics := newRestoreSessionMetrics(labels)
+	legacyMetrics := legacyRestoreSessionMetrics(labels)
 
 	if inv.GetStatus().Phase == api_v1beta1.RestoreSucceeded {
 		// mark the entire restore session as succeeded
-		metrics.RestoreSessionMetrics.SessionSuccess.Set(1)
-
-		// set total time taken to complete the restore session
-		duration, err := time.ParseDuration(inv.GetStatus().SessionDuration)
+		err = setRestoreSessionSucceededMetrics(metrics, registry, inv)
 		if err != nil {
 			return err
 		}
-		metrics.RestoreSessionMetrics.SessionDuration.Set(duration.Seconds())
-
-		// set total number of target that was restored in this restore session
-		metrics.RestoreSessionMetrics.TargetCount.Set(float64(len(inv.GetStatus().TargetStatus)))
-
-		// register metrics to the registry
-		registry.MustRegister(
-			metrics.RestoreSessionMetrics.SessionSuccess,
-			metrics.RestoreSessionMetrics.SessionDuration,
-			metrics.RestoreSessionMetrics.TargetCount,
-		)
+		err = setRestoreSessionSucceededMetrics(legacyMetrics, registry, inv)
+		if err != nil {
+			return err
+		}
 	} else {
 		// mark entire restore session as failed
-		metrics.RestoreSessionMetrics.SessionSuccess.Set(0)
-		registry.MustRegister(metrics.RestoreSessionMetrics.SessionSuccess)
+		setRestoreSessionFailedMetrics(metrics, registry)
+		setRestoreSessionFailedMetrics(legacyMetrics, registry)
 	}
 
 	// send metrics to the pushgateway
@@ -210,28 +285,17 @@ func (metricOpt *MetricsOptions) SendRestoreTargetMetrics(config *rest.Config, i
 
 	// create metrics
 	metrics := newRestoreTargetMetrics(labels)
+	legacyMetrics := legacyRestoreTargetMetrics(labels)
 
 	// only send the metric of the target specified by targetRef
 	for _, targetStatus := range i.GetStatus().TargetStatus {
 		if invoker.TargetMatched(targetStatus.Ref, targetRef) {
 			if targetStatus.Phase == api_v1beta1.TargetRestoreSucceeded {
-				// mark entire restore target as succeeded
-				metrics.RestoreTargetMetrics.TargetRestoreSucceeded.Set(1)
-
-				// set total number of host that was restored in this restore session
-				if targetStatus.TotalHosts != nil {
-					metrics.RestoreTargetMetrics.HostCount.Set(float64(*targetStatus.TotalHosts))
-				}
-
-				// register metrics to the registry
-				registry.MustRegister(
-					metrics.RestoreTargetMetrics.TargetRestoreSucceeded,
-					metrics.RestoreTargetMetrics.HostCount,
-				)
+				setRestoreTargetSucceededMetrics(metrics, registry, targetStatus)
+				setRestoreTargetSucceededMetrics(legacyMetrics, registry, targetStatus)
 			} else {
-				// mark entire restore target as failed
-				metrics.RestoreTargetMetrics.TargetRestoreSucceeded.Set(0)
-				registry.MustRegister(metrics.RestoreTargetMetrics.TargetRestoreSucceeded)
+				setRestoreTargetFailedMetrics(metrics, registry)
+				setRestoreTargetFailedMetrics(legacyMetrics, registry)
 			}
 
 			// send metrics to the pushgateway
@@ -269,28 +333,22 @@ func (metricOpt *MetricsOptions) SendRestoreHostMetrics(config *rest.Config, i i
 			MetricLabelHostname: hostStats.Hostname,
 		}
 		metrics := newRestoreHostMetrics(upsertLabel(labels, hostLabel))
+		legacyMetrics := legacyRestoreHostMetrics(upsertLabel(labels, hostLabel))
 
 		if hostStats.Error == "" {
 			// mark the host restore as success
-			metrics.RestoreHostMetrics.RestoreSuccess.Set(1)
-
-			// set the time that has been taken to restore the host
-			duration, err := time.ParseDuration(hostStats.Duration)
+			err := setRestoreHostSucceededMetrics(metrics, registry, hostStats)
 			if err != nil {
 				return err
 			}
-			metrics.RestoreHostMetrics.RestoreDuration.Set(duration.Seconds())
 
-			registry.MustRegister(
-				metrics.RestoreHostMetrics.RestoreSuccess,
-				metrics.RestoreHostMetrics.RestoreDuration,
-			)
+			err = setRestoreHostSucceededMetrics(legacyMetrics, registry, hostStats)
+			if err != nil {
+				return err
+			}
 		} else {
-			// mark the host restore as failure
-			metrics.RestoreHostMetrics.RestoreSuccess.Set(0)
-			registry.MustRegister(
-				metrics.RestoreHostMetrics.RestoreSuccess,
-			)
+			setRestoreHostFailedMetrics(metrics, registry)
+			setRestoreHostFailedMetrics(legacyMetrics, registry)
 		}
 	}
 
@@ -316,4 +374,79 @@ func restoreInvokerLabels(inv invoker.RestoreInvoker, userProvidedLabels []strin
 	}
 
 	return promLabels, nil
+}
+
+func setRestoreSessionSucceededMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, inv invoker.RestoreInvoker) error {
+	metrics.RestoreSessionMetrics.SessionSuccess.Set(1)
+
+	// set total time taken to complete the restore session
+	duration, err := time.ParseDuration(inv.GetStatus().SessionDuration)
+	if err != nil {
+		return err
+	}
+	metrics.RestoreSessionMetrics.SessionDuration.Set(duration.Seconds())
+
+	// set total number of target that was restored in this restore session
+	metrics.RestoreSessionMetrics.TargetCount.Set(float64(len(inv.GetStatus().TargetStatus)))
+
+	// register metrics to the registry
+	registry.MustRegister(
+		metrics.RestoreSessionMetrics.SessionSuccess,
+		metrics.RestoreSessionMetrics.SessionDuration,
+		metrics.RestoreSessionMetrics.TargetCount,
+	)
+
+	return nil
+}
+
+func setRestoreSessionFailedMetrics(metrics *RestoreMetrics, registry *prometheus.Registry) {
+	metrics.RestoreSessionMetrics.SessionSuccess.Set(0)
+	registry.MustRegister(metrics.RestoreSessionMetrics.SessionSuccess)
+}
+
+func setRestoreTargetSucceededMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
+	// mark entire restore target as succeeded
+	metrics.RestoreTargetMetrics.TargetRestoreSucceeded.Set(1)
+
+	// set total number of host that was restored in this restore session
+	if targetStatus.TotalHosts != nil {
+		metrics.RestoreTargetMetrics.HostCount.Set(float64(*targetStatus.TotalHosts))
+	}
+
+	// register metrics to the registry
+	registry.MustRegister(
+		metrics.RestoreTargetMetrics.TargetRestoreSucceeded,
+		metrics.RestoreTargetMetrics.HostCount,
+	)
+}
+
+func setRestoreTargetFailedMetrics(metrics *RestoreMetrics, registry *prometheus.Registry) {
+	// mark entire restore target as failed
+	metrics.RestoreTargetMetrics.TargetRestoreSucceeded.Set(0)
+	registry.MustRegister(metrics.RestoreTargetMetrics.TargetRestoreSucceeded)
+}
+
+func setRestoreHostSucceededMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, hostStats api_v1beta1.HostRestoreStats) error {
+	metrics.RestoreHostMetrics.RestoreSuccess.Set(1)
+
+	// set the time that has been taken to restore the host
+	duration, err := time.ParseDuration(hostStats.Duration)
+	if err != nil {
+		return err
+	}
+	metrics.RestoreHostMetrics.RestoreDuration.Set(duration.Seconds())
+
+	registry.MustRegister(
+		metrics.RestoreHostMetrics.RestoreSuccess,
+		metrics.RestoreHostMetrics.RestoreDuration,
+	)
+	return nil
+}
+
+func setRestoreHostFailedMetrics(metrics *RestoreMetrics, registry *prometheus.Registry) {
+	// mark the host restore as failure
+	metrics.RestoreHostMetrics.RestoreSuccess.Set(0)
+	registry.MustRegister(
+		metrics.RestoreHostMetrics.RestoreSuccess,
+	)
 }
