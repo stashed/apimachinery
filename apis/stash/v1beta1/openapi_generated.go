@@ -21120,7 +21120,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchSpec(ref common.Referenc
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of restore process",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21418,13 +21418,6 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionSpec(ref common.Refere
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
 						},
 					},
-					"timeOut": {
-						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of restore process",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
 					"driver": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Driver indicates the name of the agent to use to restore the target. Supported values are \"Restic\", \"VolumeSnapshotter\". Default value is \"Restic\".",
@@ -21451,6 +21444,13 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionSpec(ref common.Refere
 									},
 								},
 							},
+						},
+					},
+					"timeOut": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TimeOut specifies the maximum duration of restore process",
+							Type:        []string{"integer"},
+							Format:      "int64",
 						},
 					},
 				},
@@ -21659,13 +21659,6 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreTargetSpec(ref common.Referen
 						SchemaProps: spec.SchemaProps{
 							Description: "Actions that Stash should take in response to restore sessions.",
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreHooks"),
-						},
-					},
-					"timeOut": {
-						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of restore process",
-							Type:        []string{"integer"},
-							Format:      "int64",
 						},
 					},
 				},

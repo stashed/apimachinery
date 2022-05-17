@@ -1164,6 +1164,11 @@ func (in *RestoreSessionSpec) DeepCopyInto(out *RestoreSessionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(time.Duration)
+		**out = **in
+	}
 	return
 }
 
@@ -1278,11 +1283,6 @@ func (in *RestoreTargetSpec) DeepCopyInto(out *RestoreTargetSpec) {
 		in, out := &in.Hooks, &out.Hooks
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
-	}
-	if in.TimeOut != nil {
-		in, out := &in.TimeOut, &out.TimeOut
-		*out = new(time.Duration)
-		**out = **in
 	}
 	return
 }

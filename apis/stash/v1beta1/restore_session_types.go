@@ -64,6 +64,9 @@ type RestoreSessionSpec struct {
 	// +optional
 	// Deprecated. Use rules section inside `target`.
 	Rules []Rule `json:"rules,omitempty"`
+	// TimeOut specifies the maximum duration of restore process
+	// +optional
+	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
 
 type RestoreTargetSpec struct {
@@ -88,9 +91,6 @@ type RestoreTargetSpec struct {
 	// Actions that Stash should take in response to restore sessions.
 	// +optional
 	Hooks *RestoreHooks `json:"hooks,omitempty"`
-	// TimeOut specifies the maximum duration of restore process
-	// +optional
-	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
 
 // Hooks describes actions that Stash should take in response to restore sessions. For the PostRestore
@@ -199,7 +199,7 @@ const (
 	// PostRestoreHookExecutionSucceeded indicates whether the postRestore hook was executed successfully or not
 	PostRestoreHookExecutionSucceeded = "PostRestoreHookExecutionSucceeded"
 
-	// RestoreTimeOutPeriodNotExceeded indicates whether the backup was timed out or not
+	// RestoreTimeOutPeriodNotExceeded indicates whether the restore process was timed out or not
 	RestoreTimeOutPeriodNotExceeded = "RestoreTimeOutPeriodNotExceeded"
 )
 

@@ -10146,7 +10146,7 @@
           "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.ObjectReference"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup",
+          "description": "TimeOut specifies the maximum duration of restore process",
           "type": "integer",
           "format": "int64"
         }
@@ -10464,11 +10464,6 @@
           "description": "Temp directory configuration for functions/sidecar An `EmptyDir` will always be mounted at /tmp with this settings",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
-        },
-        "timeOut": {
-          "description": "TimeOut specifies the maximum duration of restore process",
-          "type": "integer",
-          "format": "int64"
         }
       }
     },
