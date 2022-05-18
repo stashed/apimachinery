@@ -6,7 +6,7 @@
 
 # apimachinery
 
-Stash API
+Stash APIs
 
 ## Installation
 
