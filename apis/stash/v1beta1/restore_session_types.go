@@ -64,7 +64,8 @@ type RestoreSessionSpec struct {
 	// +optional
 	// Deprecated. Use rules section inside `target`.
 	Rules []Rule `json:"rules,omitempty"`
-	// TimeOut specifies the maximum duration of restore process
+	// TimeOut specifies the maximum duration of backup. Backup session will be considered Failed
+	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
 	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }

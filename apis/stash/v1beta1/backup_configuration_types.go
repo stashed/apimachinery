@@ -102,7 +102,8 @@ type BackupConfigurationSpec struct {
 	// Default: 1
 	// +optional
 	BackupHistoryLimit *int32 `json:"backupHistoryLimit,omitempty"`
-	// TimeOut specifies the maximum duration of backup
+	// TimeOut specifies the maximum duration of backup. Backup session will be considered Failed
+	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
 	TimeOut *time.Duration `json:"timeOut,omitempty"`
 }
