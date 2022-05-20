@@ -19520,7 +19520,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -19956,7 +19956,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationSpec(ref common.R
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup",
+							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21120,7 +21120,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchSpec(ref common.Referenc
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of restore process",
+							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
@@ -21448,7 +21448,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionSpec(ref common.Refere
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of restore process",
+							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},

@@ -9195,7 +9195,7 @@
           "type": "string"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup",
+          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "integer",
           "format": "int64"
         }
@@ -9476,7 +9476,7 @@
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup",
+          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "integer",
           "format": "int64"
         }
@@ -10146,7 +10146,7 @@
           "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.ObjectReference"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of restore process",
+          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "integer",
           "format": "int64"
         }
@@ -10344,7 +10344,7 @@
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of restore process",
+          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "integer",
           "format": "int64"
         }
