@@ -154,6 +154,10 @@ type RestoreSessionStatus struct {
 	// Conditions shows current restore condition of the RestoreSession.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// SessionDeadline specifies the deadline of restore process. Restore session will be
+	// considered Failed if restore does not complete within this deadline
+	// +optional
+	SessionDeadline *metav1.Time `json:"SessionDeadline,omitempty"`
 }
 
 type HostRestoreStats struct {

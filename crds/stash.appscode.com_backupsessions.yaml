@@ -72,6 +72,12 @@ spec:
             type: object
           status:
             properties:
+              SessionDeadline:
+                description: SessionDeadline specifies the deadline of backup. Backup
+                  session will be considered Failed if backup does not complete within
+                  this deadline
+                format: date-time
+                type: string
               conditions:
                 description: Conditions shows condition of different operations/steps
                   of the backup process

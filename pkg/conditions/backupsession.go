@@ -18,6 +18,7 @@ package conditions
 
 import (
 	"fmt"
+	"time"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
@@ -379,14 +380,14 @@ func SetBackupHistoryCleanedConditionToTrue(session *invoker.BackupSessionHandle
 	})
 }
 
-func SetBackupTimeLimitExceededConditionToTrue(session *invoker.BackupSessionHandler) error {
+func SetBackupTimeLimitExceededConditionToTrue(session *invoker.BackupSessionHandler, timeOut time.Duration) error {
 	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
 				Type:               v1beta1.BackupTimeLimitExceeded,
 				Status:             core.ConditionTrue,
 				Reason:             v1beta1.FailedToCompleteBackupWithinTimeout,
-				Message:            "Failed to complete backup within timeout",
+				Message:            fmt.Sprintf("Failed to complete backup within %s.", timeOut.String()),
 				LastTransitionTime: metav1.Now(),
 			},
 		},

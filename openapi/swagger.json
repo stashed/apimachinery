@@ -9650,6 +9650,10 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupSessionStatus": {
       "type": "object",
       "properties": {
+        "SessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+        },
         "conditions": {
           "description": "Conditions shows condition of different operations/steps of the backup process",
           "type": "array",
@@ -10353,6 +10357,10 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RestoreSessionStatus": {
       "type": "object",
       "properties": {
+        "SessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+        },
         "conditions": {
           "description": "Conditions shows current restore condition of the RestoreSession.",
           "type": "array",

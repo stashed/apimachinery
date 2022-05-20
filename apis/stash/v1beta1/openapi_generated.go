@@ -20291,11 +20291,17 @@ func schema_apimachinery_apis_stash_v1beta1_BackupSessionStatus(ref common.Refer
 							},
 						},
 					},
+					"SessionDeadline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupTargetStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupTargetStatus"},
 	}
 }
 
@@ -21516,11 +21522,17 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionStatus(ref common.Refe
 							},
 						},
 					},
+					"SessionDeadline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.HostRestoreStats"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.HostRestoreStats"},
 	}
 }
 

@@ -538,6 +538,10 @@ func (in *BackupSessionStatus) DeepCopyInto(out *BackupSessionStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.SessionDeadline != nil {
+		in, out := &in.SessionDeadline, &out.SessionDeadline
+		*out = (*in).DeepCopy()
+	}
 	return
 }
 
@@ -1201,6 +1205,10 @@ func (in *RestoreSessionStatus) DeepCopyInto(out *RestoreSessionStatus) {
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.SessionDeadline != nil {
+		in, out := &in.SessionDeadline, &out.SessionDeadline
+		*out = (*in).DeepCopy()
 	}
 	return
 }
