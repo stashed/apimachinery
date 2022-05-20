@@ -231,7 +231,7 @@ func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.Ba
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryIntegrityVerified) ||
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupTimeOutPeriodNotExceeded) {
+		kmapi.IsConditionTrue(status.Conditions, v1beta1.BackupTimeLimitExceeded) {
 		return v1beta1.BackupSessionFailed
 	}
 
