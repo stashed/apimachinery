@@ -155,9 +155,9 @@ func (inv *BackupConfigurationInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupConfigurationInvoker) GetTimeOut() time.Duration {
+func (inv *BackupConfigurationInvoker) GetTimeOut() *time.Duration {
 	duration := inv.backupConfig.Spec.TimeOut
-	return *duration
+	return duration
 }
 
 func (inv *BackupConfigurationInvoker) GetRepoRef() kmapi.ObjectReference {

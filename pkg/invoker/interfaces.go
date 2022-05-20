@@ -54,8 +54,8 @@ type DriverHandler interface {
 	GetDriver() v1beta1.Snapshotter
 }
 
-type TimeOutHandler interface {
-	GetTimeOut() time.Duration
+type TimeOutGetter interface {
+	GetTimeOut() *time.Duration
 }
 
 type Eventer interface {

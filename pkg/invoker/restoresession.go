@@ -156,9 +156,9 @@ func (inv *RestoreSessionInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *RestoreSessionInvoker) GetTimeOut() time.Duration {
+func (inv *RestoreSessionInvoker) GetTimeOut() *time.Duration {
 	duration := inv.restoreSession.Spec.TimeOut
-	return *duration
+	return duration
 }
 
 func (inv *RestoreSessionInvoker) GetRepoRef() kmapi.ObjectReference {

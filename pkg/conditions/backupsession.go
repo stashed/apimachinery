@@ -379,28 +379,14 @@ func SetBackupHistoryCleanedConditionToTrue(session *invoker.BackupSessionHandle
 	})
 }
 
-func SetBackupTimeOutPeriodNotExceededConditionToTrue(session *invoker.BackupSessionHandler) error {
+func SetBackupTimeLimitExceededConditionToTrue(session *invoker.BackupSessionHandler) error {
 	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
-				Type:               v1beta1.BackupTimeOutPeriodNotExceeded,
+				Type:               v1beta1.BackupTimeLimitExceeded,
 				Status:             core.ConditionTrue,
-				Reason:             v1beta1.BackupTimeOutNotOccurred,
-				Message:            "Backup timeout not occurred.",
-				LastTransitionTime: metav1.Now(),
-			},
-		},
-	})
-}
-
-func SetBackupTimeOutPeriodNotExceededConditionToFalse(session *invoker.BackupSessionHandler) error {
-	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:               v1beta1.BackupTimeOutPeriodNotExceeded,
-				Status:             core.ConditionFalse,
-				Reason:             v1beta1.BackupTimeOutOccurred,
-				Message:            "Backup timeout occurred.",
+				Reason:             v1beta1.FailedToCompleteBackupWithinTimeout,
+				Message:            "Failed to complete backup within timeout",
 				LastTransitionTime: metav1.Now(),
 			},
 		},
