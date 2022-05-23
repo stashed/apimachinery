@@ -9652,6 +9652,7 @@
       "properties": {
         "SessionDeadline": {
           "description": "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "conditions": {
