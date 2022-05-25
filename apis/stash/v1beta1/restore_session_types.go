@@ -17,8 +17,6 @@ limitations under the License.
 package v1beta1
 
 import (
-	"time"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -67,7 +65,7 @@ type RestoreSessionSpec struct {
 	// TimeOut specifies the maximum duration of backup. Backup session will be considered Failed
 	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
-	TimeOut *time.Duration `json:"timeOut,omitempty"`
+	TimeOut string `json:"timeOut,omitempty"`
 }
 
 type RestoreTargetSpec struct {

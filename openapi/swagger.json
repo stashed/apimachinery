@@ -9196,8 +9196,7 @@
         },
         "timeOut": {
           "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       }
     },
@@ -9477,8 +9476,7 @@
         },
         "timeOut": {
           "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       }
     },
@@ -10152,8 +10150,7 @@
         },
         "timeOut": {
           "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       }
     },
@@ -10350,8 +10347,7 @@
         },
         "timeOut": {
           "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       }
     },

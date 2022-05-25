@@ -179,9 +179,8 @@ func (inv *RestoreBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *RestoreBatchInvoker) GetTimeOut() *time.Duration {
-	duration := inv.restoreBatch.Spec.TimeOut
-	return duration
+func (inv *RestoreBatchInvoker) GetTimeOut() string {
+	return inv.restoreBatch.Spec.TimeOut
 }
 
 func (inv *RestoreBatchInvoker) GetRepoRef() kmapi.ObjectReference {

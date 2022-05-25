@@ -17,8 +17,6 @@ limitations under the License.
 package v1beta1
 
 import (
-	"time"
-
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 
 	core "k8s.io/api/core/v1"
@@ -105,7 +103,7 @@ type BackupConfigurationSpec struct {
 	// TimeOut specifies the maximum duration of backup. Backup session will be considered Failed
 	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
-	TimeOut *time.Duration `json:"timeOut,omitempty"`
+	TimeOut string `json:"timeOut,omitempty"`
 }
 
 // Hooks describes actions that Stash should take in response to backup sessions. For the PostBackup

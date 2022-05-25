@@ -17,8 +17,6 @@ limitations under the License.
 package invoker
 
 import (
-	"time"
-
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
@@ -55,7 +53,7 @@ type DriverHandler interface {
 }
 
 type TimeOutGetter interface {
-	GetTimeOut() *time.Duration
+	GetTimeOut() string
 }
 
 type Eventer interface {

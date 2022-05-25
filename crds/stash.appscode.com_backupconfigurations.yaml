@@ -3028,8 +3028,7 @@ spec:
                 description: TimeOut specifies the maximum duration of backup. Backup
                   session will be considered Failed if backup does not complete within
                   this time limit. By default, Stash don't set any timeout for backup.
-                format: int64
-                type: integer
+                type: string
             required:
             - retentionPolicy
             type: object

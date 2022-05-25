@@ -22,8 +22,6 @@ limitations under the License.
 package v1beta1
 
 import (
-	time "time"
-
 	corev1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	v1 "kmodules.xyz/client-go/api/v1"
@@ -114,11 +112,6 @@ func (in *BackupBatchSpec) DeepCopyInto(out *BackupBatchSpec) {
 		in, out := &in.Hooks, &out.Hooks
 		*out = new(BackupHooks)
 		(*in).DeepCopyInto(*out)
-	}
-	if in.TimeOut != nil {
-		in, out := &in.TimeOut, &out.TimeOut
-		*out = new(time.Duration)
-		**out = **in
 	}
 	return
 }
@@ -324,11 +317,6 @@ func (in *BackupConfigurationSpec) DeepCopyInto(out *BackupConfigurationSpec) {
 	if in.BackupHistoryLimit != nil {
 		in, out := &in.BackupHistoryLimit, &out.BackupHistoryLimit
 		*out = new(int32)
-		**out = **in
-	}
-	if in.TimeOut != nil {
-		in, out := &in.TimeOut, &out.TimeOut
-		*out = new(time.Duration)
 		**out = **in
 	}
 	return
@@ -984,11 +972,6 @@ func (in *RestoreBatchSpec) DeepCopyInto(out *RestoreBatchSpec) {
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.TimeOut != nil {
-		in, out := &in.TimeOut, &out.TimeOut
-		*out = new(time.Duration)
-		**out = **in
-	}
 	return
 }
 
@@ -1164,11 +1147,6 @@ func (in *RestoreSessionSpec) DeepCopyInto(out *RestoreSessionSpec) {
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
-	}
-	if in.TimeOut != nil {
-		in, out := &in.TimeOut, &out.TimeOut
-		*out = new(time.Duration)
-		**out = **in
 	}
 	return
 }
