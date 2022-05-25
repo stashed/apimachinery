@@ -99,7 +99,7 @@ type BackupSessionStatus struct {
 	// SessionDeadline specifies the deadline of backup. Backup session will be
 	// considered Failed if backup does not complete within this deadline
 	// +optional
-	SessionDeadline metav1.Time `json:"SessionDeadline,omitempty"`
+	SessionDeadline metav1.Time `json:"sessionDeadline,omitempty"`
 }
 
 type BackupTargetStatus struct {
