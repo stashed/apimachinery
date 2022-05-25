@@ -242,21 +242,29 @@ func (metricOpt *MetricsOptions) SendRestoreSessionMetrics(inv invoker.RestoreIn
 	if err != nil {
 		return err
 	}
-	// create metrics
-	metrics := newRestoreSessionMetrics(labels)
-	err = setRestoreSessionMetrics(metrics, registry, inv)
+
+	err = exportRestoreSessionMetrics(labels, inv, registry)
 	if err != nil {
 		return err
 	}
 
-	legacyMetrics := legacyRestoreSessionMetrics(labels)
-	err = setRestoreSessionMetrics(legacyMetrics, registry, inv)
+	err = exportRestoreSessionLegacyMetrics(labels, inv, registry)
 	if err != nil {
 		return err
 	}
 
 	// send metrics to the pushgateway
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
+}
+
+func exportRestoreSessionMetrics(labels prometheus.Labels, inv invoker.RestoreInvoker, registry *prometheus.Registry) error {
+	metrics := newRestoreSessionMetrics(labels)
+	return setRestoreSessionMetrics(metrics, registry, inv)
+}
+
+func exportRestoreSessionLegacyMetrics(labels prometheus.Labels, inv invoker.RestoreInvoker, registry *prometheus.Registry) error {
+	legacyMetrics := legacyRestoreSessionMetrics(labels)
+	return setRestoreSessionMetrics(legacyMetrics, registry, inv)
 }
 
 func setRestoreSessionMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, inv invoker.RestoreInvoker) error {
@@ -306,22 +314,28 @@ func (metricOpt *MetricsOptions) SendRestoreTargetMetrics(config *rest.Config, i
 	}
 	labels = upsertLabel(labels, targetLabels)
 
-	// create metrics
-	metrics := newRestoreTargetMetrics(labels)
-	legacyMetrics := legacyRestoreTargetMetrics(labels)
-
 	// only send the metric of the target specified by targetRef
 	for _, targetStatus := range i.GetStatus().TargetStatus {
 		if invoker.TargetMatched(targetStatus.Ref, targetRef) {
 
-			setRestoreTargetMetrics(metrics, registry, targetStatus)
-			setRestoreTargetMetrics(legacyMetrics, registry, targetStatus)
+			exportRestoreTargetMetrics(labels, registry, targetStatus)
+			exportRestoreTargetLegacyMetrics(labels, registry, targetStatus)
 
 			// send metrics to the pushgateway
 			return metricOpt.sendMetrics(registry, metricOpt.JobName)
 		}
 	}
 	return nil
+}
+
+func exportRestoreTargetMetrics(labels prometheus.Labels, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
+	metrics := newRestoreTargetMetrics(labels)
+	setRestoreTargetMetrics(metrics, registry, targetStatus)
+}
+
+func exportRestoreTargetLegacyMetrics(labels prometheus.Labels, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
+	legacyMetrics := legacyRestoreTargetMetrics(labels)
+	setRestoreTargetMetrics(legacyMetrics, registry, targetStatus)
 }
 
 func setRestoreTargetMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
@@ -373,20 +387,29 @@ func (metricOpt *MetricsOptions) SendRestoreHostMetrics(config *rest.Config, i i
 		hostLabel := map[string]string{
 			MetricLabelHostname: hostStats.Hostname,
 		}
-		metrics := newRestoreHostMetrics(upsertLabel(labels, hostLabel))
-		err := setRestoreHostMetrics(metrics, registry, hostStats)
+
+		err = exportRestoreHostMetrics(upsertLabel(labels, hostLabel), registry, hostStats)
 		if err != nil {
 			return err
 		}
 
-		legacyMetrics := legacyRestoreHostMetrics(upsertLabel(labels, hostLabel))
-		err = setRestoreHostMetrics(legacyMetrics, registry, hostStats)
+		err = exportRestoreHostLegacyMetrics(upsertLabel(labels, hostLabel), registry, hostStats)
 		if err != nil {
 			return err
 		}
 	}
 
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
+}
+
+func exportRestoreHostMetrics(labels prometheus.Labels, registry *prometheus.Registry, hostStats api_v1beta1.HostRestoreStats) error {
+	metrics := newRestoreHostMetrics(labels)
+	return setRestoreHostMetrics(metrics, registry, hostStats)
+}
+
+func exportRestoreHostLegacyMetrics(labels prometheus.Labels, registry *prometheus.Registry, hostStats api_v1beta1.HostRestoreStats) error {
+	metrics := legacyRestoreHostMetrics(labels)
+	return setRestoreHostMetrics(metrics, registry, hostStats)
 }
 
 func setRestoreHostMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, hostStats api_v1beta1.HostRestoreStats) error {

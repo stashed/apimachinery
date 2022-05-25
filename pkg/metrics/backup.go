@@ -433,23 +433,30 @@ func (metricOpt *MetricsOptions) SendBackupSessionMetrics(inv invoker.BackupInvo
 		return err
 	}
 
-	// create metrics
-	metrics := newBackupSessionMetrics(labels)
-
-	err = setBackupSessionMetrics(metrics, status, registry)
+	err = exportBackupSessionMetrics(labels, status, registry)
 	if err != nil {
 		return err
 	}
 
-	// create legacy metrics
-	legacyMetrics := legacyBackupSessionMetrics(labels)
-	err = setBackupSessionMetrics(legacyMetrics, status, registry)
+	err = exportBackupSessionLegacyMetrics(labels, status, registry)
 	if err != nil {
 		return err
 	}
 
 	// send metrics to the pushgateway
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
+}
+
+func exportBackupSessionMetrics(labels prometheus.Labels, status api_v1beta1.BackupSessionStatus, registry *prometheus.Registry) error {
+	// create metrics
+	metrics := newBackupSessionMetrics(labels)
+	return setBackupSessionMetrics(metrics, status, registry)
+}
+
+func exportBackupSessionLegacyMetrics(labels prometheus.Labels, status api_v1beta1.BackupSessionStatus, registry *prometheus.Registry) error {
+	// create legacy metrics
+	legacyMetrics := legacyBackupSessionMetrics(labels)
+	return setBackupSessionMetrics(legacyMetrics, status, registry)
 }
 
 func setBackupSessionMetrics(metrics *BackupMetrics, status api_v1beta1.BackupSessionStatus, registry *prometheus.Registry) error {
@@ -502,22 +509,29 @@ func (metricOpt *MetricsOptions) SendBackupTargetMetrics(config *rest.Config, i 
 	}
 	labels = upsertLabel(labels, targetLabels)
 
-	// create metrics
-	metrics := newBackupTargetMetrics(labels)
-	// create legacy metrics
-	legacyMetrics := legacyBackupTargetMetrics(labels)
-
 	// only send the metric for the target specified by targetRef
 	for _, targetStatus := range status.Targets {
 		if invoker.TargetMatched(targetStatus.Ref, targetRef) {
-			setBackupTargetMetrics(metrics, targetStatus, registry)
-			setBackupTargetMetrics(legacyMetrics, targetStatus, registry)
+			exportBackupTargetMetrics(labels, targetStatus, registry)
+			exportBackupTargetLegacyMetrics(labels, targetStatus, registry)
 
 			// send metrics to the pushgateway
 			return metricOpt.sendMetrics(registry, metricOpt.JobName)
 		}
 	}
 	return nil
+}
+
+func exportBackupTargetMetrics(labels prometheus.Labels, targetStatus api_v1beta1.BackupTargetStatus, registry *prometheus.Registry) {
+	// create metrics
+	metrics := newBackupTargetMetrics(labels)
+	setBackupTargetMetrics(metrics, targetStatus, registry)
+}
+
+func exportBackupTargetLegacyMetrics(labels prometheus.Labels, targetStatus api_v1beta1.BackupTargetStatus, registry *prometheus.Registry) {
+	// create legacy metrics
+	legacyMetrics := legacyBackupTargetMetrics(labels)
+	setBackupTargetMetrics(legacyMetrics, targetStatus, registry)
 }
 
 func setBackupTargetMetrics(metrics *BackupMetrics, targetStatus api_v1beta1.BackupTargetStatus, registry *prometheus.Registry) {
@@ -573,19 +587,28 @@ func (metricOpt *MetricsOptions) SendBackupHostMetrics(config *rest.Config, i in
 		hostLabel := map[string]string{
 			MetricLabelHostname: hostStats.Hostname,
 		}
-		metrics := newBackupHostMetrics(upsertLabel(labels, hostLabel))
-		err := setBackupHostMetrics(metrics, hostStats, registry)
+
+		err := exportBackupHostMetrics(upsertLabel(labels, hostLabel), hostStats, registry)
 		if err != nil {
 			return err
 		}
 
-		legacyMetrics := legacyBackupHostMetrics(upsertLabel(labels, hostLabel))
-		err = setBackupHostMetrics(legacyMetrics, hostStats, registry)
+		err = exportBackupHostLegacyMetrics(upsertLabel(labels, hostLabel), hostStats, registry)
 		if err != nil {
 			return err
 		}
 	}
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
+}
+
+func exportBackupHostMetrics(labels prometheus.Labels, hostStats api_v1beta1.HostBackupStats, registry *prometheus.Registry) error {
+	metrics := newBackupHostMetrics(labels)
+	return setBackupHostMetrics(metrics, hostStats, registry)
+}
+
+func exportBackupHostLegacyMetrics(labels prometheus.Labels, hostStats api_v1beta1.HostBackupStats, registry *prometheus.Registry) error {
+	legacyMetrics := legacyBackupHostMetrics(labels)
+	return setBackupHostMetrics(legacyMetrics, hostStats, registry)
 }
 
 func setBackupHostMetrics(metrics *BackupMetrics, hostStats api_v1beta1.HostBackupStats, registry *prometheus.Registry) error {

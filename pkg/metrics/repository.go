@@ -138,21 +138,28 @@ func (metricOpt *MetricsOptions) SendRepositoryMetrics(config *rest.Config, i in
 		return err
 	}
 
-	// create repository metrics
-	repoMetrics := newRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
-	err = setRepoMetrics(repoMetrics, registry, repoStats)
+	err = exportRepositoryMetrics(upsertLabel(labels, repoMetricLabels), registry, repoStats)
 	if err != nil {
 		return err
 	}
 
-	repoLegacyMetrics := legacyRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
-	err = setRepoMetrics(repoLegacyMetrics, registry, repoStats)
+	err = exportRepositoryLegacyMetrics(upsertLabel(labels, repoMetricLabels), registry, repoStats)
 	if err != nil {
 		return err
 	}
 
 	// send metrics to the pushgateway
 	return metricOpt.sendMetrics(registry, metricOpt.JobName)
+}
+
+func exportRepositoryMetrics(labels prometheus.Labels, registry *prometheus.Registry, repoStats restic.RepositoryStats) error {
+	repoMetrics := newRepositoryMetrics(labels)
+	return setRepoMetrics(repoMetrics, registry, repoStats)
+}
+
+func exportRepositoryLegacyMetrics(labels prometheus.Labels, registry *prometheus.Registry, repoStats restic.RepositoryStats) error {
+	repoLegacyMetrics := legacyRepositoryMetrics(labels)
+	return setRepoMetrics(repoLegacyMetrics, registry, repoStats)
 }
 
 func repoMetricLabels(clientConfig *rest.Config, i invoker.BackupInvoker, userProvidedLabels []string) (prometheus.Labels, error) {
