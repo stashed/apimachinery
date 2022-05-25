@@ -20291,7 +20291,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupSessionStatus(ref common.Refer
 							},
 						},
 					},
-					"SessionDeadline": {
+					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
 							Default:     map[string]interface{}{},
@@ -21523,7 +21523,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionStatus(ref common.Refe
 							},
 						},
 					},
-					"SessionDeadline": {
+					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
 							Default:     map[string]interface{}{},

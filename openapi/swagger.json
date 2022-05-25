@@ -9650,11 +9650,6 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupSessionStatus": {
       "type": "object",
       "properties": {
-        "SessionDeadline": {
-          "description": "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
-          "default": {},
-          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
-        },
         "conditions": {
           "description": "Conditions shows condition of different operations/steps of the backup process",
           "type": "array",
@@ -9666,6 +9661,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the backup process for this BackupSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete backup, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete current backup session (sum of backup duration of all targets)",
@@ -10358,11 +10358,6 @@
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RestoreSessionStatus": {
       "type": "object",
       "properties": {
-        "SessionDeadline": {
-          "description": "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
-          "default": {},
-          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
-        },
         "conditions": {
           "description": "Conditions shows current restore condition of the RestoreSession.",
           "type": "array",
@@ -10374,6 +10369,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete restore, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete current restore session (sum of restore duration of all hosts)",
