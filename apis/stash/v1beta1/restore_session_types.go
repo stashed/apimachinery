@@ -203,9 +203,6 @@ const (
 
 	// PostRestoreHookExecutionSucceeded indicates whether the postRestore hook was executed successfully or not
 	PostRestoreHookExecutionSucceeded = "PostRestoreHookExecutionSucceeded"
-
-	// RestoreTimeLimitExceeded indicates whether the restore time limit was exceeded or not
-	RestoreTimeLimitExceeded = "RestoreTimeLimitExceeded"
 )
 
 // ======================== Condition Reasons ===================
@@ -238,6 +235,4 @@ const (
 
 	PostRestoreTasksExecuted    = "PostRestoreTasksExecuted"
 	PostRestoreTasksNotExecuted = "PostRestoreTasksNotExecuted"
-
-	FailedToCompleteRestoreWithinTimeout = "FailedToCompleteRestoreWithinTimeout"
 )

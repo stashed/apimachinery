@@ -219,8 +219,8 @@ const (
 	// PostBackupHookExecutionSucceeded indicates whether the postBackup hook was executed successfully or not
 	PostBackupHookExecutionSucceeded = "PostBackupHookExecutionSucceeded"
 
-	// BackupTimeLimitExceeded indicates whether the backup time limit was exceeded or not
-	BackupTimeLimitExceeded = "BackupTimeLimitExceeded"
+	// DeadlineExceeded  indicates whether the session deadline was exceeded or not
+	DeadlineExceeded = "DeadlineExceeded"
 )
 
 // =========================== Condition Reasons =======================
@@ -260,5 +260,5 @@ const (
 	SuccessfullyExecutedPostBackupHook = "SuccessfullyExecutedPostBackupHook"
 	FailedToExecutePostBackupHook      = "FailedToExecutePostBackupHook"
 
-	FailedToCompleteBackupWithinTimeout = "FailedToCompleteBackupWithinTimeout"
+	FailedToCompleteWithinDeadline = "FailedToCompleteWithinDeadline"
 )

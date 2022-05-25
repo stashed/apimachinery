@@ -388,7 +388,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
 		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) ||
-		kmapi.IsConditionTrue(status.Conditions, v1beta1.RestoreTimeLimitExceeded) {
+		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
 		return v1beta1.RestoreFailed
 	}
 

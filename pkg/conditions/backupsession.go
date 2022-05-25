@@ -380,13 +380,13 @@ func SetBackupHistoryCleanedConditionToTrue(session *invoker.BackupSessionHandle
 	})
 }
 
-func SetBackupTimeLimitExceededConditionToTrue(session *invoker.BackupSessionHandler, timeOut time.Duration) error {
+func SetBackupDeadlineExceededConditionToTrue(session *invoker.BackupSessionHandler, timeOut time.Duration) error {
 	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
 			{
-				Type:               v1beta1.BackupTimeLimitExceeded,
+				Type:               v1beta1.DeadlineExceeded,
 				Status:             core.ConditionTrue,
-				Reason:             v1beta1.FailedToCompleteBackupWithinTimeout,
+				Reason:             v1beta1.FailedToCompleteWithinDeadline,
 				Message:            fmt.Sprintf("Failed to complete backup within %s.", timeOut.String()),
 				LastTransitionTime: metav1.Now(),
 			},
