@@ -60,7 +60,10 @@ func (h *BackupSessionHandler) UpdateStatus(status *v1beta1.BackupSessionStatus)
 			if IsBackupCompleted(in.Phase) && in.SessionDuration == "" {
 				in.SessionDuration = time.Since(h.backupSession.ObjectMeta.CreationTimestamp.Time).Round(time.Second).String()
 			}
-			in.SessionDeadline = status.SessionDeadline
+			if in.SessionDeadline.IsZero() {
+				in.SessionDeadline = status.SessionDeadline
+			}
+
 			return h.backupSession.ObjectMeta.UID, in
 		},
 		metav1.UpdateOptions{},

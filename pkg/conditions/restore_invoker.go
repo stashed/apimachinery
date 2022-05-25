@@ -258,8 +258,8 @@ func SetRestoreTimeLimitExceededConditionToTrue(invoker invoker.RestoreInvoker, 
 	return invoker.SetCondition(nil, kmapi.Condition{
 		Type:               v1beta1.RestoreTimeLimitExceeded,
 		Status:             core.ConditionTrue,
-		Reason:             v1beta1.FailedToCompleteBackupWithinTimeout,
-		Message:            fmt.Sprintf("Failed to complete backup within %s.", timeOut.String()),
+		Reason:             v1beta1.FailedToCompleteRestoreWithinTimeout,
+		Message:            fmt.Sprintf("Failed to complete restore within %s.", timeOut.String()),
 		LastTransitionTime: metav1.Now(),
 	})
 }

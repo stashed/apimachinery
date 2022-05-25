@@ -1203,10 +1203,7 @@ func (in *RestoreSessionStatus) DeepCopyInto(out *RestoreSessionStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.SessionDeadline != nil {
-		in, out := &in.SessionDeadline, &out.SessionDeadline
-		*out = (*in).DeepCopy()
-	}
+	in.SessionDeadline.DeepCopyInto(&out.SessionDeadline)
 	return
 }
 
