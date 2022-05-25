@@ -140,13 +140,12 @@ func (metricOpt *MetricsOptions) SendRepositoryMetrics(config *rest.Config, i in
 
 	// create repository metrics
 	repoMetrics := newRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
-	repoLegacyMetrics := legacyRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
-
 	err = setRepoMetrics(repoMetrics, registry, repoStats)
 	if err != nil {
 		return err
 	}
 
+	repoLegacyMetrics := legacyRepositoryMetrics(upsertLabel(labels, repoMetricLabels))
 	err = setRepoMetrics(repoLegacyMetrics, registry, repoStats)
 	if err != nil {
 		return err
