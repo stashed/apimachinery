@@ -192,6 +192,7 @@ func getInvokerStatusFromRestoreBatch(restoreBatch *v1beta1.RestoreBatch) Restor
 func getInvokerStatusFromRestoreSession(restoreSession *v1beta1.RestoreSession) RestoreInvokerStatus {
 	invokerStatus := RestoreInvokerStatus{
 		SessionDuration: time.Since(restoreSession.CreationTimestamp.Time).Round(time.Second).String(),
+		SessionDeadline: restoreSession.Status.SessionDeadline,
 		Conditions:      restoreSession.Status.Conditions,
 	}
 	var targetStatus v1beta1.RestoreMemberStatus
