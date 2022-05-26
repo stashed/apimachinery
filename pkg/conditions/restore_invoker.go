@@ -18,7 +18,6 @@ package conditions
 
 import (
 	"fmt"
-	"time"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
@@ -254,12 +253,12 @@ func SetGlobalPostRestoreHookSucceededConditionToTrue(invoker invoker.RestoreInv
 	})
 }
 
-func SetRestoreDeadlineExceededConditionToTrue(invoker invoker.RestoreInvoker, timeOut time.Duration) error {
+func SetRestoreDeadlineExceededConditionToTrue(invoker invoker.RestoreInvoker, timeOut string) error {
 	return invoker.SetCondition(nil, kmapi.Condition{
 		Type:               v1beta1.DeadlineExceeded,
 		Status:             core.ConditionTrue,
 		Reason:             v1beta1.FailedToCompleteWithinDeadline,
-		Message:            fmt.Sprintf("Failed to complete restore within %s.", timeOut.String()),
+		Message:            fmt.Sprintf("Failed to complete restore within %s.", timeOut),
 		LastTransitionTime: metav1.Now(),
 	})
 }
