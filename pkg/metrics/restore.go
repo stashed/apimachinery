@@ -263,8 +263,8 @@ func exportRestoreSessionMetrics(labels prometheus.Labels, inv invoker.RestoreIn
 }
 
 func exportRestoreSessionLegacyMetrics(labels prometheus.Labels, inv invoker.RestoreInvoker, registry *prometheus.Registry) error {
-	legacyMetrics := legacyRestoreSessionMetrics(labels)
-	return setRestoreSessionMetrics(legacyMetrics, registry, inv)
+	metrics := legacyRestoreSessionMetrics(labels)
+	return setRestoreSessionMetrics(metrics, registry, inv)
 }
 
 func setRestoreSessionMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, inv invoker.RestoreInvoker) error {
@@ -334,8 +334,8 @@ func exportRestoreTargetMetrics(labels prometheus.Labels, registry *prometheus.R
 }
 
 func exportRestoreTargetLegacyMetrics(labels prometheus.Labels, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
-	legacyMetrics := legacyRestoreTargetMetrics(labels)
-	setRestoreTargetMetrics(legacyMetrics, registry, targetStatus)
+	metrics := legacyRestoreTargetMetrics(labels)
+	setRestoreTargetMetrics(metrics, registry, targetStatus)
 }
 
 func setRestoreTargetMetrics(metrics *RestoreMetrics, registry *prometheus.Registry, targetStatus api_v1beta1.RestoreMemberStatus) {
@@ -388,12 +388,14 @@ func (metricOpt *MetricsOptions) SendRestoreHostMetrics(config *rest.Config, i i
 			MetricLabelHostname: hostStats.Hostname,
 		}
 
-		err = exportRestoreHostMetrics(upsertLabel(labels, hostLabel), registry, hostStats)
+		metricLabels := upsertLabel(labels, hostLabel)
+
+		err = exportRestoreHostMetrics(metricLabels, registry, hostStats)
 		if err != nil {
 			return err
 		}
 
-		err = exportRestoreHostLegacyMetrics(upsertLabel(labels, hostLabel), registry, hostStats)
+		err = exportRestoreHostLegacyMetrics(metricLabels, registry, hostStats)
 		if err != nil {
 			return err
 		}
