@@ -96,7 +96,7 @@ type BackupSessionStatus struct {
 	// Conditions shows condition of different operations/steps of the backup process
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
-	// SessionDeadline specifies the deadline of backup. Backup session will be
+	// SessionDeadline specifies the deadline of backup. BackupSession will be
 	// considered Failed if backup does not complete within this deadline
 	// +optional
 	SessionDeadline metav1.Time `json:"sessionDeadline,omitempty"`
