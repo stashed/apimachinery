@@ -186,6 +186,7 @@ func getInvokerStatusFromRestoreBatch(restoreBatch *v1beta1.RestoreBatch) Restor
 		SessionDuration: restoreBatch.Status.SessionDuration,
 		Conditions:      restoreBatch.Status.Conditions,
 		TargetStatus:    restoreBatch.Status.Members,
+		SessionDeadline: restoreBatch.Status.SessionDeadline,
 	}
 }
 
