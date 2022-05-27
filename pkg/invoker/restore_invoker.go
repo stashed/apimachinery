@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"time"
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
@@ -192,7 +191,7 @@ func getInvokerStatusFromRestoreBatch(restoreBatch *v1beta1.RestoreBatch) Restor
 
 func getInvokerStatusFromRestoreSession(restoreSession *v1beta1.RestoreSession) RestoreInvokerStatus {
 	invokerStatus := RestoreInvokerStatus{
-		SessionDuration: time.Since(restoreSession.CreationTimestamp.Time).Round(time.Second).String(),
+		SessionDuration: restoreSession.Status.SessionDuration,
 		SessionDeadline: restoreSession.Status.SessionDeadline,
 		Conditions:      restoreSession.Status.Conditions,
 	}
