@@ -9195,7 +9195,7 @@
           "type": "string"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "description": "TimeOut specifies the maximum duration of backup. BackupBatch will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "string"
         }
       }
@@ -9475,7 +9475,7 @@
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "description": "TimeOut specifies the maximum duration of backup. BackupSession will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
           "type": "string"
         }
       }
@@ -9661,7 +9661,7 @@
           "type": "string"
         },
         "sessionDeadline": {
-          "description": "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+          "description": "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
           "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
@@ -10149,7 +10149,7 @@
           "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.ObjectReference"
         },
         "timeOut": {
-          "description": "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "description": "TimeOut specifies the maximum duration of restore. RestoreBatch will be considered Failed if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.",
           "type": "string"
         }
       }
@@ -10176,6 +10176,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreBatch. Phase will be \"Succeeded\" only if phase of all members are \"Succeeded\". If the restore process fail for any of the members, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of restore process. RestoreBatch will be considered Failed if restore does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete restore of all the members.",
@@ -10367,7 +10372,7 @@
           "type": "string"
         },
         "sessionDeadline": {
-          "description": "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
+          "description": "SessionDeadline specifies the deadline of restore process. RestoreSession will be considered Failed if restore does not complete within this deadline",
           "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },

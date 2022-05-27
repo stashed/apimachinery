@@ -1002,6 +1002,7 @@ func (in *RestoreBatchStatus) DeepCopyInto(out *RestoreBatchStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	in.SessionDeadline.DeepCopyInto(&out.SessionDeadline)
 	return
 }
 

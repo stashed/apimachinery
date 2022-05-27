@@ -19520,7 +19520,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+							Description: "TimeOut specifies the maximum duration of backup. BackupBatch will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -19956,7 +19956,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationSpec(ref common.R
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+							Description: "TimeOut specifies the maximum duration of backup. BackupSession will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -20293,7 +20293,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupSessionStatus(ref common.Refer
 					},
 					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
-							Description: "SessionDeadline specifies the deadline of backup. Backup session will be considered Failed if backup does not complete within this deadline",
+							Description: "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
 							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
@@ -21127,7 +21127,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchSpec(ref common.Referenc
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+							Description: "TimeOut specifies the maximum duration of restore. RestoreBatch will be considered Failed if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -21188,11 +21188,18 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchStatus(ref common.Refere
 							},
 						},
 					},
+					"sessionDeadline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SessionDeadline specifies the deadline of restore process. RestoreBatch will be considered Failed if restore does not complete within this deadline",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreMemberStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.Condition", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreMemberStatus"},
 	}
 }
 
@@ -21525,7 +21532,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionStatus(ref common.Refe
 					},
 					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
-							Description: "SessionDeadline specifies the deadline of restore process. Restore session will be considered Failed if restore does not complete within this deadline",
+							Description: "SessionDeadline specifies the deadline of restore process. RestoreSession will be considered Failed if restore does not complete within this deadline",
 							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},

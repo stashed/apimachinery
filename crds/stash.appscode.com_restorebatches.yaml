@@ -3830,9 +3830,9 @@ spec:
                 - name
                 type: object
               timeOut:
-                description: TimeOut specifies the maximum duration of backup. Backup
-                  session will be considered Failed if backup does not complete within
-                  this time limit. By default, Stash don't set any timeout for backup.
+                description: TimeOut specifies the maximum duration of restore. RestoreBatch
+                  will be considered Failed if restore does not complete within this
+                  time limit. By default, Stash don't set any timeout for restore.
                 type: string
             type: object
           status:
@@ -4008,6 +4008,12 @@ spec:
                 - Failed
                 - Unknown
                 - Invalid
+                type: string
+              sessionDeadline:
+                description: SessionDeadline specifies the deadline of restore process.
+                  RestoreBatch will be considered Failed if restore does not complete
+                  within this deadline
+                format: date-time
                 type: string
               sessionDuration:
                 description: SessionDuration specify total time taken to complete

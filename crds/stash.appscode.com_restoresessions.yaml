@@ -3440,7 +3440,7 @@ spec:
                 type: string
               sessionDeadline:
                 description: SessionDeadline specifies the deadline of restore process.
-                  Restore session will be considered Failed if restore does not complete
+                  RestoreSession will be considered Failed if restore does not complete
                   within this deadline
                 format: date-time
                 type: string
