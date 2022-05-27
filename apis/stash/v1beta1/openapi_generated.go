@@ -21462,7 +21462,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionSpec(ref common.Refere
 					},
 					"timeOut": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TimeOut specifies the maximum duration of backup. Backup session will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+							Description: "TimeOut specifies the maximum duration of restore. RestoreSession will be considered Failed if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
