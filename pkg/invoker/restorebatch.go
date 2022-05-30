@@ -330,6 +330,11 @@ func (inv *RestoreBatchInvoker) UpdateStatus(status RestoreInvokerStatus) error 
 				duration := time.Since(startTime.Time)
 				in.SessionDuration = duration.Round(time.Second).String()
 			}
+
+			if in.SessionDeadline.IsZero() {
+				in.SessionDeadline = status.SessionDeadline
+			}
+
 			return inv.restoreBatch.ObjectMeta.UID, in
 		},
 		metav1.UpdateOptions{},
