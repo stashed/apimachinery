@@ -36,6 +36,7 @@ const (
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.repository.name"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Duration",type="string",JSONPath=".status.sessionDuration"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type RestoreBatch struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
