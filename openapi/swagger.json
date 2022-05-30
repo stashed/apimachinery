@@ -9193,6 +9193,10 @@
         "schedule": {
           "description": "Schedule specifies the schedule for invoking backup sessions",
           "type": "string"
+        },
+        "timeOut": {
+          "description": "TimeOut specifies the maximum duration of backup. BackupBatch will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "type": "string"
         }
       }
     },
@@ -9469,6 +9473,10 @@
           "description": "Temp directory configuration for functions/sidecar An `EmptyDir` will always be mounted at /tmp with this settings",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
+        },
+        "timeOut": {
+          "description": "TimeOut specifies the maximum duration of backup. BackupSession will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "type": "string"
         }
       }
     },
@@ -9651,6 +9659,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the backup process for this BackupSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete backup, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete current backup session (sum of backup duration of all targets)",
@@ -10134,6 +10147,10 @@
           "description": "Repository refer to the Repository crd that holds backend information",
           "default": {},
           "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.ObjectReference"
+        },
+        "timeOut": {
+          "description": "TimeOut specifies the maximum duration of restore. RestoreBatch will be considered Failed if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.",
+          "type": "string"
         }
       }
     },
@@ -10159,6 +10176,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreBatch. Phase will be \"Succeeded\" only if phase of all members are \"Succeeded\". If the restore process fail for any of the members, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of restore process. RestoreBatch will be considered Failed if restore does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete restore of all the members.",
@@ -10327,6 +10349,10 @@
           "description": "Temp directory configuration for functions/sidecar An `EmptyDir` will always be mounted at /tmp with this settings",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
+        },
+        "timeOut": {
+          "description": "TimeOut specifies the maximum duration of restore. RestoreSession will be considered Failed if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.",
+          "type": "string"
         }
       }
     },
@@ -10344,6 +10370,11 @@
         "phase": {
           "description": "Phase indicates the overall phase of the restore process for this RestoreSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete restore, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "sessionDeadline": {
+          "description": "SessionDeadline specifies the deadline of restore process. RestoreSession will be considered Failed if restore does not complete within this deadline",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
           "description": "SessionDuration specify total time taken to complete current restore session (sum of restore duration of all hosts)",
