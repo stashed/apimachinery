@@ -27,12 +27,12 @@ import (
 	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
-	"github.com/go-openapi/spec"
 	gort "gomodules.xyz/runtime"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/klog/v2"
 	"k8s.io/kube-openapi/pkg/common"
+	"k8s.io/kube-openapi/pkg/validation/spec"
 	"kmodules.xyz/client-go/openapi"
 )
 
