@@ -9363,6 +9363,10 @@
           "description": "BackupNamespace specifies the namespace where the backup resources (i.e. BackupConfiguration, BackupSession, Job, Repository etc.) will be created. If you don't provide this field, then the backup resources will be created in the target namespace.",
           "type": "string"
         },
+        "hooks": {
+          "description": "Hooks specifies the actions Stash should execute before or after backup.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupHooks"
+        },
         "interimVolumeTemplate": {
           "description": "InterimVolumeTemplate specifies a template for a volume to hold targeted data temporarily before uploading to backend or inserting into target. It is only usable for job model. Don't specify it in sidecar model.",
           "$ref": "#/definitions/xyz.kmodules.offshoot-api.api.v1.PersistentVolumeClaim"
@@ -9394,6 +9398,10 @@
           "description": "Temp directory configuration for functions/sidecar An `EmptyDir` will always be mounted at /tmp with this settings",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
+        },
+        "timeOut": {
+          "description": "TimeOut specifies the maximum duration of backup. BackupSession will be considered Failed if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.",
+          "type": "string"
         },
         "usagePolicy": {
           "description": "UsagePolicy specifies a policy of how this Repository will be used. For example, you can use `allowedNamespaces` policy to restrict the usage of this Repository to particular namespaces. This field is optional. If you don't provide the usagePolicy, then it can be used only from the current namespace.",
