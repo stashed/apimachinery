@@ -20394,6 +20394,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupHooks(ref common.ReferenceCall
 					"postBackup": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PostBackup is called according to executionPolicy after a backup session is complete.",
+							Default:     map[string]interface{}{},
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.PostBackupHook"),
 						},
 					},
@@ -21636,6 +21637,7 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreHooks(ref common.ReferenceCal
 					"postRestore": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PostRestore is called according to executionPolicy after a restore session is complete.",
+							Default:     map[string]interface{}{},
 							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.PostRestoreHook"),
 						},
 					},

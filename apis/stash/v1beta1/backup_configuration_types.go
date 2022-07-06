@@ -116,11 +116,11 @@ type BackupHooks struct {
 
 	// PostBackup is called according to executionPolicy after a backup session is complete.
 	// +optional
-	PostBackup *PostBackupHook `json:"postBackup,omitempty"`
+	PostBackup PostBackupHook `json:"postBackup,omitempty"`
 }
 
 type PostBackupHook struct {
-	prober.Handler `json:",inline"`
+	*prober.Handler `json:",inline"`
 	// ExecutionPolicy specifies when to execute a hook.
 	// Supported values are "Always", "OnFailure", "OnSuccess".
 	// Default value: "Always".

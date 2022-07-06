@@ -9602,6 +9602,7 @@
       "properties": {
         "postBackup": {
           "description": "PostBackup is called according to executionPolicy after a backup session is complete.",
+          "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostBackupHook"
         },
         "preBackup": {
@@ -10314,6 +10315,7 @@
       "properties": {
         "postRestore": {
           "description": "PostRestore is called according to executionPolicy after a restore session is complete.",
+          "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostRestoreHook"
         },
         "preRestore": {
