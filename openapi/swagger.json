@@ -9601,8 +9601,8 @@
       "type": "object",
       "properties": {
         "postBackup": {
-          "description": "PostBackup is called immediately after a backup session is complete.",
-          "$ref": "#/definitions/xyz.kmodules.prober.api.v1.Handler"
+          "description": "PostBackup is called according to executionPolicy after a backup session is complete.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostBackupHook"
         },
         "preBackup": {
           "description": "PreBackup is called immediately before a backup session is initiated.",
@@ -10119,6 +10119,64 @@
         }
       }
     },
+    "dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostBackupHook": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "description": "ContainerName specifies the name of the container where to execute the commands for Exec probe or where to find the port for HTTP or TCP probe",
+          "type": "string"
+        },
+        "exec": {
+          "description": "One and only one of the following should be specified. Exec specifies the action to take.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.ExecAction"
+        },
+        "executionPolicy": {
+          "description": "ExecutionPolicy specifies when to execute a hook. Supported values are \"Always\", \"OnFailure\", \"OnSuccess\". Default value: \"Always\".",
+          "type": "string"
+        },
+        "httpGet": {
+          "description": "HTTPGet specifies the http Get request to perform.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.HTTPGetAction"
+        },
+        "httpPost": {
+          "description": "HTTPPost specifies the http Post request to perform.",
+          "$ref": "#/definitions/xyz.kmodules.prober.api.v1.HTTPPostAction"
+        },
+        "tcpSocket": {
+          "description": "TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported",
+          "$ref": "#/definitions/io.k8s.api.core.v1.TCPSocketAction"
+        }
+      }
+    },
+    "dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostRestoreHook": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "description": "ContainerName specifies the name of the container where to execute the commands for Exec probe or where to find the port for HTTP or TCP probe",
+          "type": "string"
+        },
+        "exec": {
+          "description": "One and only one of the following should be specified. Exec specifies the action to take.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.ExecAction"
+        },
+        "executionPolicy": {
+          "description": "ExecutionPolicy specifies when to execute a hook. Supported values are \"Always\", \"OnFailure\", \"OnSuccess\". Default value is \"Always\".",
+          "type": "string"
+        },
+        "httpGet": {
+          "description": "HTTPGet specifies the http Get request to perform.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.HTTPGetAction"
+        },
+        "httpPost": {
+          "description": "HTTPPost specifies the http Post request to perform.",
+          "$ref": "#/definitions/xyz.kmodules.prober.api.v1.HTTPPostAction"
+        },
+        "tcpSocket": {
+          "description": "TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported",
+          "$ref": "#/definitions/io.k8s.api.core.v1.TCPSocketAction"
+        }
+      }
+    },
     "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RestoreBatch": {
       "type": "object",
       "properties": {
@@ -10255,8 +10313,8 @@
       "type": "object",
       "properties": {
         "postRestore": {
-          "description": "PostRestore is called immediately after a restore session is complete.",
-          "$ref": "#/definitions/xyz.kmodules.prober.api.v1.Handler"
+          "description": "PostRestore is called according to executionPolicy after a restore session is complete.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.PostRestoreHook"
         },
         "preRestore": {
           "description": "PreRestore is called immediately before a restore session is initiated.",
