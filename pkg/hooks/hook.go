@@ -30,6 +30,7 @@ import (
 	"stash.appscode.dev/apimachinery/pkg/conditions"
 	"stash.appscode.dev/apimachinery/pkg/invoker"
 
+	sprig "github.com/Masterminds/sprig/v3"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/rest"
@@ -67,7 +68,7 @@ func (e *HookExecutor) renderTemplate() error {
 		return err
 	}
 
-	tpl, err := template.New("hook-template").Parse(string(hookContent))
+	tpl, err := template.New("hook-template").Funcs(sprig.TxtFuncMap()).Parse(string(hookContent))
 	if err != nil {
 		return err
 	}
