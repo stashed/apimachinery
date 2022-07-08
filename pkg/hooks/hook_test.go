@@ -25,17 +25,20 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/client-go/rest"
-	v1 "kmodules.xyz/client-go/api/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	prober "kmodules.xyz/prober/api/v1"
 )
 
-const errorMsg = "this session failed because destined to fail"
+const (
+	defaultErrorMsg             = "this session failed because destined to fail"
+	errorMsgWithEscapeCharacter = "mysqldump: [ERROR] mysqldump: unknown option '-k'. {\"message_type\":\"error\",\"error\":{\"Op\":\"read\",\"Path\":\"/dumpfile.sql\",\"Err\":{}},\"during\":\"archival\",\"item\":\"/dumpfile.sql\"} Fatal: unable to save snapshot: snapshot is empty"
+)
 
 func TestHookExecutor_renderTemplate(t *testing.T) {
 	type fields struct {
 		Config      *rest.Config
 		Hook        *prober.Handler
-		ExecutorPod v1.ObjectReference
+		ExecutorPod kmapi.ObjectReference
 		Summary     *v1beta1.Summary
 	}
 
@@ -64,9 +67,18 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 			expectedBody: "Name: test-session Namespace: test Phase: Failed",
 		},
 		{
+			name: "Failed session with escape character in error message",
+			fields: fields{
+				Hook:    defaultHookTemplate(),
+				Summary: failedSummary(),
+			},
+			wantErr:      false,
+			expectedBody: "Name: test-session Namespace: test Phase: Failed",
+		},
+		{
 			name: "Conditional hook with Succeeded phase",
 			fields: fields{
-				Hook:    conditionalHookTemplate(),
+				Hook:    conditionalHookTemplate(defaultErrorMsg),
 				Summary: defaultSummary(),
 			},
 			wantErr:      false,
@@ -75,11 +87,20 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 		{
 			name: "Conditional hook with Failed phase",
 			fields: fields{
-				Hook:    conditionalHookTemplate(),
+				Hook:    conditionalHookTemplate(defaultErrorMsg),
 				Summary: failedSummary(),
 			},
 			wantErr:      false,
-			expectedBody: fmt.Sprintf("Failed. Reason: %s", errorMsg),
+			expectedBody: fmt.Sprintf("Failed. Reason: %s", defaultErrorMsg),
+		},
+		{
+			name: "Conditional hook with escape character in error message",
+			fields: fields{
+				Hook:    conditionalHookTemplate(errorMsgWithEscapeCharacter),
+				Summary: failedSummary(),
+			},
+			wantErr:      false,
+			expectedBody: fmt.Sprintf("Failed. Reason: %s", errorMsgWithEscapeCharacter),
 		},
 	}
 	for _, tt := range tests {
@@ -134,7 +155,7 @@ func defaultSummary(transformFuncs ...func(s *v1beta1.Summary)) *v1beta1.Summary
 func failedSummary() *v1beta1.Summary {
 	return defaultSummary(func(s *v1beta1.Summary) {
 		s.Status.Phase = "Failed"
-		s.Status.Error = errorMsg
+		s.Status.Error = defaultErrorMsg
 	})
 }
 
@@ -146,10 +167,10 @@ func defaultHookTemplate() *prober.Handler {
 	}
 }
 
-func conditionalHookTemplate() *prober.Handler {
+func conditionalHookTemplate(msg string) *prober.Handler {
 	return &prober.Handler{
 		HTTPPost: &prober.HTTPPostAction{
-			Body: fmt.Sprintf("{{ if eq .Status.Phase `Succeeded`}}Succeeded{{ else }}Failed. Reason: %s{{ end}}", errorMsg),
+			Body: fmt.Sprintf("{{ if eq .Status.Phase `Succeeded`}}Succeeded{{ else }}Failed. Reason: %s{{ end}}", msg),
 		},
 	}
 }
