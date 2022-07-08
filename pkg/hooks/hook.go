@@ -18,7 +18,6 @@ package hooks
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"strings"
 	"sync"
@@ -48,7 +47,7 @@ type HookExecutor struct {
 }
 
 func (e *HookExecutor) Execute() error {
-	if strings.Contains(e.Hook.String(), "{{") {
+	if e.Hook.HTTPPost != nil && strings.Contains(e.Hook.HTTPPost.Body, "{{") {
 		if err := e.renderTemplate(); err != nil {
 			return err
 		}
@@ -63,12 +62,7 @@ var pool = sync.Pool{
 }
 
 func (e *HookExecutor) renderTemplate() error {
-	hookContent, err := json.Marshal(e.Hook)
-	if err != nil {
-		return err
-	}
-
-	tpl, err := template.New("hook-template").Funcs(sprig.TxtFuncMap()).Parse(string(hookContent))
+	tpl, err := template.New("hook-template").Funcs(sprig.TxtFuncMap()).Parse(e.Hook.HTTPPost.Body)
 	if err != nil {
 		return err
 	}
@@ -82,7 +76,9 @@ func (e *HookExecutor) renderTemplate() error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(buf.Bytes(), &e.Hook)
+
+	e.Hook.HTTPPost.Body = strings.TrimSpace(buf.String())
+	return nil
 }
 
 type BackupHookExecutor struct {
