@@ -457,8 +457,17 @@ func exportBackupSessionLegacyMetrics(labels prometheus.Labels, status api_v1bet
 	return setBackupSessionMetrics(metrics, status, registry)
 }
 
+func checkIfBackupSessionSucceeded(status api_v1beta1.BackupSessionStatus) bool {
+	for _, tr := range status.Targets {
+		if tr.Phase != api_v1beta1.TargetBackupSucceeded {
+			return false
+		}
+	}
+	return true
+}
+
 func setBackupSessionMetrics(metrics *BackupMetrics, status api_v1beta1.BackupSessionStatus, registry *prometheus.Registry) error {
-	if status.Phase == api_v1beta1.BackupSessionSucceeded {
+	if checkIfBackupSessionSucceeded(status) {
 		metrics.BackupSessionMetrics.SessionSuccess.Set(1)
 
 		// set total time taken to complete the entire backup session
