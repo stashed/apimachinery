@@ -398,7 +398,7 @@ release: ## Release final production docker image and push into the DockerHub.
 KO := $(shell pwd)/bin/ko
 .PHONY: install-ko
 install-ko: ## Download ko locally if necessary.
-	$(call go-get-tool,$(KO),github.com/google/ko@v0.11.0)
+	$(call go-get-tool,$(KO),github.com/google/ko@latest)
 
 # go-get-tool will 'go get' any package $2 and install it to $1.
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
