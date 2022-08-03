@@ -9239,6 +9239,10 @@
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1alpha1.RetentionPolicy"
         },
+        "retryConfig": {
+          "description": "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.RetryConfig"
+        },
         "runtimeSettings": {
           "description": "RuntimeSettings allow to specify Resources, NodeSelector, Affinity, Toleration, ReadinessProbe etc, and used to create service account for CronJob.",
           "default": {},
@@ -9380,6 +9384,10 @@
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1alpha1.RetentionPolicy"
         },
+        "retryConfig": {
+          "description": "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.RetryConfig"
+        },
         "runtimeSettings": {
           "description": "RuntimeSettings allow to specify Resources, NodeSelector, Affinity, Toleration, ReadinessProbe etc.",
           "default": {},
@@ -9512,6 +9520,10 @@
           "description": "RetentionPolicy indicates the policy to follow to clean old backup snapshots",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1alpha1.RetentionPolicy"
+        },
+        "retryConfig": {
+          "description": "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+          "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.RetryConfig"
         },
         "runtimeSettings": {
           "description": "RuntimeSettings allow to specify Resources, NodeSelector, Affinity, Toleration, ReadinessProbe etc.",
@@ -9704,6 +9716,11 @@
           "description": "Invoker refers to the BackupConfiguration or BackupBatch being used to invoke this backup session",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.BackupInvokerRef"
+        },
+        "retryLeft": {
+          "description": "RetryLeft specifies number of retry attempts left for the session. If this set to non-zero, Stash will create a new BackupSession if the current one fails.",
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -9718,9 +9735,17 @@
             "$ref": "#/definitions/xyz.kmodules.client-go.api.v1.Condition"
           }
         },
+        "nextRetry": {
+          "description": "NextRetry specifies the time when Stash should retry the current failed backup. This field will exist only if the `retryConfig` has been set in the respective backup invoker.",
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+        },
         "phase": {
           "description": "Phase indicates the overall phase of the backup process for this BackupSession. Phase will be \"Succeeded\" only if phase of all hosts are \"Succeeded\". If any of the host fail to complete backup, Phase will be \"Failed\".",
           "type": "string"
+        },
+        "retried": {
+          "description": "Retried specifies whether this session was retried or not. This field will exist only if the `retryConfig` has been set in the respective backup invoker.",
+          "type": "boolean"
         },
         "sessionDeadline": {
           "description": "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
@@ -10595,6 +10620,21 @@
           "description": "Temp directory configuration for functions/sidecar An `EmptyDir` will always be mounted at /tmp with this settings",
           "default": {},
           "$ref": "#/definitions/dev.appscode.stash.apimachinery.apis.stash.v1beta1.EmptyDirSettings"
+        }
+      }
+    },
+    "dev.appscode.stash.apimachinery.apis.stash.v1beta1.RetryConfig": {
+      "type": "object",
+      "properties": {
+        "delay": {
+          "description": "The number of seconds to wait before next retry. If you don't specify this field, Stash will retry immediately.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxRetry": {
+          "description": "MaxRetry specifies the maximum number of attempts Stash should retry. Default value: 1",
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
