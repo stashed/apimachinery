@@ -242,4 +242,7 @@ const (
 	KeyInvokerKind      = "invoker_kind"
 	KeyInvokerName      = "invoker_name"
 	KeyInvokerNamespace = "invoker_namespace"
+
+	KeyRepositoryName      = "repo_name"
+	KeyRepositoryNamespace = "repo_namespace"
 )
