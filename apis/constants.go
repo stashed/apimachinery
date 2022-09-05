@@ -230,12 +230,14 @@ const (
 
 // =================== Keys for structure logging =====================
 const (
+	ObjectKey       = "key"
+	ObjectKind      = "kind"
+	ObjectName      = "name"
+	ObjectNamespace = "namespace"
+
 	KeyTargetKind      = "target_kind"
 	KeyTargetName      = "target_name"
 	KeyTargetNamespace = "target_namespace"
-
-	ObjectKind = "kind"
-	ObjectKey  = "key"
 
 	KeyInvokerKind      = "invoker_kind"
 	KeyInvokerName      = "invoker_name"
