@@ -265,6 +265,20 @@ func (inv *BackupBatchInvoker) GetPhase() v1beta1.BackupInvokerPhase {
 	return inv.backupBatch.Status.Phase
 }
 
+func (inv *BackupBatchInvoker) UpdateObservedGeneration() error {
+	_, err := v1beta1_util.UpdateBackupBatchStatus(
+		context.TODO(),
+		inv.stashClient.StashV1beta1(),
+		inv.backupBatch.ObjectMeta,
+		func(in *v1beta1.BackupBatchStatus) (types.UID, *v1beta1.BackupBatchStatus) {
+			in.ObservedGeneration = inv.backupBatch.Generation
+			return inv.backupBatch.UID, in
+		},
+		metav1.UpdateOptions{},
+	)
+	return err
+}
+
 func (inv *BackupBatchInvoker) GetSummary(target v1beta1.TargetRef, session kmapi.ObjectReference) *v1beta1.Summary {
 	summary := getTargetBackupSummary(inv.stashClient, target, session)
 	summary.Invoker = core.TypedLocalObjectReference{

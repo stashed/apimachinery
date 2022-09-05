@@ -60,6 +60,7 @@ type BackupTargetHandler interface {
 
 type BackupInvokerStatusHandler interface {
 	GetPhase() v1beta1.BackupInvokerPhase
+	UpdateObservedGeneration() error
 }
 
 type BackupTargetInfo struct {
