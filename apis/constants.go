@@ -234,8 +234,8 @@ const (
 	KeyTargetName      = "target_name"
 	KeyTargetNamespace = "target_namespace"
 
-	ObjectKind  = "kind"
-	InformerKey = "key"
+	ObjectKind = "kind"
+	ObjectKey  = "key"
 
 	KeyInvokerKind      = "invoker_kind"
 	KeyInvokerName      = "invoker_name"
