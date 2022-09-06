@@ -245,4 +245,6 @@ const (
 
 	KeyRepositoryName      = "repo_name"
 	KeyRepositoryNamespace = "repo_namespace"
+
+	KeyReason = "reason"
 )
