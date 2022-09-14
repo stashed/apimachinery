@@ -34,6 +34,7 @@ import (
 	core_util "kmodules.xyz/client-go/core/v1"
 	"kmodules.xyz/client-go/meta"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
+	runtimeClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type BackupConfigurationInvoker struct {
@@ -243,7 +244,7 @@ func (inv *BackupConfigurationInvoker) UpdateObservedGeneration() error {
 		},
 		metav1.UpdateOptions{},
 	)
-	return err
+	return runtimeClient.IgnoreNotFound(err)
 }
 
 func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, session kmapi.ObjectReference) *v1beta1.Summary {
