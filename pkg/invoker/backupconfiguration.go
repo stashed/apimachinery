@@ -219,8 +219,9 @@ func (inv *BackupConfigurationInvoker) GetHash() string {
 }
 
 func (inv *BackupConfigurationInvoker) GetObjectJSON() (string, error) {
-	// remove status from the object
 	obj := inv.backupConfig.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
 	obj.Status = v1beta1.BackupConfigurationStatus{}
 	return marshalToJSON(obj)
 }
@@ -255,6 +256,18 @@ func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, sess
 		Name:     inv.backupConfig.Name,
 	}
 	return summary
+}
+
+func removeMetaDecorators(old metav1.ObjectMeta) metav1.ObjectMeta {
+	return metav1.ObjectMeta{
+		Name:            old.Name,
+		Namespace:       old.Namespace,
+		UID:             old.UID,
+		Generation:      old.Generation,
+		Labels:          old.Labels,
+		Annotations:     old.Annotations,
+		OwnerReferences: old.OwnerReferences,
+	}
 }
 
 func marshalToJSON(obj runtime.Object) (string, error) {

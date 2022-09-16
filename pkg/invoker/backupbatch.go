@@ -246,8 +246,9 @@ func (inv *BackupBatchInvoker) GetHash() string {
 }
 
 func (inv *BackupBatchInvoker) GetObjectJSON() (string, error) {
-	// remove status from the object
 	obj := inv.backupBatch.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
 	obj.Status = v1beta1.BackupBatchStatus{}
 	return marshalToJSON(obj)
 }

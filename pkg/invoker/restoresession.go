@@ -203,8 +203,9 @@ func (inv *RestoreSessionInvoker) GetHash() string {
 }
 
 func (inv *RestoreSessionInvoker) GetObjectJSON() (string, error) {
-	// remove status from the object
 	obj := inv.restoreSession.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
 	obj.Status = v1beta1.RestoreSessionStatus{}
 	return marshalToJSON(obj)
 }
