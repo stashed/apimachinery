@@ -203,11 +203,10 @@ func (inv *RestoreSessionInvoker) GetHash() string {
 }
 
 func (inv *RestoreSessionInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.restoreSession, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	// remove status from the object
+	obj := inv.restoreSession.DeepCopy()
+	obj.Status = v1beta1.RestoreSessionStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *RestoreSessionInvoker) GetRuntimeObject() runtime.Object {

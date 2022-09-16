@@ -226,11 +226,10 @@ func (inv *RestoreBatchInvoker) GetHash() string {
 }
 
 func (inv *RestoreBatchInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.restoreBatch, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	// remove status from the object
+	obj := inv.restoreBatch.DeepCopy()
+	obj.Status = v1beta1.RestoreBatchStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *RestoreBatchInvoker) GetRuntimeObject() runtime.Object {

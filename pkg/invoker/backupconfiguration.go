@@ -28,6 +28,7 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/reference"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -218,11 +219,10 @@ func (inv *BackupConfigurationInvoker) GetHash() string {
 }
 
 func (inv *BackupConfigurationInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.backupConfig, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	// remove status from the object
+	obj := inv.backupConfig.DeepCopy()
+	obj.Status = v1beta1.BackupConfigurationStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *BackupConfigurationInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
@@ -255,4 +255,12 @@ func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, sess
 		Name:     inv.backupConfig.Name,
 	}
 	return summary
+}
+
+func marshalToJSON(obj runtime.Object) (string, error) {
+	jsonObj, err := meta.MarshalToJson(obj, v1beta1.SchemeGroupVersion)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonObj), nil
 }

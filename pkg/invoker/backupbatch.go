@@ -33,7 +33,6 @@ import (
 	"k8s.io/client-go/tools/reference"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	core_util "kmodules.xyz/client-go/core/v1"
-	"kmodules.xyz/client-go/meta"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 	runtimeClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -247,11 +246,10 @@ func (inv *BackupBatchInvoker) GetHash() string {
 }
 
 func (inv *BackupBatchInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.backupBatch, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	// remove status from the object
+	obj := inv.backupBatch.DeepCopy()
+	obj.Status = v1beta1.BackupBatchStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *BackupBatchInvoker) GetRuntimeObject() runtime.Object {
