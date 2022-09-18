@@ -18,7 +18,6 @@ package restic
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -72,7 +71,7 @@ func setupTest(tempDir string) (*ResticWrapper, error) {
 	if err := os.MkdirAll(targetPath, 0o777); err != nil {
 		return nil, err
 	}
-	err := ioutil.WriteFile(filepath.Join(targetPath, fileName), []byte(fileContent), os.ModePerm)
+	err := os.WriteFile(filepath.Join(targetPath, fileName), []byte(fileContent), os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +98,7 @@ func cleanup(tempDir string) {
 }
 
 func TestInitializeRepository(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -118,7 +117,7 @@ func TestInitializeRepository(t *testing.T) {
 }
 
 func TestRepositoryAlreadyExist_AfterInitialization(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -139,7 +138,7 @@ func TestRepositoryAlreadyExist_AfterInitialization(t *testing.T) {
 }
 
 func TestRepositoryAlreadyExist_WithoutInitialization(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -156,7 +155,7 @@ func TestRepositoryAlreadyExist_WithoutInitialization(t *testing.T) {
 }
 
 func TestBackupRestoreDirs(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -208,7 +207,7 @@ func TestBackupRestoreDirs(t *testing.T) {
 	fmt.Println(restoreOut)
 
 	// check file
-	fileContentByte, err := ioutil.ReadFile(filepath.Join(targetPath, fileName))
+	fileContentByte, err := os.ReadFile(filepath.Join(targetPath, fileName))
 	if err != nil {
 		t.Error(err)
 		return
@@ -217,7 +216,7 @@ func TestBackupRestoreDirs(t *testing.T) {
 }
 
 func TestBackupRestoreStdin(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -267,7 +266,7 @@ func TestBackupRestoreStdin(t *testing.T) {
 }
 
 func TestBackupRestoreWithScheduling(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -327,7 +326,7 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 	fmt.Println(restoreOut)
 
 	// check file
-	fileContentByte, err := ioutil.ReadFile(filepath.Join(targetPath, fileName))
+	fileContentByte, err := os.ReadFile(filepath.Join(targetPath, fileName))
 	if err != nil {
 		t.Error(err)
 		return
@@ -336,7 +335,7 @@ func TestBackupRestoreWithScheduling(t *testing.T) {
 }
 
 func TestBackupRestoreStdinWithScheduling(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -394,7 +393,7 @@ func TestBackupRestoreStdinWithScheduling(t *testing.T) {
 }
 
 func TestRunParallelBackup(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -431,7 +430,7 @@ func TestRunParallelBackup(t *testing.T) {
 }
 
 func TestRunParallelRestore(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -487,7 +486,7 @@ func TestRunParallelRestore(t *testing.T) {
 	// verify that restored file contents are identical to the backed up file
 	for i := range restoreOptions {
 		// check file
-		restoredFileContent, err := ioutil.ReadFile(filepath.Join(restoreOptions[i].Destination, targetPath, fileName))
+		restoredFileContent, err := os.ReadFile(filepath.Join(restoreOptions[i].Destination, targetPath, fileName))
 		if err != nil {
 			t.Error(err)
 			return
@@ -497,7 +496,7 @@ func TestRunParallelRestore(t *testing.T) {
 }
 
 func TestRunParallelDump(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -640,7 +639,7 @@ func TestIncludeExcludePattern(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+			tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 			if err != nil {
 				t.Error(err)
 				return
@@ -667,7 +666,7 @@ func TestIncludeExcludePattern(t *testing.T) {
 				return
 			}
 			for _, name := range test.sourceFileNames {
-				err = ioutil.WriteFile(filepath.Join(targetPath, name), []byte(fileContent), 0o777)
+				err = os.WriteFile(filepath.Join(targetPath, name), []byte(fileContent), 0o777)
 				if err != nil {
 					t.Error(err)
 					return
@@ -744,7 +743,7 @@ func TestBackupRestoreWithArgs(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+			tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 			if err != nil {
 				t.Error(err)
 				return
@@ -795,7 +794,7 @@ func TestBackupRestoreWithArgs(t *testing.T) {
 }
 
 func TestApplyRetentionPolicy(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
@@ -846,7 +845,7 @@ func TestApplyRetentionPolicy(t *testing.T) {
 }
 
 func TestVerifyRepositoryIntegrity(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "stash-unit-test-")
+	tempDir, err := os.MkdirTemp("", "stash-unit-test-")
 	if err != nil {
 		t.Error(err)
 		return
