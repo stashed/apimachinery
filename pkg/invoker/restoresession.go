@@ -390,10 +390,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 	}
 
 	if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
-		(kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) ||
-			kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded)) {
+		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
 		return v1beta1.RestoreFailed
 	}
 
@@ -410,8 +407,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 			return v1beta1.RestorePhaseUnknown
 		}
 
-		if status.Phase == v1beta1.TargetRestoreFailed ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
+		if status.Phase == v1beta1.TargetRestoreFailed {
 			return v1beta1.RestoreFailed
 		}
 		return v1beta1.RestoreSucceeded
@@ -433,6 +429,9 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 
 func RestoreCompletedForAllTargets(status []v1beta1.RestoreMemberStatus, totalTargets int) bool {
 	for _, t := range status {
+		if t.Phase == v1beta1.TargetRestoreSucceeded || t.Phase == v1beta1.TargetRestoreFailed || t.Phase == v1beta1.TargetRestorePhaseUnknown {
+			continue
+		}
 		if t.TotalHosts == nil || !restoreCompletedForAllHosts(t.Stats, *t.TotalHosts) {
 			return false
 		}
