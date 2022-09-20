@@ -28,12 +28,14 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/reference"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	core_util "kmodules.xyz/client-go/core/v1"
 	"kmodules.xyz/client-go/meta"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
+	runtimeClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type BackupConfigurationInvoker struct {
@@ -217,11 +219,11 @@ func (inv *BackupConfigurationInvoker) GetHash() string {
 }
 
 func (inv *BackupConfigurationInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.backupConfig, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	obj := inv.backupConfig.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
+	obj.Status = v1beta1.BackupConfigurationStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *BackupConfigurationInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
@@ -232,6 +234,20 @@ func (inv *BackupConfigurationInvoker) GetPhase() v1beta1.BackupInvokerPhase {
 	return inv.backupConfig.Status.Phase
 }
 
+func (inv *BackupConfigurationInvoker) UpdateObservedGeneration() error {
+	_, err := v1beta1_util.UpdateBackupConfigurationStatus(
+		context.TODO(),
+		inv.stashClient.StashV1beta1(),
+		inv.backupConfig.ObjectMeta,
+		func(in *v1beta1.BackupConfigurationStatus) (types.UID, *v1beta1.BackupConfigurationStatus) {
+			in.ObservedGeneration = inv.backupConfig.Generation
+			return inv.backupConfig.UID, in
+		},
+		metav1.UpdateOptions{},
+	)
+	return runtimeClient.IgnoreNotFound(err)
+}
+
 func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, session kmapi.ObjectReference) *v1beta1.Summary {
 	summary := getTargetBackupSummary(inv.stashClient, target, session)
 	summary.Invoker = core.TypedLocalObjectReference{
@@ -240,4 +256,24 @@ func (inv *BackupConfigurationInvoker) GetSummary(target v1beta1.TargetRef, sess
 		Name:     inv.backupConfig.Name,
 	}
 	return summary
+}
+
+func removeMetaDecorators(old metav1.ObjectMeta) metav1.ObjectMeta {
+	return metav1.ObjectMeta{
+		Name:            old.Name,
+		Namespace:       old.Namespace,
+		UID:             old.UID,
+		Generation:      old.Generation,
+		Labels:          old.Labels,
+		Annotations:     old.Annotations,
+		OwnerReferences: old.OwnerReferences,
+	}
+}
+
+func marshalToJSON(obj runtime.Object) (string, error) {
+	jsonObj, err := meta.MarshalToJson(obj, v1beta1.SchemeGroupVersion)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonObj), nil
 }

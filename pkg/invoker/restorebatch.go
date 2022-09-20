@@ -226,11 +226,11 @@ func (inv *RestoreBatchInvoker) GetHash() string {
 }
 
 func (inv *RestoreBatchInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.restoreBatch, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	obj := inv.restoreBatch.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
+	obj.Status = v1beta1.RestoreBatchStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *RestoreBatchInvoker) GetRuntimeObject() runtime.Object {
@@ -361,10 +361,14 @@ func upsertRestoreMemberStatus(cur []v1beta1.RestoreMemberStatus, new v1beta1.Re
 }
 
 func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets int) v1beta1.RestorePhase {
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreRestoreHookSucceeded) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostRestoreHookSucceeded) ||
-		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
+		return v1beta1.RestoreFailed
+	}
+
+	if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
+		(kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreRestoreHookSucceeded) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostRestoreHookSucceeded) ||
+			kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded)) {
 		return v1beta1.RestoreFailed
 	}
 

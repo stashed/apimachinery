@@ -231,16 +231,20 @@ func calculateBackupTargetPhase(status v1beta1.BackupTargetStatus) v1beta1.Targe
 }
 
 func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.BackupSessionPhase {
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded) ||
-		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
 		return v1beta1.BackupSessionFailed
 	}
 
 	if kmapi.IsConditionTrue(status.Conditions, v1beta1.BackupSkipped) {
 		return v1beta1.BackupSessionSkipped
+	}
+
+	if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
+		(kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded)) {
+		return v1beta1.BackupSessionFailed
 	}
 
 	if len(status.Targets) == 0 || isAllTargetBackupPending(status.Targets) {

@@ -203,11 +203,11 @@ func (inv *RestoreSessionInvoker) GetHash() string {
 }
 
 func (inv *RestoreSessionInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.restoreSession, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	obj := inv.restoreSession.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
+	obj.Status = v1beta1.RestoreSessionStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *RestoreSessionInvoker) GetRuntimeObject() runtime.Object {
@@ -385,9 +385,11 @@ func checkFailureInConditions(conditions []kmapi.Condition) (bool, string) {
 }
 
 func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestorePhase {
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) ||
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
+		return v1beta1.RestoreFailed
+	}
+
+	if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
 		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
 		return v1beta1.RestoreFailed
 	}
@@ -405,8 +407,7 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 			return v1beta1.RestorePhaseUnknown
 		}
 
-		if status.Phase == v1beta1.TargetRestoreFailed ||
-			kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
+		if status.Phase == v1beta1.TargetRestoreFailed {
 			return v1beta1.RestoreFailed
 		}
 		return v1beta1.RestoreSucceeded
@@ -428,6 +429,9 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 
 func RestoreCompletedForAllTargets(status []v1beta1.RestoreMemberStatus, totalTargets int) bool {
 	for _, t := range status {
+		if t.Phase == v1beta1.TargetRestoreSucceeded || t.Phase == v1beta1.TargetRestoreFailed || t.Phase == v1beta1.TargetRestorePhaseUnknown {
+			continue
+		}
 		if t.TotalHosts == nil || !restoreCompletedForAllHosts(t.Stats, *t.TotalHosts) {
 			return false
 		}

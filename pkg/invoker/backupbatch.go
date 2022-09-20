@@ -33,8 +33,8 @@ import (
 	"k8s.io/client-go/tools/reference"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	core_util "kmodules.xyz/client-go/core/v1"
-	"kmodules.xyz/client-go/meta"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
+	runtimeClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type BackupBatchInvoker struct {
@@ -246,11 +246,11 @@ func (inv *BackupBatchInvoker) GetHash() string {
 }
 
 func (inv *BackupBatchInvoker) GetObjectJSON() (string, error) {
-	jsonObj, err := meta.MarshalToJson(inv.backupBatch, v1beta1.SchemeGroupVersion)
-	if err != nil {
-		return "", err
-	}
-	return string(jsonObj), nil
+	obj := inv.backupBatch.DeepCopy()
+	obj.ObjectMeta = removeMetaDecorators(obj.ObjectMeta)
+	// remove status from the object
+	obj.Status = v1beta1.BackupBatchStatus{}
+	return marshalToJSON(obj)
 }
 
 func (inv *BackupBatchInvoker) GetRuntimeObject() runtime.Object {
@@ -263,6 +263,20 @@ func (inv *BackupBatchInvoker) GetRetentionPolicy() v1alpha1.RetentionPolicy {
 
 func (inv *BackupBatchInvoker) GetPhase() v1beta1.BackupInvokerPhase {
 	return inv.backupBatch.Status.Phase
+}
+
+func (inv *BackupBatchInvoker) UpdateObservedGeneration() error {
+	_, err := v1beta1_util.UpdateBackupBatchStatus(
+		context.TODO(),
+		inv.stashClient.StashV1beta1(),
+		inv.backupBatch.ObjectMeta,
+		func(in *v1beta1.BackupBatchStatus) (types.UID, *v1beta1.BackupBatchStatus) {
+			in.ObservedGeneration = inv.backupBatch.Generation
+			return inv.backupBatch.UID, in
+		},
+		metav1.UpdateOptions{},
+	)
+	return runtimeClient.IgnoreNotFound(err)
 }
 
 func (inv *BackupBatchInvoker) GetSummary(target v1beta1.TargetRef, session kmapi.ObjectReference) *v1beta1.Summary {
