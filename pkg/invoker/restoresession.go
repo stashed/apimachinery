@@ -385,10 +385,15 @@ func checkFailureInConditions(conditions []kmapi.Condition) (bool, string) {
 }
 
 func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.RestorePhase {
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) ||
-		kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) {
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.MetricsPushed) {
+		return v1beta1.RestoreFailed
+	}
+
+	if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
+		(kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreExecutorEnsured) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.PreRestoreHookExecutionSucceeded) ||
+			kmapi.IsConditionFalse(status.Conditions, v1beta1.PostRestoreHookExecutionSucceeded) ||
+			kmapi.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded)) {
 		return v1beta1.RestoreFailed
 	}
 
