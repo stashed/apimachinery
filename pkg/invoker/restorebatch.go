@@ -376,6 +376,11 @@ func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets
 		return v1beta1.RestorePending
 	}
 
+	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryFound) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackendSecretFound) {
+		return v1beta1.RestorePending
+	}
+
 	failedTargetCount := 0
 	unknownTargetCount := 0
 	successfulTargetCount := 0
@@ -404,11 +409,6 @@ func calculateRestoreBatchPhase(status *v1beta1.RestoreBatchStatus, totalTargets
 		if kmapi.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) {
 			return v1beta1.RestoreSucceeded
 		}
-	}
-
-	if kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryFound) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackendSecretFound) {
-		return v1beta1.RestorePending
 	}
 
 	if kmapi.IsConditionFalse(status.Conditions, v1beta1.ValidationPassed) {
