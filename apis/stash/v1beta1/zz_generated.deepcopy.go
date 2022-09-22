@@ -546,7 +546,10 @@ func (in *BackupSessionStatus) DeepCopyInto(out *BackupSessionStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	in.SessionDeadline.DeepCopyInto(&out.SessionDeadline)
+	if in.SessionDeadline != nil {
+		in, out := &in.SessionDeadline, &out.SessionDeadline
+		*out = (*in).DeepCopy()
+	}
 	if in.Retried != nil {
 		in, out := &in.Retried, &out.Retried
 		*out = new(bool)
@@ -1073,7 +1076,10 @@ func (in *RestoreBatchStatus) DeepCopyInto(out *RestoreBatchStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	in.SessionDeadline.DeepCopyInto(&out.SessionDeadline)
+	if in.SessionDeadline != nil {
+		in, out := &in.SessionDeadline, &out.SessionDeadline
+		*out = (*in).DeepCopy()
+	}
 	return
 }
 
@@ -1253,7 +1259,10 @@ func (in *RestoreSessionStatus) DeepCopyInto(out *RestoreSessionStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	in.SessionDeadline.DeepCopyInto(&out.SessionDeadline)
+	if in.SessionDeadline != nil {
+		in, out := &in.SessionDeadline, &out.SessionDeadline
+		*out = (*in).DeepCopy()
+	}
 	return
 }
 

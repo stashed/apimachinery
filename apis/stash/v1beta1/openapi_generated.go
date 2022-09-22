@@ -20802,7 +20802,6 @@ func schema_apimachinery_apis_stash_v1beta1_BackupSessionStatus(ref common.Refer
 					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
@@ -21816,7 +21815,6 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreBatchStatus(ref common.Refere
 					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SessionDeadline specifies the deadline of restore process. RestoreBatch will be considered Failed if restore does not complete within this deadline",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
@@ -22158,7 +22156,6 @@ func schema_apimachinery_apis_stash_v1beta1_RestoreSessionStatus(ref common.Refe
 					"sessionDeadline": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SessionDeadline specifies the deadline of restore process. RestoreSession will be considered Failed if restore does not complete within this deadline",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},

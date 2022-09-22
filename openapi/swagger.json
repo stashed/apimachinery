@@ -9938,7 +9938,6 @@
         },
         "sessionDeadline": {
           "description": "SessionDeadline specifies the deadline of backup. BackupSession will be considered Failed if backup does not complete within this deadline",
-          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
@@ -10513,7 +10512,6 @@
         },
         "sessionDeadline": {
           "description": "SessionDeadline specifies the deadline of restore process. RestoreBatch will be considered Failed if restore does not complete within this deadline",
-          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {
@@ -10707,7 +10705,6 @@
         },
         "sessionDeadline": {
           "description": "SessionDeadline specifies the deadline of restore process. RestoreSession will be considered Failed if restore does not complete within this deadline",
-          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "sessionDuration": {

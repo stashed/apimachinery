@@ -398,6 +398,13 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 		return v1beta1.RestorePending
 	}
 
+	if status.Phase == v1beta1.TargetRestorePending ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryFound) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackendSecretFound) ||
+		kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreTargetFound) {
+		return v1beta1.RestorePending
+	}
+
 	if RestoreCompletedForAllTargets([]v1beta1.RestoreMemberStatus{status}, 1) {
 		if !kmapi.HasCondition(status.Conditions, v1beta1.MetricsPushed) {
 			return v1beta1.RestoreRunning
@@ -411,13 +418,6 @@ func calculateRestoreSessionPhase(status v1beta1.RestoreMemberStatus) v1beta1.Re
 			return v1beta1.RestoreFailed
 		}
 		return v1beta1.RestoreSucceeded
-	}
-
-	if status.Phase == v1beta1.TargetRestorePending ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.RepositoryFound) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.BackendSecretFound) ||
-		kmapi.IsConditionFalse(status.Conditions, v1beta1.RestoreTargetFound) {
-		return v1beta1.RestorePending
 	}
 
 	if kmapi.IsConditionFalse(status.Conditions, v1beta1.ValidationPassed) {
