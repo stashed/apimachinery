@@ -104,7 +104,7 @@ type BackupSessionStatus struct {
 	// SessionDeadline specifies the deadline of backup. BackupSession will be
 	// considered Failed if backup does not complete within this deadline
 	// +optional
-	SessionDeadline metav1.Time `json:"sessionDeadline,omitempty"`
+	SessionDeadline *metav1.Time `json:"sessionDeadline,omitempty"`
 
 	// Retried specifies whether this session was retried or not.
 	// This field will exist only if the `retryConfig` has been set in the respective backup invoker.
