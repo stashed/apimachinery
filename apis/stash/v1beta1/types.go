@@ -156,7 +156,8 @@ type RetryConfig struct {
 	// +kubebuilder:default=1
 	MaxRetry int32 `json:"maxRetry,omitempty"`
 
-	// The number of seconds to wait before next retry. If you don't specify this field, Stash will retry immediately.
+	// The amount of time to wait before next retry. If you don't specify this field, Stash will retry immediately.
+	// Format: 30s, 2m, 1h etc.
 	// +optional
-	Delay int32 `json:"delay,omitempty"`
+	Delay string `json:"delay,omitempty"`
 }

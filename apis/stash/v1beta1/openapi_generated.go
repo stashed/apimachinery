@@ -22327,9 +22327,9 @@ func schema_apimachinery_apis_stash_v1beta1_RetryConfig(ref common.ReferenceCall
 					},
 					"delay": {
 						SchemaProps: spec.SchemaProps{
-							Description: "The number of seconds to wait before next retry. If you don't specify this field, Stash will retry immediately.",
-							Type:        []string{"integer"},
-							Format:      "int32",
+							Description: "The amount of time to wait before next retry. If you don't specify this field, Stash will retry immediately. Format: 30s, 2m, 1h etc.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},

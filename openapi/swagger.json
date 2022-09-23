@@ -10813,9 +10813,8 @@
       "type": "object",
       "properties": {
         "delay": {
-          "description": "The number of seconds to wait before next retry. If you don't specify this field, Stash will retry immediately.",
-          "type": "integer",
-          "format": "int32"
+          "description": "The amount of time to wait before next retry. If you don't specify this field, Stash will retry immediately. Format: 30s, 2m, 1h etc.",
+          "type": "string"
         },
         "maxRetry": {
           "description": "MaxRetry specifies the maximum number of attempts Stash should retry. Default value: 1",
