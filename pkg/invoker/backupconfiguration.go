@@ -18,7 +18,10 @@ package invoker
 
 import (
 	"context"
+	"fmt"
+	"time"
 
+	"stash.appscode.dev/apimachinery/apis"
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
@@ -276,4 +279,50 @@ func marshalToJSON(obj runtime.Object) (string, error) {
 		return "", err
 	}
 	return string(jsonObj), nil
+}
+
+func (inv *BackupConfigurationInvoker) GetRetryConfig() *v1beta1.RetryConfig {
+	return inv.backupConfig.Spec.RetryConfig
+}
+
+func (inv *BackupConfigurationInvoker) NewSession() *v1beta1.BackupSession {
+	retryLimit := int32(0)
+	if inv.backupConfig.Spec.RetryConfig != nil {
+		retryLimit = inv.backupConfig.Spec.RetryConfig.MaxRetry
+	}
+
+	session := &v1beta1.BackupSession{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:            meta.NameWithSuffix(inv.backupConfig.Name, fmt.Sprintf("%d", time.Now().Unix())),
+			Namespace:       inv.backupConfig.Namespace,
+			OwnerReferences: []metav1.OwnerReference{},
+			Labels:          inv.getSessionLabels(),
+		},
+		Spec: v1beta1.BackupSessionSpec{
+			Invoker: v1beta1.BackupInvokerRef{
+				APIGroup: v1beta1.SchemeGroupVersion.Group,
+				Kind:     inv.backupConfig.Kind,
+				Name:     inv.backupConfig.Name,
+			},
+			RetryLeft: retryLimit,
+		},
+	}
+
+	return session
+}
+
+func (inv *BackupConfigurationInvoker) getSessionLabels() map[string]string {
+	sl := inv.GetLabels()
+
+	// Add invoker info
+	sl[apis.LabelInvokerType] = inv.backupConfig.Kind
+	sl[apis.LabelInvokerName] = inv.backupConfig.Name
+
+	// Add target info
+	target := inv.backupConfig.Spec.Target.Ref
+	sl[apis.LabelTargetKind] = target.Kind
+	sl[apis.LabelTargetName] = target.Name
+	sl[apis.LabelTargetNamespace] = target.Namespace
+
+	return sl
 }
