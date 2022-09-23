@@ -64,6 +64,14 @@ func (h *BackupSessionHandler) UpdateStatus(status *v1beta1.BackupSessionStatus)
 				in.SessionDeadline = status.SessionDeadline
 			}
 
+			if in.Retried == nil {
+				in.Retried = status.Retried
+			}
+
+			if in.NextRetry == nil {
+				in.NextRetry = status.NextRetry
+			}
+
 			return h.backupSession.ObjectMeta.UID, in
 		},
 		metav1.UpdateOptions{},
