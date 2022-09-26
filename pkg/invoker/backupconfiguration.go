@@ -301,7 +301,7 @@ func (inv *BackupConfigurationInvoker) NewSession() *v1beta1.BackupSession {
 		Spec: v1beta1.BackupSessionSpec{
 			Invoker: v1beta1.BackupInvokerRef{
 				APIGroup: v1beta1.SchemeGroupVersion.Group,
-				Kind:     inv.backupConfig.Kind,
+				Kind:     v1beta1.ResourceKindBackupConfiguration,
 				Name:     inv.backupConfig.Name,
 			},
 			RetryLeft: retryLimit,

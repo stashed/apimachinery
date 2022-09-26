@@ -313,7 +313,7 @@ func (inv *BackupBatchInvoker) NewSession() *v1beta1.BackupSession {
 		Spec: v1beta1.BackupSessionSpec{
 			Invoker: v1beta1.BackupInvokerRef{
 				APIGroup: v1beta1.SchemeGroupVersion.Group,
-				Kind:     inv.backupBatch.Kind,
+				Kind:     v1beta1.ResourceKindBackupBatch,
 				Name:     inv.backupBatch.Name,
 			},
 			RetryLeft: retryLimit,
