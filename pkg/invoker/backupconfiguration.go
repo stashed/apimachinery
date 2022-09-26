@@ -159,7 +159,7 @@ func (inv *BackupConfigurationInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupConfigurationInvoker) GetTimeOut() string {
+func (inv *BackupConfigurationInvoker) GetTimeOut() metav1.Duration {
 	return inv.backupConfig.Spec.TimeOut
 }
 

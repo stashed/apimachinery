@@ -18,6 +18,7 @@ package v1beta1
 
 import (
 	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -159,5 +160,5 @@ type RetryConfig struct {
 	// The amount of time to wait before next retry. If you don't specify this field, Stash will retry immediately.
 	// Format: 30s, 2m, 1h etc.
 	// +optional
-	Delay string `json:"delay,omitempty"`
+	Delay metav1.Duration `json:"delay,omitempty"`
 }
