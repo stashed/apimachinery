@@ -187,7 +187,7 @@ func (inv *BackupBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupBatchInvoker) GetTimeOut() metav1.Duration {
+func (inv *BackupBatchInvoker) GetTimeOut() *metav1.Duration {
 	return inv.backupBatch.Spec.TimeOut
 }
 

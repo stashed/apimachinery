@@ -53,7 +53,7 @@ type DriverHandler interface {
 }
 
 type TimeOutGetter interface {
-	GetTimeOut() metav1.Duration
+	GetTimeOut() *metav1.Duration
 }
 
 type Eventer interface {

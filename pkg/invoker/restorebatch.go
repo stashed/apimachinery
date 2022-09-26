@@ -179,7 +179,7 @@ func (inv *RestoreBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *RestoreBatchInvoker) GetTimeOut() metav1.Duration {
+func (inv *RestoreBatchInvoker) GetTimeOut() *metav1.Duration {
 	return inv.restoreBatch.Spec.TimeOut
 }
 

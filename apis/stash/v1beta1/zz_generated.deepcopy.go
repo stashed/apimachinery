@@ -23,9 +23,10 @@ package v1beta1
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	v1 "kmodules.xyz/client-go/api/v1"
-	apiv1 "kmodules.xyz/offshoot-api/api/v1"
+	apiv1 "kmodules.xyz/client-go/api/v1"
+	offshootapiapiv1 "kmodules.xyz/offshoot-api/api/v1"
 	proberapiv1 "kmodules.xyz/prober/api/v1"
 )
 
@@ -113,7 +114,11 @@ func (in *BackupBatchSpec) DeepCopyInto(out *BackupBatchSpec) {
 		*out = new(BackupHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	out.TimeOut = in.TimeOut
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(v1.Duration)
+		**out = **in
+	}
 	if in.RetryConfig != nil {
 		in, out := &in.RetryConfig, &out.RetryConfig
 		*out = new(RetryConfig)
@@ -137,7 +142,7 @@ func (in *BackupBatchStatus) DeepCopyInto(out *BackupBatchStatus) {
 	*out = *in
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -232,7 +237,7 @@ func (in *BackupBlueprintSpec) DeepCopyInto(out *BackupBlueprintSpec) {
 	in.TempDir.DeepCopyInto(&out.TempDir)
 	if in.InterimVolumeTemplate != nil {
 		in, out := &in.InterimVolumeTemplate, &out.InterimVolumeTemplate
-		*out = new(apiv1.PersistentVolumeClaim)
+		*out = new(offshootapiapiv1.PersistentVolumeClaim)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Hooks != nil {
@@ -245,7 +250,11 @@ func (in *BackupBlueprintSpec) DeepCopyInto(out *BackupBlueprintSpec) {
 		*out = new(int32)
 		**out = **in
 	}
-	out.TimeOut = in.TimeOut
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(v1.Duration)
+		**out = **in
+	}
 	if in.RetryConfig != nil {
 		in, out := &in.RetryConfig, &out.RetryConfig
 		*out = new(RetryConfig)
@@ -336,7 +345,11 @@ func (in *BackupConfigurationSpec) DeepCopyInto(out *BackupConfigurationSpec) {
 		*out = new(int32)
 		**out = **in
 	}
-	out.TimeOut = in.TimeOut
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(v1.Duration)
+		**out = **in
+	}
 	if in.RetryConfig != nil {
 		in, out := &in.RetryConfig, &out.RetryConfig
 		*out = new(RetryConfig)
@@ -360,7 +373,7 @@ func (in *BackupConfigurationStatus) DeepCopyInto(out *BackupConfigurationStatus
 	*out = *in
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -391,7 +404,7 @@ func (in *BackupConfigurationTemplateSpec) DeepCopyInto(out *BackupConfiguration
 	in.TempDir.DeepCopyInto(&out.TempDir)
 	if in.InterimVolumeTemplate != nil {
 		in, out := &in.InterimVolumeTemplate, &out.InterimVolumeTemplate
-		*out = new(apiv1.PersistentVolumeClaim)
+		*out = new(offshootapiapiv1.PersistentVolumeClaim)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Hooks != nil {
@@ -544,7 +557,7 @@ func (in *BackupSessionStatus) DeepCopyInto(out *BackupSessionStatus) {
 	}
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -647,7 +660,7 @@ func (in *BackupTargetStatus) DeepCopyInto(out *BackupTargetStatus) {
 	}
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -835,7 +848,7 @@ func (in *FunctionSpec) DeepCopyInto(out *FunctionSpec) {
 	}
 	if in.RuntimeSettings != nil {
 		in, out := &in.RuntimeSettings, &out.RuntimeSettings
-		*out = new(apiv1.ContainerRuntimeSettings)
+		*out = new(offshootapiapiv1.ContainerRuntimeSettings)
 		(*in).DeepCopyInto(*out)
 	}
 	return
@@ -896,7 +909,7 @@ func (in *MemberConditions) DeepCopyInto(out *MemberConditions) {
 	out.Target = in.Target
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1049,7 +1062,11 @@ func (in *RestoreBatchSpec) DeepCopyInto(out *RestoreBatchSpec) {
 		*out = new(RestoreHooks)
 		(*in).DeepCopyInto(*out)
 	}
-	out.TimeOut = in.TimeOut
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(v1.Duration)
+		**out = **in
+	}
 	return
 }
 
@@ -1068,7 +1085,7 @@ func (in *RestoreBatchStatus) DeepCopyInto(out *RestoreBatchStatus) {
 	*out = *in
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1129,7 +1146,7 @@ func (in *RestoreMemberStatus) DeepCopyInto(out *RestoreMemberStatus) {
 	out.Ref = in.Ref
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1230,7 +1247,11 @@ func (in *RestoreSessionSpec) DeepCopyInto(out *RestoreSessionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	out.TimeOut = in.TimeOut
+	if in.TimeOut != nil {
+		in, out := &in.TimeOut, &out.TimeOut
+		*out = new(v1.Duration)
+		**out = **in
+	}
 	return
 }
 
@@ -1259,7 +1280,7 @@ func (in *RestoreSessionStatus) DeepCopyInto(out *RestoreSessionStatus) {
 	}
 	if in.Conditions != nil {
 		in, out := &in.Conditions, &out.Conditions
-		*out = make([]v1.Condition, len(*in))
+		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1299,7 +1320,7 @@ func (in *RestoreTarget) DeepCopyInto(out *RestoreTarget) {
 	}
 	if in.VolumeClaimTemplates != nil {
 		in, out := &in.VolumeClaimTemplates, &out.VolumeClaimTemplates
-		*out = make([]apiv1.PersistentVolumeClaim, len(*in))
+		*out = make([]offshootapiapiv1.PersistentVolumeClaim, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1342,7 +1363,7 @@ func (in *RestoreTargetSpec) DeepCopyInto(out *RestoreTargetSpec) {
 	in.TempDir.DeepCopyInto(&out.TempDir)
 	if in.InterimVolumeTemplate != nil {
 		in, out := &in.InterimVolumeTemplate, &out.InterimVolumeTemplate
-		*out = new(apiv1.PersistentVolumeClaim)
+		*out = new(offshootapiapiv1.PersistentVolumeClaim)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Hooks != nil {
