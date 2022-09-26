@@ -315,7 +315,7 @@ func (inv *BackupConfigurationInvoker) getSessionLabels() map[string]string {
 	sl := inv.GetLabels()
 
 	// Add invoker info
-	sl[apis.LabelInvokerType] = inv.backupConfig.Kind
+	sl[apis.LabelInvokerType] = v1beta1.ResourceKindBackupConfiguration
 	sl[apis.LabelInvokerName] = inv.backupConfig.Name
 
 	// Add target info

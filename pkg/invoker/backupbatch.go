@@ -327,7 +327,7 @@ func (inv *BackupBatchInvoker) getSessionLabels() map[string]string {
 	sl := inv.GetLabels()
 
 	// Add invoker info
-	sl[apis.LabelInvokerType] = inv.backupBatch.Kind
+	sl[apis.LabelInvokerType] = v1beta1.ResourceKindBackupBatch
 	sl[apis.LabelInvokerName] = inv.backupBatch.Name
 
 	// Add target info. For batch backup, we will be adding the first member info.
