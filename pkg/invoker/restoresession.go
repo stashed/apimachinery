@@ -156,7 +156,7 @@ func (inv *RestoreSessionInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *RestoreSessionInvoker) GetTimeOut() string {
+func (inv *RestoreSessionInvoker) GetTimeOut() *metav1.Duration {
 	return inv.restoreSession.Spec.TimeOut
 }
 

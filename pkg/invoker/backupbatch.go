@@ -18,7 +18,10 @@ package invoker
 
 import (
 	"context"
+	"fmt"
+	"time"
 
+	"stash.appscode.dev/apimachinery/apis"
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 	"stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	cs "stash.appscode.dev/apimachinery/client/clientset/versioned"
@@ -33,6 +36,7 @@ import (
 	"k8s.io/client-go/tools/reference"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	core_util "kmodules.xyz/client-go/core/v1"
+	"kmodules.xyz/client-go/meta"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 	runtimeClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -183,7 +187,7 @@ func (inv *BackupBatchInvoker) GetDriver() v1beta1.Snapshotter {
 	return driver
 }
 
-func (inv *BackupBatchInvoker) GetTimeOut() string {
+func (inv *BackupBatchInvoker) GetTimeOut() *metav1.Duration {
 	return inv.backupBatch.Spec.TimeOut
 }
 
@@ -287,4 +291,50 @@ func (inv *BackupBatchInvoker) GetSummary(target v1beta1.TargetRef, session kmap
 		Name:     inv.backupBatch.Name,
 	}
 	return summary
+}
+
+func (inv *BackupBatchInvoker) GetRetryConfig() *v1beta1.RetryConfig {
+	return inv.backupBatch.Spec.RetryConfig
+}
+
+func (inv *BackupBatchInvoker) NewSession() *v1beta1.BackupSession {
+	retryLimit := int32(0)
+	if inv.backupBatch.Spec.RetryConfig != nil {
+		retryLimit = inv.backupBatch.Spec.RetryConfig.MaxRetry
+	}
+
+	session := &v1beta1.BackupSession{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:            meta.NameWithSuffix(inv.backupBatch.Name, fmt.Sprintf("%d", time.Now().Unix())),
+			Namespace:       inv.backupBatch.Namespace,
+			OwnerReferences: []metav1.OwnerReference{},
+			Labels:          inv.getSessionLabels(),
+		},
+		Spec: v1beta1.BackupSessionSpec{
+			Invoker: v1beta1.BackupInvokerRef{
+				APIGroup: v1beta1.SchemeGroupVersion.Group,
+				Kind:     v1beta1.ResourceKindBackupBatch,
+				Name:     inv.backupBatch.Name,
+			},
+			RetryLeft: retryLimit,
+		},
+	}
+
+	return session
+}
+
+func (inv *BackupBatchInvoker) getSessionLabels() map[string]string {
+	sl := inv.GetLabels()
+
+	// Add invoker info
+	sl[apis.LabelInvokerType] = v1beta1.ResourceKindBackupBatch
+	sl[apis.LabelInvokerName] = inv.backupBatch.Name
+
+	// Add target info. For batch backup, we will be adding the first member info.
+	target := inv.backupBatch.Spec.Members[0].Target.Ref
+	sl[apis.LabelTargetKind] = target.Kind
+	sl[apis.LabelTargetName] = target.Name
+	sl[apis.LabelTargetNamespace] = target.Namespace
+
+	return sl
 }
