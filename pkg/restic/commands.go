@@ -328,7 +328,7 @@ func (w *ResticWrapper) stats(snapshotID string) ([]byte, error) {
 		args = append(args, snapshotID)
 	}
 	args = w.appendMaxConnectionsFlag(args)
-	args = append(args, "--quiet", "--json", "--mode", "--no-lock", "raw-data")
+	args = append(args, "--quiet", "--json", "--mode", "raw-data", "--no-lock")
 	args = w.appendCaCertFlag(args)
 
 	return w.run(Command{Name: ResticCMD, Args: args})
