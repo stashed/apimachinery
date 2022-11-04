@@ -71,8 +71,7 @@ type restoreParams struct {
 
 func (w *ResticWrapper) listSnapshots(snapshotIDs []string) ([]Snapshot, error) {
 	result := make([]Snapshot, 0)
-	args := w.appendCacheDirFlag([]interface{}{"snapshots", "--json", "--quiet"})
-	args = w.appendNoLockFlag(args)
+	args := w.appendCacheDirFlag([]interface{}{"snapshots", "--json", "--quiet", "--no-lock"})
 	args = w.appendCaCertFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
 	for _, id := range snapshotIDs {
@@ -99,8 +98,7 @@ func (w *ResticWrapper) deleteSnapshots(snapshotIDs []string) ([]byte, error) {
 
 func (w *ResticWrapper) repositoryExist() bool {
 	klog.Infoln("Checking whether the backend repository exist or not....")
-	args := w.appendCacheDirFlag([]interface{}{"snapshots", "--json"})
-	args = w.appendNoLockFlag(args)
+	args := w.appendCacheDirFlag([]interface{}{"snapshots", "--json", "--no-lock"})
 	args = w.appendCaCertFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
 	if _, err := w.run(Command{Name: ResticCMD, Args: args}); err == nil {
@@ -316,8 +314,7 @@ func (w *ResticWrapper) dump(dumpOptions DumpOptions) ([]byte, error) {
 
 func (w *ResticWrapper) check() ([]byte, error) {
 	klog.Infoln("Checking integrity of repository")
-	args := w.appendCacheDirFlag([]interface{}{"check"})
-	args = w.appendNoLockFlag(args)
+	args := w.appendCacheDirFlag([]interface{}{"check", "--no-lock"})
 	args = w.appendCaCertFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
 
@@ -331,7 +328,7 @@ func (w *ResticWrapper) stats(snapshotID string) ([]byte, error) {
 		args = append(args, snapshotID)
 	}
 	args = w.appendMaxConnectionsFlag(args)
-	args = append(args, "--quiet", "--json", "--mode", "raw-data")
+	args = append(args, "--quiet", "--json", "--mode", "--no-lock", "raw-data")
 	args = w.appendCaCertFlag(args)
 
 	return w.run(Command{Name: ResticCMD, Args: args})
@@ -352,10 +349,6 @@ func (w *ResticWrapper) appendCacheDirFlag(args []interface{}) []interface{} {
 		return append(args, "--cache-dir", cacheDir)
 	}
 	return append(args, "--no-cache")
-}
-
-func (w *ResticWrapper) appendNoLockFlag(args []interface{}) []interface{} {
-	return append(args, "--no-lock")
 }
 
 func (w *ResticWrapper) appendMaxConnectionsFlag(args []interface{}) []interface{} {
