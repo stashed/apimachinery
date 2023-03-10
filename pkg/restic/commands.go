@@ -173,7 +173,7 @@ func (w *ResticWrapper) cleanup(retentionPolicy v1alpha1.RetentionPolicy, host s
 	klog.Infoln("Cleaning old snapshots according to retention policy")
 
 	out, err := w.tryCleanup(retentionPolicy, host)
-	if err == nil || !strings.Contains(string(out), "unlock") {
+	if err == nil || !strings.Contains(err.Error(), "unlock") {
 		return out, err
 	}
 	// repo is locked, so unlock first
