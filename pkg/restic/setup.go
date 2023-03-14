@@ -121,8 +121,10 @@ func (w *ResticWrapper) setupEnv() error {
 
 	case storage.ProviderLocal:
 		r := w.config.Bucket
-		if err := os.MkdirAll(r, 0o755); err != nil {
-			return err
+		if _, err := os.Stat(r); os.IsNotExist(err) {
+			if err := os.MkdirAll(r, 0o755); err != nil {
+				return err
+			}
 		}
 		w.sh.SetEnv(RESTIC_REPOSITORY, r)
 
