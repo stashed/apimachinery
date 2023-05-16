@@ -252,4 +252,5 @@ const (
 const (
 	ESMetaDir  = "meta"
 	ESMetaFile = "data.txt"
+	TempDir    = "/tmp"
 )
