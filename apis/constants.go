@@ -248,3 +248,8 @@ const (
 
 	KeyReason = "reason"
 )
+
+const (
+	ESMetaDir  = "meta"
+	ESMetaFile = "data.txt"
+)
