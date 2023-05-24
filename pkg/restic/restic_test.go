@@ -418,11 +418,7 @@ func TestRunParallelBackup(t *testing.T) {
 	}
 
 	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	backupOutput := w.RunParallelBackup(backupOpts, testTargetRef, 2)
 	// verify each host status
 	for i := range backupOutput.BackupTargetStatus.Stats {
 		assert.Equal(t, backupOutput.BackupTargetStatus.Stats[i].Phase, api_v1beta1.HostBackupSucceeded)
@@ -455,11 +451,7 @@ func TestRunParallelRestore(t *testing.T) {
 	}
 
 	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	backupOutput := w.RunParallelBackup(backupOpts, testTargetRef, 2)
 
 	// verify that all host backup has succeeded
 	for i := range backupOutput.BackupTargetStatus.Stats {
@@ -521,11 +513,7 @@ func TestRunParallelDump(t *testing.T) {
 	}
 
 	backupOpts := newParallelBackupOptions()
-	backupOutput, err := w.RunParallelBackup(backupOpts, testTargetRef, 2)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	backupOutput := w.RunParallelBackup(backupOpts, testTargetRef, 2)
 
 	// verify that all host backup has succeeded
 	for i := range backupOutput.BackupTargetStatus.Stats {
