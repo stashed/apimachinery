@@ -523,11 +523,7 @@ func TestRunParallelDump(t *testing.T) {
 	// run parallel dump
 	dumpOptions := newParallelDumpOptions()
 
-	dumpOutput, err := w.ParallelDump(dumpOptions, testTargetRef, 2)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	dumpOutput := w.ParallelDump(dumpOptions, testTargetRef, 2)
 
 	// verify that all host has been restored successfully
 	for i := range dumpOutput.RestoreTargetStatus.Stats {
