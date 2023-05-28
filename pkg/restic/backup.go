@@ -101,7 +101,6 @@ func (w *ResticWrapper) RunParallelBackup(backupOptions []BackupOptions, targetR
 			mu.Lock()
 			backupOutput.upsertHostBackupStats(hostStats)
 			mu.Unlock()
-
 		}(backupOptions[i], time.Now())
 	}
 
