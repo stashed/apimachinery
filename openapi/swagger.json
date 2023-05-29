@@ -10247,7 +10247,7 @@
       "type": "object",
       "properties": {
         "duration": {
-          "description": "Duration indicates total time taken to complete backup for this hosts",
+          "description": "Duration indicates total time taken to complete backup for this host",
           "type": "string"
         },
         "error": {
