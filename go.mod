@@ -31,6 +31,8 @@ require (
 	sigs.k8s.io/yaml v1.3.0
 )
 
+require github.com/dustin/go-humanize v1.0.1-0.20220316001817-d5090ed65664 // indirect
+
 require (
 	cloud.google.com/go/compute v1.13.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.2 // indirect
@@ -40,7 +42,7 @@ require (
 	github.com/PuerkitoBio/purell v1.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
-	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
