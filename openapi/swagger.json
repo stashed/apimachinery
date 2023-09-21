@@ -10344,7 +10344,7 @@
           "$ref": "#/definitions/io.k8s.api.core.v1.ExecAction"
         },
         "executionPolicy": {
-          "description": "ExecutionPolicy specifies when to execute a hook. Supported values are \"Always\", \"OnFailure\", \"OnSuccess\". Default value: \"Always\".",
+          "description": "ExecutionPolicy specifies when to execute a hook. Supported values are \"Always\", \"OnFailure\", \"OnSuccess\", \"OnFinalRetryFailure\". Default value: \"Always\".",
           "type": "string"
         },
         "httpGet": {
