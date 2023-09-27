@@ -159,7 +159,7 @@ const (
 	ScratchDirVolumeName  = "stash-scratchdir"
 	TmpDirVolumeName      = "stash-tmp-dir"
 	TmpDirMountPath       = "/stash-tmp"
-	SnapshotDownloadDir   = "/stash-tmp/snapshots"
+	ScratchDirMountPath   = "/tmp"
 	PodinfoVolumeName     = "stash-podinfo"
 
 	RecoveryJobPrefix   = "stash-recovery-"
@@ -251,6 +251,6 @@ const (
 )
 
 const (
-	ESMetaFile = "meta.txt"
-	TempDir    = "/tmp"
+	ESMetaFile          = "meta.txt"
+	SnapshotDownloadDir = "snapshots"
 )
