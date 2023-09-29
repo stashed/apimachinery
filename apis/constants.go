@@ -152,6 +152,7 @@ const (
 	PrefixStashVolumeSnapshot = "stash-vs"
 	PrefixStashTrigger        = "stash-trigger"
 
+	OperatorContainer     = "operator"
 	StashContainer        = "stash"
 	StashInitContainer    = "stash-init"
 	StashCronJobContainer = "stash-trigger"
