@@ -517,3 +517,22 @@ func (w *ResticWrapper) addKey(params keyParams) ([]byte, error) {
 
 	return w.run(Command{Name: ResticCMD, Args: args})
 }
+
+func (w *ResticWrapper) listKey(params keyParams) ([]byte, error) {
+	klog.Infoln("listing restic keys")
+
+	args := []interface{}{"key", "list", "--no-lock"}
+	if params.host != "" {
+		args = append(args, "--host", params.host)
+	}
+
+	if params.user != "" {
+		args = append(args, "--user", params.user)
+	}
+
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}

@@ -25,3 +25,12 @@ func (w *ResticWrapper) AddKey(opt KeyOptions) error {
 	_, err := w.addKey(params)
 	return err
 }
+
+func (w *ResticWrapper) ListKey(opt KeyOptions) error {
+	params := keyParams{
+		user: opt.User,
+		host: opt.Host,
+	}
+	_, err := w.listKey(params)
+	return err
+}
