@@ -70,6 +70,7 @@ type restoreParams struct {
 }
 
 type keyParams struct {
+	id   string
 	user string
 	host string
 	file string
@@ -518,17 +519,38 @@ func (w *ResticWrapper) addKey(params keyParams) ([]byte, error) {
 	return w.run(Command{Name: ResticCMD, Args: args})
 }
 
-func (w *ResticWrapper) listKey(params keyParams) ([]byte, error) {
-	klog.Infoln("listing restic keys")
+func (w *ResticWrapper) listKey() ([]byte, error) {
+	klog.Infoln("Listing restic keys")
 
 	args := []interface{}{"key", "list", "--no-lock"}
-	if params.host != "" {
-		args = append(args, "--host", params.host)
+
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}
+
+func (w *ResticWrapper) updateKey(params keyParams) ([]byte, error) {
+	klog.Infoln("Updating restic key")
+
+	args := []interface{}{"key", "passwd", "--no-lock"}
+
+	if params.file != "" {
+		args = append(args, "--new-password-file", params.file)
 	}
 
-	if params.user != "" {
-		args = append(args, "--user", params.user)
-	}
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}
+
+func (w *ResticWrapper) removeKey(params keyParams) ([]byte, error) {
+	klog.Infoln("Removing restic key")
+
+	args := []interface{}{"key", "remove", params.id, "--no-lock"}
 
 	args = w.appendCacheDirFlag(args)
 	args = w.appendMaxConnectionsFlag(args)

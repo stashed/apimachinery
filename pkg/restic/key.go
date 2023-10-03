@@ -26,11 +26,23 @@ func (w *ResticWrapper) AddKey(opt KeyOptions) error {
 	return err
 }
 
-func (w *ResticWrapper) ListKey(opt KeyOptions) error {
+func (w *ResticWrapper) ListKey() error {
+	_, err := w.listKey()
+	return err
+}
+
+func (w *ResticWrapper) UpdateKey(opt KeyOptions) error {
 	params := keyParams{
-		user: opt.User,
-		host: opt.Host,
+		file: opt.File,
 	}
-	_, err := w.listKey(params)
+	_, err := w.updateKey(params)
+	return err
+}
+
+func (w *ResticWrapper) RemoveKey(opt KeyOptions) error {
+	params := keyParams{
+		id: opt.ID,
+	}
+	_, err := w.removeKey(params)
 	return err
 }

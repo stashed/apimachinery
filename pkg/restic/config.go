@@ -94,6 +94,7 @@ type SetupOptions struct {
 }
 
 type KeyOptions struct {
+	ID   string
 	User string
 	Host string
 	File string
