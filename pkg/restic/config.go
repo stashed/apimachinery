@@ -96,7 +96,7 @@ type SetupOptions struct {
 type KeyOptions struct {
 	User string
 	Host string
-	file string
+	File string
 }
 
 func NewResticWrapper(options SetupOptions) (*ResticWrapper, error) {
