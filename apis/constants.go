@@ -254,5 +254,4 @@ const (
 const (
 	ESMetaFile          = "meta.txt"
 	SnapshotDownloadDir = "snapshots"
-	ResticPasswordDir   = "password"
 )
