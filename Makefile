@@ -24,7 +24,7 @@ REGISTRY ?= stashed
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS          ?= "crd:generateEmbeddedObjectMeta=true"
-CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.25
+CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.29
 API_GROUPS           ?= repositories:v1alpha1 stash:v1alpha1 stash:v1beta1 ui:v1alpha1
 
 # This version-strategy uses git tags to set the version string
@@ -66,7 +66,7 @@ ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 BASEIMAGE_PROD   ?= gcr.io/distroless/static-debian11
 BASEIMAGE_DBG    ?= debian:bullseye
 
-GO_VERSION       ?= 1.20
+GO_VERSION       ?= 1.21
 BUILD_IMAGE      ?= ghcr.io/appscode/golang-dev:$(GO_VERSION)
 TEST_IMAGE       ?= ghcr.io/appscode/golang-dev:$(GO_VERSION)-stash
 
@@ -118,7 +118,6 @@ clientset:
 	# for EAS types
 	@rm -rf ./apis/repositories/v1alpha1/zz_generated.conversion.go
 	@docker run --rm 	                                          \
-		-u $$(id -u):$$(id -g)                                    \
 		-v /tmp:/.cache                                           \
 		-v $$(pwd):$(DOCKER_REPO_ROOT)                            \
 		-w $(DOCKER_REPO_ROOT)                                    \
@@ -134,7 +133,6 @@ clientset:
 			--go-header-file "./hack/license/go.txt"
 	# for both CRD and EAS types
 	@docker run --rm 	                                          \
-		-u $$(id -u):$$(id -g)                                    \
 		-v /tmp:/.cache                                           \
 		-v $$(pwd):$(DOCKER_REPO_ROOT)                            \
 		-w $(DOCKER_REPO_ROOT)                                    \
@@ -142,7 +140,7 @@ clientset:
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                          \
 		$(CODE_GENERATOR_IMAGE)                                   \
 		/go/src/k8s.io/code-generator/generate-groups.sh          \
-			all                                                   \
+			client,deepcopy,informer,lister                       \
 			$(GO_PKG)/$(REPO)/client                              \
 			$(GO_PKG)/$(REPO)/apis                                \
 			"$(API_GROUPS)"                                       \
@@ -381,7 +379,7 @@ push: push-crd-installer
 .PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
-	KO_DOCKER_REPO=$(REGISTRY) $(KO) publish ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+	KO_DOCKER_REPO=$(REGISTRY) KO_DEFAULTBASEIMAGE=gcr.io/distroless/static-debian12 $(KO) build ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
 
 .PHONY: release
 release: ## Release final production docker image and push into the DockerHub.
