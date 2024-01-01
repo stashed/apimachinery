@@ -385,8 +385,8 @@ k8s.io/utils v0.0.0-20230726121419-3b25d923346b h1:sgn3ZU783SCgtaSJjpcVVlRqd6GSn
 k8s.io/utils v0.0.0-20230726121419-3b25d923346b/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
 kmodules.xyz/client-go v0.29.3 h1:vkQz4zaqWZ5wk+YQwl+C2LhzTXuJZcCUMvPpwdAzGTo=
 kmodules.xyz/client-go v0.29.3/go.mod h1:xWlS/1zWkx1sIKCAkzULy9570mHZYi2exDECEoP1ek4=
-kmodules.xyz/crd-schema-fuzz v0.29.0 h1:s6ATG46aWyP+SoBQU00/kL/7AS2AEWwkSPwVjU512vM=
-kmodules.xyz/crd-schema-fuzz v0.29.0/go.mod h1:n708z9YQqLMP2KNLQVgBcRJw1QpSWLvpNCEi+KJDOYE=
+kmodules.xyz/crd-schema-fuzz v0.29.1 h1:zJTlWYOrT5dsVVHW8HGcnR/vaWfxQfNh11QwTtkYpcs=
+kmodules.xyz/crd-schema-fuzz v0.29.1/go.mod h1:n708z9YQqLMP2KNLQVgBcRJw1QpSWLvpNCEi+KJDOYE=
 kmodules.xyz/custom-resources v0.29.0 h1:RaDM2+wSVXiwIvLqmkTVYpwoH83AC8wruXe2p2rOZNY=
 kmodules.xyz/custom-resources v0.29.0/go.mod h1:MzZyXtxdg1PDxGk3RTTO1Xv3KiVqZnIonSwmxVbagOY=
 kmodules.xyz/objectstore-api v0.29.0 h1:dK53fQXdoboyW/EyBBAMjykT8u7jstKrM1DS4RJvhEU=
