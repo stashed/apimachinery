@@ -77,22 +77,22 @@ func getTaskParams(task v1beta1.TaskRef) []appcat.Param {
 }
 
 func upsertParams(oldParams, newParams []appcat.Param) []appcat.Param {
-	newParamsMap := make(map[string]appcat.Param)
+	paramMap := make(map[string]appcat.Param)
 
 	for _, newParam := range newParams {
-		newParamsMap[newParam.Name] = newParam
+		paramMap[newParam.Name] = newParam
 	}
 
 	for _, oldParam := range oldParams {
-		if _, found := newParamsMap[oldParam.Name]; !found {
-			newParamsMap[oldParam.Name] = oldParam
+		if _, found := paramMap[oldParam.Name]; !found {
+			paramMap[oldParam.Name] = oldParam
 		}
 	}
 
-	var resultParams []appcat.Param
-	for _, param := range newParamsMap {
-		resultParams = append(resultParams, param)
+	var updatedParams []appcat.Param
+	for _, param := range paramMap {
+		updatedParams = append(updatedParams, param)
 	}
 
-	return resultParams
+	return updatedParams
 }
