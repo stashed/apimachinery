@@ -1242,7 +1242,7 @@ kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alph
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/auditor/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/objectstore-api v0.29.0
+# kmodules.xyz/objectstore-api v0.29.1-0.20240205052451-a5cf0aa669f1 => github.com/anisurrahman75/objectstore-api v0.0.0-20240202113030-1e50488736e0
 ## explicit; go 1.21
 kmodules.xyz/objectstore-api/api/v1
 # kmodules.xyz/offshoot-api v0.29.0
@@ -1283,3 +1283,4 @@ sigs.k8s.io/structured-merge-diff/v4/value
 ## explicit; go 1.12
 sigs.k8s.io/yaml
 sigs.k8s.io/yaml/goyaml.v2
+# kmodules.xyz/objectstore-api => github.com/anisurrahman75/objectstore-api v0.0.0-20240202113030-1e50488736e0

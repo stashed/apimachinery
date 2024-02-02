@@ -24,7 +24,7 @@ require (
 	kmodules.xyz/client-go v0.29.3
 	kmodules.xyz/crd-schema-fuzz v0.29.1
 	kmodules.xyz/custom-resources v0.29.0
-	kmodules.xyz/objectstore-api v0.29.0
+	kmodules.xyz/objectstore-api v0.29.1-0.20240205052451-a5cf0aa669f1
 	kmodules.xyz/offshoot-api v0.29.0
 	kmodules.xyz/prober v0.29.0
 	sigs.k8s.io/controller-runtime v0.16.3
@@ -137,3 +137,5 @@ require (
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.1 // indirect
 )
+
+replace kmodules.xyz/objectstore-api => github.com/anisurrahman75/objectstore-api v0.0.0-20240202113030-1e50488736e0
