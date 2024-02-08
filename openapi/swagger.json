@@ -12303,6 +12303,9 @@
           "type": "string",
           "default": ""
         },
+        "insecureTLS": {
+          "type": "boolean"
+        },
         "prefix": {
           "type": "string"
         },
