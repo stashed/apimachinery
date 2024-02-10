@@ -24,29 +24,23 @@ import (
 	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	metrics "kmodules.xyz/custom-resources/apis/metrics/v1alpha1"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-var (
-	masterURL                string
-	kubeConfig               string
-	enableEnterpriseFeatures bool
-)
+var enableEnterpriseFeatures bool
 
 func init() {
-	flag.StringVar(&kubeConfig, "kubeconfig", kubeConfig, "Path to a kube config file. Only required if out-of-cluster.")
-	flag.StringVar(&masterURL, "master", masterURL, "The address of the Kubernetes API server. Overrides any value in kube config file. Only required if out-of-cluster.")
 	flag.BoolVar(&enableEnterpriseFeatures, "enterprise", false, "Specify whether enterprise features enabled or not.")
 }
 
 func main() {
 	flag.Parse()
 
-	cfg, err := clientcmd.BuildConfigFromFlags(masterURL, kubeConfig)
+	cfg, err := ctrl.GetConfig()
 	if err != nil {
 		klog.Errorf("Error building kubeconfig: %s", err.Error())
 		os.Exit(1)
