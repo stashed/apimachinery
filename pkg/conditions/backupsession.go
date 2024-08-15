@@ -399,3 +399,17 @@ func SetBackupDeadlineExceededConditionToTrue(session *invoker.BackupSessionHand
 		},
 	})
 }
+
+func SetBackupDisruptedConditionToTrue(session *invoker.BackupSessionHandler, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
+		Conditions: []kmapi.Condition{
+			{
+				Type:               v1beta1.BackupDisrupted,
+				Status:             metav1.ConditionTrue,
+				Reason:             v1beta1.FailedToCompleteDueToDisruption,
+				Message:            fmt.Sprintf("Failed to complete backup. Reason: %v.", err.Error()),
+				LastTransitionTime: metav1.Now(),
+			},
+		},
+	})
+}

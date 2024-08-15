@@ -250,6 +250,7 @@ func calculateBackupSessionPhase(status *v1beta1.BackupSessionStatus) v1beta1.Ba
 
 	if cutil.IsConditionTrue(status.Conditions, v1beta1.MetricsPushed) &&
 		(cutil.IsConditionTrue(status.Conditions, v1beta1.DeadlineExceeded) ||
+			cutil.IsConditionTrue(status.Conditions, v1beta1.BackupDisrupted) ||
 			cutil.IsConditionFalse(status.Conditions, v1beta1.BackupHistoryCleaned) ||
 			cutil.IsConditionFalse(status.Conditions, v1beta1.GlobalPreBackupHookSucceeded) ||
 			cutil.IsConditionFalse(status.Conditions, v1beta1.GlobalPostBackupHookSucceeded)) {
