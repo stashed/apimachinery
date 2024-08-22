@@ -172,6 +172,25 @@ func SetPostBackupHookExecutionSucceededToTrueWithMsg(session *invoker.BackupSes
 	})
 }
 
+func SetBackupDisruptedConditionToTrue(session *invoker.BackupSessionHandler, target v1beta1.TargetRef, err error) error {
+	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
+		Targets: []v1beta1.BackupTargetStatus{
+			{
+				Ref: target,
+				Conditions: []kmapi.Condition{
+					{
+						Type:               v1beta1.BackupDisrupted,
+						Status:             metav1.ConditionTrue,
+						Reason:             v1beta1.FailedToCompleteDueToDisruption,
+						Message:            fmt.Sprintf("Failed to complete backup. Reason: %v.", err.Error()),
+						LastTransitionTime: metav1.Now(),
+					},
+				},
+			},
+		},
+	})
+}
+
 func SetGlobalPreBackupHookSucceededConditionToFalse(session *invoker.BackupSessionHandler, hookErr error) error {
 	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
 		Conditions: []kmapi.Condition{
@@ -394,20 +413,6 @@ func SetBackupDeadlineExceededConditionToTrue(session *invoker.BackupSessionHand
 				Status:             metav1.ConditionTrue,
 				Reason:             v1beta1.FailedToCompleteWithinDeadline,
 				Message:            fmt.Sprintf("Failed to complete backup within %s.", timeOut),
-				LastTransitionTime: metav1.Now(),
-			},
-		},
-	})
-}
-
-func SetBackupDisruptedConditionToTrue(session *invoker.BackupSessionHandler, err error) error {
-	return session.UpdateStatus(&v1beta1.BackupSessionStatus{
-		Conditions: []kmapi.Condition{
-			{
-				Type:               v1beta1.BackupDisrupted,
-				Status:             metav1.ConditionTrue,
-				Reason:             v1beta1.FailedToCompleteDueToDisruption,
-				Message:            fmt.Sprintf("Failed to complete backup. Reason: %v.", err.Error()),
 				LastTransitionTime: metav1.Now(),
 			},
 		},
