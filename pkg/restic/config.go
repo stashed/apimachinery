@@ -101,13 +101,6 @@ type KeyOptions struct {
 	File string
 }
 
-type CheckOptions struct {
-	// All restic options for the 'check' command.
-	ReadData       bool
-	ReadDataSubset string
-	WithCache      bool
-}
-
 func NewResticWrapper(options SetupOptions) (*ResticWrapper, error) {
 	wrapper := &ResticWrapper{
 		sh:     shell.NewSession(),

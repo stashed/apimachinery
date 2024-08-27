@@ -76,12 +76,6 @@ type keyParams struct {
 	file string
 }
 
-type checkParams struct {
-	readData       bool
-	readDataSubset string
-	withCache      bool
-}
-
 func (w *ResticWrapper) listSnapshots(snapshotIDs []string) ([]Snapshot, error) {
 	result := make([]Snapshot, 0)
 	args := w.appendCacheDirFlag([]interface{}{"snapshots", "--json", "--quiet", "--no-lock"})
@@ -588,20 +582,10 @@ func (w *ResticWrapper) appendInsecureTLSFlag(args []interface{}) []interface{} 
 	return args
 }
 
-func (w *ResticWrapper) checkRepository(params checkParams) ([]byte, error) {
+func (w *ResticWrapper) CheckRepository(params []string) ([]byte, error) {
 	klog.Infoln("Checking the repository for errors")
 
-	args := []interface{}{"check"}
-	if params.readData {
-		args = append(args, "--read-data")
-	}
-	if params.readDataSubset != "" {
-		args = append(args,
-			fmt.Sprintf("--read-data-subset=%s", params.readDataSubset))
-	}
-	if params.withCache {
-		args = append(args, "--with-cache")
-	}
+	args := []interface{}{"check", params}
 
 	args = w.appendCacheDirFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
