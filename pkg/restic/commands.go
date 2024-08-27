@@ -610,3 +610,16 @@ func (w *ResticWrapper) checkRepository(params checkParams) ([]byte, error) {
 
 	return w.run(Command{Name: ResticCMD, Args: args})
 }
+
+func (w *ResticWrapper) RebuildIndex(params []string) ([]byte, error) {
+	klog.Infoln("Re-building a new index for restic repository")
+
+	args := []interface{}{"rebuild-index", params}
+
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+	args = w.appendInsecureTLSFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}
