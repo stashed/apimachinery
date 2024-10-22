@@ -581,3 +581,29 @@ func (w *ResticWrapper) appendInsecureTLSFlag(args []interface{}) []interface{} 
 	}
 	return args
 }
+
+func (w *ResticWrapper) CheckRepository(params []string) ([]byte, error) {
+	klog.Infoln("Checking the repository for errors")
+
+	args := []interface{}{"check", params}
+
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+	args = w.appendInsecureTLSFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}
+
+func (w *ResticWrapper) RebuildIndex(params []string) ([]byte, error) {
+	klog.Infoln("Re-building a new index for restic repository")
+
+	args := []interface{}{"rebuild-index", params}
+
+	args = w.appendCacheDirFlag(args)
+	args = w.appendMaxConnectionsFlag(args)
+	args = w.appendCaCertFlag(args)
+	args = w.appendInsecureTLSFlag(args)
+
+	return w.run(Command{Name: ResticCMD, Args: args})
+}
