@@ -49,34 +49,34 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 		expectedBody string
 	}{
 		{
-			name: "Successful session",
+			name: "[HTTPPost] Successful session",
 			fields: fields{
-				Hook:    defaultHookTemplate(),
+				Hook:    defaultHookTemplate(false),
 				Summary: defaultSummary(),
 			},
 			wantErr:      false,
 			expectedBody: "Name: test-session Namespace: test Phase: Succeeded",
 		},
 		{
-			name: "Failed session",
+			name: "[HTTPPost] Failed session",
 			fields: fields{
-				Hook:    defaultHookTemplate(),
+				Hook:    defaultHookTemplate(false),
 				Summary: failedSummary(),
 			},
 			wantErr:      false,
 			expectedBody: "Name: test-session Namespace: test Phase: Failed",
 		},
 		{
-			name: "Failed session with escape character in error message",
+			name: "[HTTPPost] Failed session with escape character in error message",
 			fields: fields{
-				Hook:    defaultHookTemplate(),
+				Hook:    defaultHookTemplate(false),
 				Summary: failedSummary(),
 			},
 			wantErr:      false,
 			expectedBody: "Name: test-session Namespace: test Phase: Failed",
 		},
 		{
-			name: "Conditional hook with Succeeded phase",
+			name: "[HTTPPost] Conditional hook with Succeeded phase",
 			fields: fields{
 				Hook:    conditionalHookTemplate(defaultErrorMsg),
 				Summary: defaultSummary(),
@@ -85,7 +85,7 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 			expectedBody: "Succeeded",
 		},
 		{
-			name: "Conditional hook with Failed phase",
+			name: "[HTTPPost] Conditional hook with Failed phase",
 			fields: fields{
 				Hook:    conditionalHookTemplate(defaultErrorMsg),
 				Summary: failedSummary(),
@@ -94,13 +94,31 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 			expectedBody: fmt.Sprintf("Failed. Reason: %s", defaultErrorMsg),
 		},
 		{
-			name: "Conditional hook with escape character in error message",
+			name: "[HTTPPost] Conditional hook with escape character in error message",
 			fields: fields{
 				Hook:    conditionalHookTemplate(errorMsgWithEscapeCharacter),
 				Summary: failedSummary(),
 			},
 			wantErr:      false,
 			expectedBody: fmt.Sprintf("Failed. Reason: %s", errorMsgWithEscapeCharacter),
+		},
+		{
+			name: "[Exec] Successful session",
+			fields: fields{
+				Hook:    defaultHookTemplate(true),
+				Summary: defaultSummary(),
+			},
+			wantErr:      false,
+			expectedBody: "{\"text\":\":x: Name: test-session Namespace: test Phase: Succeeded\"}",
+		},
+		{
+			name: "[Exec] Failed session",
+			fields: fields{
+				Hook:    defaultHookTemplate(true),
+				Summary: failedSummary(),
+			},
+			wantErr:      false,
+			expectedBody: "{\"text\":\":x: Name: test-session Namespace: test Phase: Failed\"}",
 		},
 	}
 	for _, tt := range tests {
@@ -111,13 +129,20 @@ func TestHookExecutor_renderTemplate(t *testing.T) {
 				ExecutorPod: tt.fields.ExecutorPod,
 				Summary:     tt.fields.Summary,
 			}
-			if err := e.renderTemplate(); (err != nil) != tt.wantErr {
-				t.Errorf("renderTemplate() error = %v, wantErr %v", err, tt.wantErr)
+			if err := e.renderHookTemplate(); (err != nil) != tt.wantErr {
+				t.Errorf("renderHookTemplate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if tt.expectedBody != e.Hook.HTTPPost.Body {
+			if e.Hook.HTTPPost != nil &&
+				tt.expectedBody != e.Hook.HTTPPost.Body {
 				t.Errorf("Expected: %v, found: %v", tt.expectedBody, e.Hook.HTTPPost.Body)
 				return
+			}
+			if e.Hook.Exec != nil {
+				if e.Hook.Exec.Command[6] != tt.expectedBody {
+					t.Errorf("Expected: %v, found: %v", tt.expectedBody, e.Hook.Exec.Command[6])
+					return
+				}
 			}
 		})
 	}
@@ -159,7 +184,23 @@ func failedSummary() *v1beta1.Summary {
 	})
 }
 
-func defaultHookTemplate() *prober.Handler {
+func defaultHookTemplate(isExec bool) *prober.Handler {
+	if isExec {
+		return &prober.Handler{
+			Exec: &core.ExecAction{
+				Command: []string{
+					"curl",
+					"-X",
+					"POST",
+					"-H",
+					"Content-Type: application/json",
+					"-d",
+					`{"text":":x: Name: {{ .Name }} Namespace: {{.Namespace}} Phase: {{.Status.Phase}}"}`,
+					"https://slack-webhook.url/stash",
+				},
+			},
+		}
+	}
 	return &prober.Handler{
 		HTTPPost: &prober.HTTPPostAction{
 			Body: "Name: {{ .Name }} Namespace: {{.Namespace}} Phase: {{.Status.Phase}}",
