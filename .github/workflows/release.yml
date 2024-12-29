@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Set up Go 1.23
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
           go-version: '1.23'
         id: go
@@ -31,10 +31,10 @@ jobs:
 
       - name: Set up QEMU
         id: qemu
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: Publish to GitHub Container Registry
         env:
