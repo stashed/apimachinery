@@ -414,7 +414,7 @@ func (w *ResticWrapper) prune(pruneOpts PruneOptions) ([]byte, error) {
 			fmt.Sprintf("--max-repack-size=%s", pruneOpts.MaxRepackSize))
 	}
 
-	args = w.appendCacheDirFlag([]interface{}{"prune"})
+	args = w.appendCacheDirFlag(args)
 	args = w.appendMaxConnectionsFlag(args)
 	args = w.appendCaCertFlag(args)
 	args = w.appendInsecureTLSFlag(args)
