@@ -53,7 +53,7 @@ RESTIC_VER       := 0.17.3
 ### These variables should not need tweaking.
 ###
 
-SRC_PKGS := apis client cmd crds pkg # directories which hold app source (not vendored)
+SRC_PKGS := apis client cmd crds hack pkg # directories which hold app source (not vendored)
 SRC_DIRS := $(SRC_PKGS) hack/gencrd
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
