@@ -84,6 +84,7 @@ func (w *ResticWrapper) EnsureNoExclusiveLock(k8sClient kubernetes.Interface, na
 		return fmt.Errorf("failed to query exclusive lock: %w", err)
 	}
 	if podName == "" {
+		klog.Infoln("No exclusive lock found, nothing to do.")
 		return nil // nothing to do
 	}
 
@@ -93,7 +94,7 @@ func (w *ResticWrapper) EnsureNoExclusiveLock(k8sClient kubernetes.Interface, na
 		kutil.ReadinessTimeout,
 		true,
 		func(ctx context.Context) (bool, error) {
-			klog.Infoln("Getting pod to check if it is still running:", podName)
+			klog.Infoln("Getting Pod", podName, "to check if it's finished...")
 			pod, err := k8sClient.CoreV1().Pods(namespace).Get(ctx, podName, metav1.GetOptions{})
 			switch {
 			case errors.IsNotFound(err): // Pod gone → unlock
@@ -102,13 +103,14 @@ func (w *ResticWrapper) EnsureNoExclusiveLock(k8sClient kubernetes.Interface, na
 				return true, err
 			case err != nil: // API error → stop
 				return false, err
-			case pod.Status.Phase == corev1.PodRunning: // still running → keep waiting
-				klog.Infoln("Pod", podName, "is still running, waiting for it to finish...")
-				return false, nil
-			default: // Pod finished → unlock
-				klog.Infoln("Pod", podName, "is not running, unlocking repository...")
+			case pod.Status.Phase == corev1.PodSucceeded ||
+				pod.Status.Phase == corev1.PodFailed: // Pod finished → unlock
+				klog.Infoln("Pod", podName, "has finished, unlocking repository...")
 				_, err := w.unlock()
 				return true, err
+			default: // Not finished yet → keep waiting
+				klog.Infoln("Pod", podName, "phase is", pod.Status.Phase, ", waiting for it to finish...")
+				return false, nil
 			}
 		},
 	)
