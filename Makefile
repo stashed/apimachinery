@@ -24,7 +24,7 @@ REGISTRY ?= stashed
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS          ?= "crd:generateEmbeddedObjectMeta=true"
-CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.29
+CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.32
 API_GROUPS           ?= repositories:v1alpha1 stash:v1alpha1 stash:v1beta1 ui:v1alpha1
 
 # This version-strategy uses git tags to set the version string

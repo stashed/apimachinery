@@ -41,7 +41,7 @@ var (
 	password          = "password"
 	fileName          = "some-file"
 	fileContent       = "hello stash"
-	stdinPipeCommand  = Command{Name: "echo", Args: []interface{}{"hello"}}
+	stdinPipeCommand  = Command{Name: "echo", Args: []any{"hello"}}
 	stdoutPipeCommand = Command{Name: "cat"}
 )
 
