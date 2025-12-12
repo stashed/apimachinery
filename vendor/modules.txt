@@ -414,7 +414,7 @@ github.com/yudai/golcs
 # github.com/zeebo/xxh3 v1.0.2
 ## explicit; go 1.17
 github.com/zeebo/xxh3
-# go.bytebuilders.dev/audit v0.0.41
+# go.bytebuilders.dev/audit v0.0.42
 ## explicit; go 1.22.1
 go.bytebuilders.dev/audit/api/v1
 go.bytebuilders.dev/audit/lib
@@ -425,14 +425,14 @@ go.bytebuilders.dev/license-proxyserver/apis/proxyserver/v1alpha1
 go.bytebuilders.dev/license-proxyserver/client/clientset/versioned
 go.bytebuilders.dev/license-proxyserver/client/clientset/versioned/scheme
 go.bytebuilders.dev/license-proxyserver/client/clientset/versioned/typed/proxyserver/v1alpha1
-# go.bytebuilders.dev/license-verifier v0.14.6
-## explicit; go 1.21
+# go.bytebuilders.dev/license-verifier v0.14.10
+## explicit; go 1.24.0
 go.bytebuilders.dev/license-verifier
 go.bytebuilders.dev/license-verifier/apis/licenses
 go.bytebuilders.dev/license-verifier/apis/licenses/v1alpha1
 go.bytebuilders.dev/license-verifier/info
-# go.bytebuilders.dev/license-verifier/kubernetes v0.14.6
-## explicit; go 1.22.0
+# go.bytebuilders.dev/license-verifier/kubernetes v0.14.10
+## explicit; go 1.24.0
 go.bytebuilders.dev/license-verifier/kubernetes
 # go.etcd.io/etcd/api/v3 v3.5.10
 ## explicit; go 1.20
@@ -629,7 +629,7 @@ gomodules.xyz/encoding/json
 # gomodules.xyz/go-sh v0.1.0
 ## explicit; go 1.15
 gomodules.xyz/go-sh
-# gomodules.xyz/jsonpatch/v2 v2.4.0
+# gomodules.xyz/jsonpatch/v2 v2.5.0
 ## explicit; go 1.20
 gomodules.xyz/jsonpatch/v2
 # gomodules.xyz/mergo v0.3.13
@@ -1464,8 +1464,8 @@ k8s.io/utils/trace
 # kmodules.xyz/apiversion v0.2.0
 ## explicit; go 1.14
 kmodules.xyz/apiversion
-# kmodules.xyz/client-go v0.30.44
-## explicit; go 1.22.0
+# kmodules.xyz/client-go v0.30.48
+## explicit; go 1.23.0
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
@@ -1513,7 +1513,7 @@ kmodules.xyz/prober/probe
 kmodules.xyz/prober/probe/exec
 kmodules.xyz/prober/probe/http
 kmodules.xyz/prober/probe/tcp
-# kmodules.xyz/resource-metadata v0.24.3
+# kmodules.xyz/resource-metadata v0.25.1
 ## explicit; go 1.22.1
 kmodules.xyz/resource-metadata/apis/core/v1alpha1
 kmodules.xyz/resource-metadata/apis/identity/v1alpha1

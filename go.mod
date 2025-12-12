@@ -11,8 +11,8 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/prometheus/client_golang v1.18.0
 	github.com/stretchr/testify v1.9.0
-	go.bytebuilders.dev/audit v0.0.41
-	go.bytebuilders.dev/license-verifier/kubernetes v0.14.6
+	go.bytebuilders.dev/audit v0.0.42
+	go.bytebuilders.dev/license-verifier/kubernetes v0.14.10
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.3.0
@@ -23,7 +23,7 @@ require (
 	k8s.io/client-go v0.30.2
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kube-openapi v0.0.0-20240703190633-0aa61b46e8c2
-	kmodules.xyz/client-go v0.30.44
+	kmodules.xyz/client-go v0.30.48
 	kmodules.xyz/crd-schema-fuzz v0.29.1
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/objectstore-api v0.29.1
@@ -121,7 +121,7 @@ require (
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.bytebuilders.dev/license-proxyserver v0.0.20 // indirect
-	go.bytebuilders.dev/license-verifier v0.14.6 // indirect
+	go.bytebuilders.dev/license-verifier v0.14.10 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.10 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.10 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.10 // indirect
@@ -147,7 +147,7 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	gomodules.xyz/counter v0.0.1 // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
-	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
+	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	gomodules.xyz/mergo v0.3.13 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240311132316-a219d84964c2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
@@ -164,7 +164,7 @@ require (
 	k8s.io/utils v0.0.0-20240502163921-fe8a2dddb1d0 // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
 	kmodules.xyz/go-containerregistry v0.0.12 // indirect
-	kmodules.xyz/resource-metadata v0.24.3 // indirect
+	kmodules.xyz/resource-metadata v0.25.1 // indirect
 	kmodules.xyz/resource-metrics v0.30.5 // indirect
 	moul.io/http2curl/v2 v2.3.1-0.20221024080105-10c404f653f7 // indirect
 	sigs.k8s.io/apiserver-network-proxy/konnectivity-client v0.29.0 // indirect
