@@ -298,8 +298,6 @@ unit-tests: $(BUILD_DIRS) bin/.container-$(DOTFILE_IMAGE)-TEST
 	        ./hack/test.sh $(SRC_PKGS)                          \
 	    "
 
-ADDTL_LINTERS   := gofmt,goimports,unparam
-
 .PHONY: lint
 lint: $(BUILD_DIRS)
 	@echo "running linter"
