@@ -59,7 +59,7 @@ jobs:
 
   kubernetes:
     name: Kubernetes
-    runs-on: firecracker
+    runs-on: ubuntu-24.04
     needs: build
     strategy:
       matrix:
