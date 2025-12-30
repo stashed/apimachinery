@@ -16,7 +16,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-24.04
+    runs-on: firecracker
     steps:
       - name: Set up Go 1.25
         uses: actions/setup-go@v5
@@ -59,7 +59,7 @@ jobs:
 
   kubernetes:
     name: Kubernetes
-    runs-on: ubuntu-24.04
+    runs-on: firecracker
     needs: build
     strategy:
       matrix:
