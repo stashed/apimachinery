@@ -486,7 +486,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreSessionStatus":            schema_apimachinery_apis_stash_v1beta1_RestoreSessionStatus(ref),
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreTarget":                   schema_apimachinery_apis_stash_v1beta1_RestoreTarget(ref),
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.RestoreTargetSpec":               schema_apimachinery_apis_stash_v1beta1_RestoreTargetSpec(ref),
-		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig":                     schema_apimachinery_apis_stash_v1beta1_RetryConfig(ref),
+		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig":                     schema_apimachinery_apis_stash_v1beta1_RetryConfig(ref),
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.Rule":                            schema_apimachinery_apis_stash_v1beta1_Rule(ref),
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.SnapshotStats":                   schema_apimachinery_apis_stash_v1beta1_SnapshotStats(ref),
 		"stash.appscode.dev/apimachinery/apis/stash/v1beta1.Summary":                         schema_apimachinery_apis_stash_v1beta1_Summary(ref),
@@ -23496,8 +23496,8 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 					},
 					"retryConfig": {
 						SchemaProps: spec.SchemaProps{
-							Description: "retryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
-							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig"),
+							Description: "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig"),
 						},
 					},
 				},
@@ -23505,7 +23505,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBatchSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupConfigurationTemplateSpec", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupConfigurationTemplateSpec", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig"},
 	}
 }
 
@@ -23754,8 +23754,8 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 					},
 					"retryConfig": {
 						SchemaProps: spec.SchemaProps{
-							Description: "retryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
-							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig"),
+							Description: "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig"),
 						},
 					},
 				},
@@ -23763,7 +23763,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupBlueprintSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/objectstore-api/api/v1.Backend", "kmodules.xyz/offshoot-api/api/v1.PersistentVolumeClaim", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.UsagePolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.EmptyDirSettings", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.TaskRef"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/objectstore-api/api/v1.Backend", "kmodules.xyz/offshoot-api/api/v1.PersistentVolumeClaim", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.UsagePolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.EmptyDirSettings", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.TaskRef"},
 	}
 }
 
@@ -23955,8 +23955,8 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationSpec(ref common.R
 					},
 					"retryConfig": {
 						SchemaProps: spec.SchemaProps{
-							Description: "retryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
-							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig"),
+							Description: "RetryConfig specify a configuration for retry a backup if it fails. By default, Stash does not retry any failed backup.",
+							Ref:         ref("stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig"),
 						},
 					},
 				},
@@ -23964,7 +23964,7 @@ func schema_apimachinery_apis_stash_v1beta1_BackupConfigurationSpec(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.PersistentVolumeClaim", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupTarget", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.EmptyDirSettings", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.retryConfig", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.TaskRef"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.PersistentVolumeClaim", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "stash.appscode.dev/apimachinery/apis/stash/v1alpha1.RetentionPolicy", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupHooks", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.BackupTarget", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.EmptyDirSettings", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.RetryConfig", "stash.appscode.dev/apimachinery/apis/stash/v1beta1.TaskRef"},
 	}
 }
 

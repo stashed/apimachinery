@@ -1,3 +1,19 @@
+/*
+Copyright AppsCode Inc. and Contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package restic
 
 import (
@@ -34,7 +50,7 @@ func NewRetryConfig() *RetryConfig {
 				return false
 			}
 			combined := strings.ToLower(err.Error() + " " + output)
-			klog.Info("Combined output: " + combined)
+			klog.Infoln("Combined output: " + combined)
 			for _, pattern := range retryablePatterns {
 				if strings.Contains(combined, strings.ToLower(pattern)) {
 					return true
@@ -63,7 +79,7 @@ func (rc *RetryConfig) RunWithRetry(ctx context.Context, execFunc func() ([]byte
 			if !rc.ShouldRetry(lastErr, string(output)) {
 				return true, nil
 			}
-			klog.Info("Retrying command after error",
+			klog.Infoln("Retrying command after error",
 				"attempt", attempts,
 				"maxRetries", rc.MaxRetries,
 				"error", fmt.Sprintf("%s %s", lastErr, string(output)))
@@ -71,7 +87,6 @@ func (rc *RetryConfig) RunWithRetry(ctx context.Context, execFunc func() ([]byte
 			return false, nil
 		},
 	)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed after %d attempts: %w", attempts, lastErr)
 	}
