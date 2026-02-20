@@ -17,6 +17,7 @@ limitations under the License.
 package restic
 
 import (
+	"context"
 	"sync"
 	"time"
 
@@ -197,7 +198,9 @@ func (w *ResticWrapper) InitializeRepository() error {
 
 func (w *ResticWrapper) ApplyRetentionPolicies(retentionPolicy api_v1alpha1.RetentionPolicy) (*RepositoryStats, error) {
 	// Cleanup old snapshots according to retention policy
-	out, err := w.cleanup(retentionPolicy, "")
+	out, err := w.RunWithRetry(context.Background(), func() ([]byte, error) {
+		return w.cleanup(retentionPolicy, "")
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -211,14 +214,18 @@ func (w *ResticWrapper) ApplyRetentionPolicies(retentionPolicy api_v1alpha1.Rete
 
 func (w *ResticWrapper) VerifyRepositoryIntegrity() (*RepositoryStats, error) {
 	// Check repository integrity
-	out, err := w.check()
+	out, err := w.RunWithRetry(context.Background(), func() ([]byte, error) {
+		return w.check()
+	})
 	if err != nil {
 		return nil, err
 	}
 	// Extract information from output of "check" command
 	integrity := extractCheckInfo(out)
 	// Read repository statics after cleanup
-	out, err = w.stats("")
+	out, err = w.RunWithRetry(context.Background(), func() ([]byte, error) {
+		return w.stats("")
+	})
 	if err != nil {
 		return nil, err
 	}
