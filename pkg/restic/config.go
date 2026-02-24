@@ -38,6 +38,7 @@ const (
 type ResticWrapper struct {
 	sh     *shell.Session
 	config SetupOptions
+	*RetryConfig
 }
 
 type Command struct {
@@ -112,8 +113,9 @@ type KeyOptions struct {
 
 func NewResticWrapper(options SetupOptions) (*ResticWrapper, error) {
 	wrapper := &ResticWrapper{
-		sh:     shell.NewSession(),
-		config: options,
+		sh:          shell.NewSession(),
+		config:      options,
+		RetryConfig: NewRetryConfig(),
 	}
 
 	err := wrapper.configure()
