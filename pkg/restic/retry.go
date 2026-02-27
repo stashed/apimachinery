@@ -50,7 +50,6 @@ func NewRetryConfig() *RetryConfig {
 				return false
 			}
 			combined := strings.ToLower(err.Error() + " " + output)
-			klog.Infoln("Combined output: " + combined)
 			for _, pattern := range retryablePatterns {
 				if strings.Contains(combined, strings.ToLower(pattern)) {
 					return true
@@ -64,7 +63,7 @@ func NewRetryConfig() *RetryConfig {
 func (rc *RetryConfig) RunWithRetry(ctx context.Context, execFunc func() ([]byte, error)) ([]byte, error) {
 	var output []byte
 	var lastErr error
-	attempts := 0
+	attempts := 1
 
 	err := wait.PollUntilContextCancel(
 		ctx,
@@ -72,24 +71,23 @@ func (rc *RetryConfig) RunWithRetry(ctx context.Context, execFunc func() ([]byte
 		true, // Run immediately on first call
 		func(ctx context.Context) (bool, error) {
 			// Stop if max retries reached
-			if attempts >= rc.MaxRetries {
+			if attempts > rc.MaxRetries {
 				return false, fmt.Errorf("max retries reached")
 			}
 			output, lastErr = execFunc()
+			klog.Infof("Attempt #%d: retrying in %v", attempts, rc.Delay)
+			klog.Infof("Attempt #%d error: %v", attempts, lastErr)
+			klog.Infof("Attempt #%d output: %s", attempts, string(output))
+
 			if !rc.ShouldRetry(lastErr, string(output)) {
 				return true, nil
 			}
-			klog.Infoln("Retrying command after error",
-				"attempt", attempts,
-				"maxRetries", rc.MaxRetries,
-				"error", fmt.Sprintf("%s %s", lastErr, string(output)))
 			attempts++
 			return false, nil
 		},
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed after %d attempts: %w", attempts, lastErr)
+		return output, fmt.Errorf("failed after %d attempts: %w", attempts, lastErr)
 	}
-
 	return output, lastErr
 }

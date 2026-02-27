@@ -17,6 +17,7 @@ limitations under the License.
 package restic
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,7 +31,6 @@ import (
 
 	"stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
 
-	"github.com/armon/circbuf"
 	"k8s.io/klog/v2"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 )
@@ -464,11 +464,9 @@ func (w *ResticWrapper) appendCaCertFlag(args []any) []any {
 
 func (w *ResticWrapper) run(commands ...Command) ([]byte, error) {
 	// write std errors into os.Stderr and buffer
-	errBuff, err := circbuf.NewBuffer(256)
-	if err != nil {
-		return nil, err
-	}
-	w.sh.Stderr = io.MultiWriter(os.Stderr, errBuff)
+	var err error
+	var errBuff bytes.Buffer
+	w.sh.Stderr = io.MultiWriter(os.Stderr, &errBuff)
 
 	for _, cmd := range commands {
 		if cmd.Name == ResticCMD {
