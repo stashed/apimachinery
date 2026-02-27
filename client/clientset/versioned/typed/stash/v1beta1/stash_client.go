@@ -21,10 +21,9 @@ package v1beta1
 import (
 	"net/http"
 
+	rest "k8s.io/client-go/rest"
 	v1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	"stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
-
-	rest "k8s.io/client-go/rest"
 )
 
 type StashV1beta1Interface interface {

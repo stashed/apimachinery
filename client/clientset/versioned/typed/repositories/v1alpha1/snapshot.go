@@ -22,11 +22,10 @@ import (
 	"context"
 	"time"
 
-	v1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
-	scheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
-
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	rest "k8s.io/client-go/rest"
+	v1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
+	scheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
 )
 
 // SnapshotsGetter has a method to return a SnapshotInterface.
