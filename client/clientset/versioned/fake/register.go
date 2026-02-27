@@ -19,15 +19,16 @@ limitations under the License.
 package fake
 
 import (
+	repositoriesv1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
+	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
+	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
+	uiv1alpha1 "stash.appscode.dev/apimachinery/apis/ui/v1alpha1"
+
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	repositoriesv1alpha1 "stash.appscode.dev/apimachinery/apis/repositories/v1alpha1"
-	stashv1alpha1 "stash.appscode.dev/apimachinery/apis/stash/v1alpha1"
-	stashv1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
-	uiv1alpha1 "stash.appscode.dev/apimachinery/apis/ui/v1alpha1"
 )
 
 var scheme = runtime.NewScheme()
