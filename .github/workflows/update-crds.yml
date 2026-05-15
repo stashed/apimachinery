@@ -15,12 +15,6 @@ jobs:
     name: Build
     runs-on: ubuntu-24.04
     steps:
-      - name: Set up Go 1.25
-        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
-        with:
-          go-version: '1.25'
-        id: go
-
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Install crd-importer
@@ -29,23 +23,47 @@ jobs:
           chmod +x ./crd-importer
           sudo mv ./crd-importer /usr/local/bin/crd-importer
 
-      - name: Clone installer repository
+      - name: Parse installer repository
+        id: installer
         env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INSTALLER_REPOSITORY: ${{ secrets.INSTALLER_REPOSITORY }}
         run: |
-          url="https://${GITHUB_USER}:${GITHUB_TOKEN}@${INSTALLER_REPOSITORY}.git"
+          owner=$(basename $(dirname $INSTALLER_REPOSITORY))
+          name=$(basename $INSTALLER_REPOSITORY)
+          echo "::add-mask::$owner"
+          echo "::add-mask::$name"
+          echo "owner=$owner" >> $GITHUB_OUTPUT
+          echo "name=$name" >> $GITHUB_OUTPUT
+
+      - name: Generate LGTM App token
+        id: lgtm-app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.LGTM_APP_CLIENT_ID }}
+          private-key: ${{ secrets.LGTM_APP_PRIVATE_KEY }}
+          owner: ${{ steps.installer.outputs.owner }}
+          repositories: ${{ steps.installer.outputs.name }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Clone installer repository
+        env:
+          GITHUB_USER: 1gtm
+          GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
+          INSTALLER_REPOSITORY: ${{ secrets.INSTALLER_REPOSITORY }}
+        run: |
+          git config --global http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)"
           cd $RUNNER_WORKSPACE
-          git clone $url
+          git clone "https://${INSTALLER_REPOSITORY}.git"
           cd $(basename $INSTALLER_REPOSITORY)
           git config user.name "1gtm"
           git config user.email "1gtm@appscode.com"
 
       - name: Update crds
         env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: 1gtm
+          GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
           INSTALLER_REPOSITORY: ${{ secrets.INSTALLER_REPOSITORY }}
         run: |
           export INSTALLER_ROOT=$RUNNER_WORKSPACE/$(basename $INSTALLER_REPOSITORY)
