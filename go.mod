@@ -10,7 +10,7 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/prometheus/client_golang v1.22.0
 	github.com/stretchr/testify v1.11.1
-	go.bytebuilders.dev/audit v0.0.51
+	go.bytebuilders.dev/audit v0.0.52
 	go.bytebuilders.dev/license-verifier/kubernetes v0.15.0
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/pointer v0.1.0
