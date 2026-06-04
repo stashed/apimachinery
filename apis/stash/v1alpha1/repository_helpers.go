@@ -47,6 +47,20 @@ func (r *Repository) LocalNetworkVolumePath() string {
 	return ""
 }
 
+func (r *Repository) LocalPVCVolume() bool {
+	if r.Spec.Backend.Local != nil && r.Spec.Backend.Local.PersistentVolumeClaim != nil {
+		return true
+	}
+	return false
+}
+
+func (r *Repository) LocalPVCVolumeName() string {
+	if r.Spec.Backend.Local != nil && r.Spec.Backend.Local.PersistentVolumeClaim != nil {
+		return r.Spec.Backend.Local.PersistentVolumeClaim.ClaimName
+	}
+	return ""
+}
+
 func (r *Repository) UsageAllowed(srcNamespace *core.Namespace) bool {
 	if r.Spec.UsagePolicy == nil {
 		return r.Namespace == srcNamespace.Name
