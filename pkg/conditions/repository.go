@@ -33,7 +33,8 @@ func SetRepositoryFoundConditionToUnknown(i any, err error) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionUnknown,
 			Reason: v1beta1.UnableToCheckRepositoryAvailability,
-			Message: fmt.Sprintf("Failed to check whether the Repository %s/%s exist or not. Reason: %v",
+			Message: fmt.Sprintf(
+				"Failed to check whether the Repository %s/%s exist or not. Reason: %v",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 				err.Error(),
@@ -45,7 +46,8 @@ func SetRepositoryFoundConditionToUnknown(i any, err error) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionUnknown,
 			Reason: v1beta1.UnableToCheckRepositoryAvailability,
-			Message: fmt.Sprintf("Failed to check whether the Repository %s/%s exist or not. Reason: %v",
+			Message: fmt.Sprintf(
+				"Failed to check whether the Repository %s/%s exist or not. Reason: %v",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 				err.Error(),
@@ -64,7 +66,8 @@ func SetRepositoryFoundConditionToFalse(i any) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionFalse,
 			Reason: v1beta1.RepositoryNotAvailable,
-			Message: fmt.Sprintf("Repository %s/%s does not exist.",
+			Message: fmt.Sprintf(
+				"Repository %s/%s does not exist.",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
@@ -75,7 +78,8 @@ func SetRepositoryFoundConditionToFalse(i any) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionFalse,
 			Reason: v1beta1.RepositoryNotAvailable,
-			Message: fmt.Sprintf("Repository %s/%s does not exist.",
+			Message: fmt.Sprintf(
+				"Repository %s/%s does not exist.",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
@@ -93,7 +97,8 @@ func SetRepositoryFoundConditionToTrue(i any) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionTrue,
 			Reason: v1beta1.RepositoryAvailable,
-			Message: fmt.Sprintf("Repository %s/%s exist.",
+			Message: fmt.Sprintf(
+				"Repository %s/%s exist.",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
@@ -104,7 +109,8 @@ func SetRepositoryFoundConditionToTrue(i any) error {
 			Type:   v1beta1.RepositoryFound,
 			Status: metav1.ConditionTrue,
 			Reason: v1beta1.RepositoryAvailable,
-			Message: fmt.Sprintf("Repository %s/%s exist.",
+			Message: fmt.Sprintf(
+				"Repository %s/%s exist.",
 				in.GetRepoRef().Namespace,
 				in.GetRepoRef().Name,
 			),
@@ -168,7 +174,8 @@ func SetBackendSecretFoundConditionToUnknown(i any, secretName string, err error
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionUnknown,
 			Reason: v1beta1.UnableToCheckBackendSecretAvailability,
-			Message: fmt.Sprintf("Failed to check whether the backend Secret %s/%s exist or not. Reason: %v",
+			Message: fmt.Sprintf(
+				"Failed to check whether the backend Secret %s/%s exist or not. Reason: %v",
 				in.GetRepoRef().Namespace,
 				secretName,
 				err.Error(),
@@ -180,7 +187,8 @@ func SetBackendSecretFoundConditionToUnknown(i any, secretName string, err error
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionUnknown,
 			Reason: v1beta1.UnableToCheckBackendSecretAvailability,
-			Message: fmt.Sprintf("Failed to check whether the backend Secret %s/%s exist or not. Reason: %v",
+			Message: fmt.Sprintf(
+				"Failed to check whether the backend Secret %s/%s exist or not. Reason: %v",
 				in.GetRepoRef().Namespace,
 				secretName,
 				err.Error(),
@@ -199,7 +207,8 @@ func SetBackendSecretFoundConditionToFalse(i any, secretName string) error {
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionFalse,
 			Reason: v1beta1.BackendSecretNotAvailable,
-			Message: fmt.Sprintf("Backend Secret %s/%s does not exist.",
+			Message: fmt.Sprintf(
+				"Backend Secret %s/%s does not exist.",
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
@@ -210,7 +219,8 @@ func SetBackendSecretFoundConditionToFalse(i any, secretName string) error {
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionFalse,
 			Reason: v1beta1.BackendSecretNotAvailable,
-			Message: fmt.Sprintf("Backend Secret %s/%s does not exist.",
+			Message: fmt.Sprintf(
+				"Backend Secret %s/%s does not exist.",
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
@@ -228,7 +238,8 @@ func SetBackendSecretFoundConditionToTrue(i any, secretName string) error {
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionTrue,
 			Reason: v1beta1.BackendSecretAvailable,
-			Message: fmt.Sprintf("Backend Secret %s/%s exist.",
+			Message: fmt.Sprintf(
+				"Backend Secret %s/%s exist.",
 				in.GetRepoRef().Namespace,
 				secretName,
 			),
@@ -239,7 +250,8 @@ func SetBackendSecretFoundConditionToTrue(i any, secretName string) error {
 			Type:   v1beta1.BackendSecretFound,
 			Status: metav1.ConditionTrue,
 			Reason: v1beta1.BackendSecretAvailable,
-			Message: fmt.Sprintf("Backend Secret %s/%s exist.",
+			Message: fmt.Sprintf(
+				"Backend Secret %s/%s exist.",
 				in.GetRepoRef().Namespace,
 				secretName,
 			),

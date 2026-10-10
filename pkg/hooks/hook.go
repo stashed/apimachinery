@@ -145,7 +145,8 @@ func (e *BackupHookExecutor) Execute() error {
 	session := invoker.NewBackupSessionHandler(e.StashClient, e.BackupSession)
 
 	if !IsAllowedByExecutionPolicy(e.ExecutionPolicy, hookExecutor.Summary) {
-		reason := fmt.Sprintf("Skipping executing %s. Reason: executionPolicy is %q but phase is %q.",
+		reason := fmt.Sprintf(
+			"Skipping executing %s. Reason: executionPolicy is %q but phase is %q.",
 			e.HookType,
 			getExecutionPolicyWithDefault(e.ExecutionPolicy),
 			getTargetPhase(hookExecutor.Summary),
@@ -259,7 +260,8 @@ func (e *RestoreHookExecutor) Execute() error {
 	}
 
 	if !IsAllowedByExecutionPolicy(e.ExecutionPolicy, hookExecutor.Summary) {
-		reason := fmt.Sprintf("Skipping executing %s. Reason: executionPolicy is %q but phase is %q.",
+		reason := fmt.Sprintf(
+			"Skipping executing %s. Reason: executionPolicy is %q but phase is %q.",
 			e.HookType,
 			getExecutionPolicyWithDefault(e.ExecutionPolicy),
 			getTargetPhase(hookExecutor.Summary),

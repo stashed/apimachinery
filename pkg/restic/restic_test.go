@@ -543,7 +543,8 @@ func TestRunParallelDump(t *testing.T) {
 
 	// verify that all host has been restored successfully
 	for i := range dumpOutput.RestoreTargetStatus.Stats {
-		t.Logf("Host: %s, Phase: %s",
+		t.Logf(
+			"Host: %s, Phase: %s",
 			dumpOutput.RestoreTargetStatus.Stats[i].Hostname,
 			dumpOutput.RestoreTargetStatus.Stats[i].Phase,
 		)

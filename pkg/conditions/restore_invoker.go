@@ -32,7 +32,8 @@ func SetRestoreTargetFoundConditionToTrue(inv invoker.RestoreInvoker, index int)
 		Type:   v1beta1.RestoreTargetFound,
 		Status: metav1.ConditionTrue,
 		Reason: v1beta1.TargetAvailable,
-		Message: fmt.Sprintf("Restore target %s %s/%s found.",
+		Message: fmt.Sprintf(
+			"Restore target %s %s/%s found.",
 			target.Ref.Kind,
 			target.Ref.Namespace,
 			target.Ref.Name,
@@ -47,7 +48,8 @@ func SetRestoreTargetFoundConditionToFalse(inv invoker.RestoreInvoker, index int
 		Type:   v1beta1.RestoreTargetFound,
 		Status: metav1.ConditionFalse,
 		Reason: v1beta1.TargetNotAvailable,
-		Message: fmt.Sprintf("Restore target %s %s/%s does not exist.",
+		Message: fmt.Sprintf(
+			"Restore target %s %s/%s does not exist.",
 			target.Ref.Kind,
 			target.Ref.Namespace,
 			target.Ref.Name,
@@ -62,7 +64,8 @@ func SetRestoreTargetFoundConditionToUnknown(inv invoker.RestoreInvoker, index i
 		Type:   v1beta1.RestoreTargetFound,
 		Status: metav1.ConditionUnknown,
 		Reason: v1beta1.UnableToCheckTargetAvailability,
-		Message: fmt.Sprintf("Failed to check whether restore target %s %s/%s exist or not. Reason: %v",
+		Message: fmt.Sprintf(
+			"Failed to check whether restore target %s %s/%s exist or not. Reason: %v",
 			target.Ref.Kind,
 			target.Ref.Namespace,
 			target.Ref.Name,
