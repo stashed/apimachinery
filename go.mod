@@ -4,7 +4,6 @@ go 1.25.0
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/armon/circbuf v0.0.0-20190214190532-5111143e8da2
 	github.com/evanphx/json-patch v5.9.11+incompatible
 	github.com/gogo/protobuf v1.3.2
 	github.com/json-iterator/go v1.1.12
