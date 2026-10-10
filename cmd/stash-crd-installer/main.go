@@ -75,7 +75,8 @@ func getStashCRDs() []*apiextensions.CustomResourceDefinition {
 	// community features CRDs
 	var stashCRDs []*apiextensions.CustomResourceDefinition
 
-	stashCRDs = append(stashCRDs,
+	stashCRDs = append(
+		stashCRDs,
 		// v1alpha1 resources
 		stashv1alpha1.Repository{}.CustomResourceDefinition(),
 
@@ -89,7 +90,8 @@ func getStashCRDs() []*apiextensions.CustomResourceDefinition {
 
 	// enterprise features CRDs
 	if enableEnterpriseFeatures {
-		stashCRDs = append(stashCRDs,
+		stashCRDs = append(
+			stashCRDs,
 			// v1beta1 resources
 			stashv1beta1.BackupBatch{}.CustomResourceDefinition(),
 			stashv1beta1.BackupBlueprint{}.CustomResourceDefinition(),

@@ -63,10 +63,10 @@ BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 
-BASEIMAGE_PROD   ?= gcr.io/distroless/static-debian12
-BASEIMAGE_DBG    ?= debian:12
+BASEIMAGE_PROD   ?= gcr.io/distroless/static-debian13
+BASEIMAGE_DBG    ?= debian:13
 
-GO_VERSION       ?= 1.25
+GO_VERSION       ?= 1.27
 BUILD_IMAGE      ?= ghcr.io/appscode/golang-dev:$(GO_VERSION)
 TEST_IMAGE       ?= ghcr.io/appscode/golang-dev:$(GO_VERSION)-stash
 
@@ -379,7 +379,7 @@ push: push-crd-installer
 .PHONY: push-crd-installer
 push-crd-installer: $(BUILD_DIRS) install-ko ## Build and push CRD installer image
 	@echo "Pushing CRD installer image....."
-	KO_DOCKER_REPO=$(REGISTRY) KO_DEFAULTBASEIMAGE=gcr.io/distroless/static-debian12 $(KO) build ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
+	KO_DOCKER_REPO=$(REGISTRY) KO_DEFAULTBASEIMAGE=gcr.io/distroless/static-debian13 $(KO) build ./cmd/stash-crd-installer --tags $(VERSION),latest  --base-import-paths  --platform=all
 
 .PHONY: release
 release: ## Release final production docker image and push into the DockerHub.

@@ -31,7 +31,8 @@ func SetBackupTargetFoundConditionToUnknown(invoker invoker.BackupInvoker, tref 
 		Type:   v1beta1.BackupTargetFound,
 		Status: metav1.ConditionUnknown,
 		Reason: v1beta1.UnableToCheckTargetAvailability,
-		Message: fmt.Sprintf("Failed to check whether backup target %s %s/%s exist or not. Reason: %v",
+		Message: fmt.Sprintf(
+			"Failed to check whether backup target %s %s/%s exist or not. Reason: %v",
 			tref.Kind,
 			tref.Namespace,
 			tref.Name,
@@ -47,7 +48,8 @@ func SetBackupTargetFoundConditionToFalse(invoker invoker.BackupInvoker, tref v1
 		Type:   v1beta1.BackupTargetFound,
 		Status: metav1.ConditionFalse,
 		Reason: v1beta1.TargetNotAvailable,
-		Message: fmt.Sprintf("Backup target %s %s/%s does not exist.",
+		Message: fmt.Sprintf(
+			"Backup target %s %s/%s does not exist.",
 			tref.Kind,
 			tref.Namespace,
 			tref.Name,
@@ -61,7 +63,8 @@ func SetBackupTargetFoundConditionToTrue(invoker invoker.BackupInvoker, tref v1b
 		Type:   v1beta1.BackupTargetFound,
 		Status: metav1.ConditionTrue,
 		Reason: v1beta1.TargetAvailable,
-		Message: fmt.Sprintf("Backup target %s %s/%s found.",
+		Message: fmt.Sprintf(
+			"Backup target %s %s/%s found.",
 			tref.Kind,
 			tref.Namespace,
 			tref.Name,
@@ -95,7 +98,8 @@ func SetSidecarInjectedConditionToTrue(invoker invoker.BackupInvoker, tref v1bet
 		Type:   v1beta1.StashSidecarInjected,
 		Status: metav1.ConditionTrue,
 		Reason: v1beta1.SidecarInjectionSucceeded,
-		Message: fmt.Sprintf("Successfully injected stash sidecar into %s %s/%s",
+		Message: fmt.Sprintf(
+			"Successfully injected stash sidecar into %s %s/%s",
 			tref.Kind,
 			tref.Namespace,
 			tref.Name,
@@ -109,7 +113,8 @@ func SetSidecarInjectedConditionToFalse(invoker invoker.BackupInvoker, tref v1be
 		Type:   v1beta1.StashSidecarInjected,
 		Status: metav1.ConditionFalse,
 		Reason: v1beta1.SidecarInjectionFailed,
-		Message: fmt.Sprintf("Failed to inject stash sidecar into %s %s/%s. Reason: %v",
+		Message: fmt.Sprintf(
+			"Failed to inject stash sidecar into %s %s/%s. Reason: %v",
 			tref.Kind,
 			tref.Namespace,
 			tref.Name,
